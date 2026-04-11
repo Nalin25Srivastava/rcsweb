@@ -1,0 +1,15 @@
+node_modules/
+.env
+dist/
+build/
+.DS_Store
+*.log
+tmp/
+students_db.json
+test_db_students.js
+check_db.js
+test_api.js
+test_excel_sync.js
+test_requires.js
+test_upload_dir.js
+remove_admin_secrets.py

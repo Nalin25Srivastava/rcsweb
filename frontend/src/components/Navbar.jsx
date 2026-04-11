@@ -1,0 +1,238 @@
+import { Menu, X, LogOut, User } from 'lucide-react'
+import { Link, NavLink, useLocation } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { logout } from '../store/slices/authSlice'
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+
+
+const Navbar = () => {
+    const dispatch = useDispatch()
+    const location = useLocation()
+    const [isOpen, setIsOpen] = useState(false)
+    const { user: reduxUser, isSecretVerified } = useSelector((state) => state.auth)
+    
+    // Use Redux user as primary, but fallback to localStorage
+    const storedUser = JSON.parse(localStorage.getItem('rcs_user') || 'null')
+    const user = reduxUser || storedUser
+
+    const handleLogout = () => {
+        dispatch(logout())
+        setIsOpen(false)
+        window.location.href = '/login' // Force a clean state after logout
+    }
+
+    const navLinks = [
+        { name: 'Home', href: '/' },
+        { name: 'About', href: '/about' },
+        { name: 'Services', href: '/services' },
+        { name: 'Registration', href: '/postres' },
+        { name: 'View Jobs', href: '/viewjobs' },
+        { name: 'Contact Us', href: '/contact' },
+        { name: 'Admin Panel', href: '/admin-panel', adminOnly: true },
+    ]
+
+    return (
+        <nav className="bg-white border-b border-gray-200">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="mt-3 flex justify-between h-14 items-center">
+
+                    {/* Logo */}
+                    <div className="flex-shrink-0 flex items-center">
+                        <Link to="/" className="text-xl font-bold text-indigo-600">
+                            <img className="w-24 h-12 md:w-32 md:h-16 object-contain" src="/images/rcs_logo.jpg" alt="RCS Logo" />
+                        </Link>
+                    </div>
+
+                    {/* Desktop Links & Auth */}
+                    <div className="hidden md:flex items-center space-x-8">
+                        <div className="flex space-x-6">
+                            {navLinks
+                                .filter(link => {
+                                    if (!user && (link.name === 'Registration' || link.name === 'Contact Us')) return false
+                                    if (user && user.role === 'admin' && link.name === 'Registration') return false
+                                    if (link.adminOnly && (!user || user.role !== 'admin' || !isSecretVerified)) return false
+                                    return true
+                                })
+                                .map((link) => {
+                                    const isActive = location.pathname === link.href;
+                                    return (
+                                        <NavLink
+                                            key={link.name}
+                                            to={link.href}
+                                            className="relative group py-2"
+                                        >
+                                            <span className={`px-2 text-lg font-bold transition-colors duration-300 ${
+                                                isActive ? 'text-[#00c57d]' : 'text-gray-600 group-hover:text-[#00c57d]'
+                                            }`}>
+                                                {link.name}
+                                            </span>
+                                            {isActive && (
+                                                <motion.div 
+                                                    layoutId="activeNav"
+                                                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#00c57d]"
+                                                    initial={false}
+                                                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                                                />
+                                            )}
+                                        </NavLink>
+                                    );
+                                })}
+
+                        </div>
+                        
+                        <div className="flex items-center space-x-4 border-l pl-8 border-gray-100">
+                            {user && (user.name || user.email) ? (
+                                <div className="flex items-center gap-6">
+                                    <div className="flex items-center gap-2 text-gray-700 font-bold">
+                                        <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 border border-emerald-200 shadow-sm transition-transform hover:scale-110">
+                                            <User className="w-5 h-5" />
+                                        </div>
+                                        <div className="flex flex-col justify-center">
+                                            <span className="capitalize text-slate-900 leading-none mb-1">
+                                                {user.name || user.email.split('@')[0]}
+                                            </span>
+                                            <span className={`text-[10px] uppercase tracking-tighter font-black px-1.5 rounded shadow-sm w-fit ${
+                                                user.role === 'admin' 
+                                                ? 'text-emerald-600 bg-emerald-50' 
+                                                : 'text-blue-600 bg-blue-50'
+                                            }`}>
+                                                {user.role === 'admin' ? 'Admin' : 'User'}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <button 
+                                        onClick={handleLogout}
+                                        className="flex items-center gap-2 text-slate-500 hover:text-red-500 font-bold transition-all transform hover:scale-105 active:scale-95 cursor-pointer bg-slate-50 hover:bg-red-50 px-3 py-2 rounded-full border border-slate-100"
+                                    >
+                                        <LogOut className="w-4 h-4" /> <span className="text-sm">Logout</span>
+                                    </button>
+                                </div>
+                            ) : (
+                                <>
+                                    <NavLink 
+                                        to="/login" 
+                                        className={({ isActive }) => `font-medium text-lg transition-colors ${isActive ? 'text-[#00c57d]' : 'text-gray-600 hover:text-indigo-600'}`}
+                                    >
+                                        Login
+                                    </NavLink>
+                                    <Link 
+                                        to="/signup" 
+                                        className="bg-[#00c57d] hover:bg-[#00ae6e] text-white px-7 py-2.5 rounded-full font-bold transition-all transform hover:scale-105 active:scale-95 shadow-md"
+                                    >
+                                        Sign Up
+                                    </Link>
+                                </>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Mobile Button */}
+                    <div className="md:hidden flex items-center">
+                        <button
+                            onClick={() => setIsOpen(!isOpen)}
+                            className="text-gray-600 hover:text-gray-900 focus:outline-none p-2"
+                        >
+                            {isOpen ? <X className="h-7 w-7" /> : <Menu className="h-7 w-7" />}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            {/* Mobile Menu */}
+            <AnimatePresence>
+                {isOpen && (
+                    <motion.div 
+                        className="md:hidden bg-white border-t border-gray-100 overflow-hidden"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    >
+                        <div className="px-4 pt-4 pb-6 space-y-2">
+                            {navLinks
+                                .filter(link => {
+                                    if (!user && (link.name === 'Registration' || link.name === 'Contact Us')) {
+                                        return false
+                                    }
+                                    if (user && user.role === 'admin' && link.name === 'Registration') return false
+                                    if (link.adminOnly && (!user || user.role !== 'admin' || !isSecretVerified)) return false
+                                    return true
+                                })
+                                .map((link) => (
+                                <motion.div key={link.name} whileTap={{ scale: 0.95 }}>
+                                    <NavLink
+                                        to={link.href}
+                                        onClick={() => setIsOpen(false)}
+                                        className={({ isActive }) => `block px-3 py-3 text-lg font-bold rounded-lg transition-colors capitalize ${
+                                            isActive ? 'text-[#00c57d] bg-emerald-50' : 'text-gray-600 hover:text-[#00c57d] hover:bg-gray-50'
+                                        }`}
+                                    >
+                                        {link.name}
+                                    </NavLink>
+                                </motion.div>
+                            ))}
+                            
+                            <div className="pt-6 mt-4 border-t border-gray-100 flex flex-col space-y-4">
+                                {user && (user.name || user.email) ? (
+                                    <div className="flex flex-col gap-4">
+                                        <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-2xl border border-slate-100 shadow-sm">
+                                            <div className="w-12 h-12 rounded-2xl bg-emerald-500 flex items-center justify-center text-white shadow-lg shadow-emerald-200">
+                                                <User className="w-6 h-6" />
+                                            </div>
+                                            <div className="flex-grow">
+                                                <div className="flex items-center gap-2">
+                                                    <p className="text-lg font-black text-slate-900 capitalize leading-none">
+                                                        {user.name || user.email.split('@')[0]}
+                                                    </p>
+                                                        <span className={`text-[10px] uppercase font-black px-2 py-0.5 rounded-full ${
+                                                            user.role === 'admin'
+                                                            ? 'bg-emerald-100 text-emerald-700'
+                                                            : 'bg-blue-100 text-blue-700'
+                                                        }`}>
+                                                            {user.role === 'admin' ? 'Admin' : 'User'}
+                                                        </span>
+                                                </div>
+                                                <p className="text-xs text-slate-400 font-bold mt-1 truncate max-w-[150px]">{user.email}</p>
+                                            </div>
+                                        </div>
+                                        <motion.button 
+                                            onClick={handleLogout}
+                                            whileHover={{ scale: 1.02 }}
+                                            whileTap={{ scale: 0.98 }}
+                                            className="bg-red-50 text-red-600 py-4 rounded-2xl text-lg font-black flex items-center justify-center gap-2 cursor-pointer uppercase tracking-widest border border-red-100 shadow-sm"
+                                        >
+                                            <LogOut className="w-6 h-6" /> Logout
+                                        </motion.button>
+                                    </div>
+                                ) : (
+                                    <>
+                                        <Link 
+                                            to="/login" 
+                                            onClick={() => setIsOpen(false)}
+                                            className="text-center py-3 text-lg font-black text-gray-700 hover:text-[#00c57d] uppercase tracking-widest"
+                                        >
+                                            Login
+                                        </Link>
+                                        <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                                            <Link 
+                                                to="/signup" 
+                                                onClick={() => setIsOpen(false)}
+                                                className="bg-[#00c57d] text-white text-center py-4 rounded-xl text-lg font-black shadow-lg block uppercase tracking-widest"
+                                            >
+                                                Sign Up
+                                            </Link>
+                                        </motion.div>
+                                    </>
+                                )}
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+        </nav>
+    )
+}
+
+export default Navbar
