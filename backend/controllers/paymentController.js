@@ -1,5 +1,5 @@
 const Razorpay = require('razorpay');
-const crypto = require('crypto');
+const crypto = require('node:crypto');
 const dotenv = require('dotenv');
 
 dotenv.config();

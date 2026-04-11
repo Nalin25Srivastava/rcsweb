@@ -1,4 +1,4 @@
-const crypto = require('crypto');
+const crypto = require('node:crypto');
 const Resume = require('../models/Resume');
 const { sendNotification } = require('../utils/notificationService');
 
