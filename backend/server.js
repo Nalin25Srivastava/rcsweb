@@ -63,8 +63,25 @@ app.get('/api/health', (req, res) => {
     });
 });
 
+app.get('/', (req, res) => {
+    res.json({ 
+        message: 'RCS Placements Backend API is active',
+        healthCheck: '/api/health',
+        timestamp: new Date().toISOString()
+    });
+});
+
 app.get('/api/test', (req, res) => {
     res.json({ message: 'Hello from Backend!' });
+});
+
+// 404 Handler for undefined routes
+app.use((req, res) => {
+    res.status(404).json({
+        success: false,
+        message: `Route not found: ${req.originalUrl}`,
+        availableRoutes: ['/', '/api/health', '/api/test']
+    });
 });
 
 // Port configuration
