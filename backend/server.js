@@ -55,7 +55,12 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
 app.get('/api/health', (req, res) => {
-    res.json({ status: 'ok', message: 'API is running...' });
+    res.json({ 
+        status: 'ok', 
+        message: 'API is running...',
+        environment: process.env.NODE_ENV,
+        dbConnected: mongoose.connection.readyState === 1
+    });
 });
 
 app.get('/api/test', (req, res) => {
@@ -65,16 +70,31 @@ app.get('/api/test', (req, res) => {
 // Port configuration
 const PORT = process.env.PORT || 5000;
 
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => {
+// MongoDB Connection with improved error handling for serverless
+const connectDB = async () => {
+    try {
+        if (!process.env.MONGO_URI) {
+            console.error('MONGO_URI is not defined in environment variables');
+            return;
+        }
+        await mongoose.connect(process.env.MONGO_URI);
         console.log('MongoDB Connected');
-
-        app.listen(PORT, () => {
-            console.log(`Server running on port ${PORT}`);
-        });
-    })
-    .catch(err => {
+    } catch (err) {
         console.error('MongoDB connection error:', err);
+    }
+};
+
+// Initial connection
+connectDB();
+
+// Handle server listener - skip if on Vercel
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
     });
+}
+
+// Export for Vercel
+module.exports = app;
 
 // Force nodemon restart
