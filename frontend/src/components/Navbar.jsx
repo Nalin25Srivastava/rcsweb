@@ -127,13 +127,19 @@ const Navbar = () => {
                         </div>
                     </div>
 
-                    {/* Mobile Button */}
-                    <div className="md:hidden flex items-center">
+                    {/* Mobile Button & Auth */}
+                    <div className="md:hidden flex items-center gap-2">
+                        {!user && (
+                            <div className="flex items-center gap-2 mr-1">
+                                <Link to="/login" className="text-xs font-black text-gray-700 hover:text-[#00c57d] uppercase tracking-wider">Login</Link>
+                                <Link to="/signup" className="text-xs font-black text-white bg-[#00c57d] px-3 py-2 rounded-full shadow-md uppercase tracking-wider">Sign Up</Link>
+                            </div>
+                        )}
                         <button
                             onClick={() => setIsOpen(!isOpen)}
-                            className="text-gray-600 hover:text-gray-900 focus:outline-none p-2"
+                            className="text-gray-700 hover:text-emerald-500 focus:outline-none p-1 transition-colors"
                         >
-                            {isOpen ? <X className="h-7 w-7" /> : <Menu className="h-7 w-7" />}
+                            {isOpen ? <X className="h-8 w-8" /> : <Menu className="h-8 w-8" />}
                         </button>
                     </div>
                 </div>
