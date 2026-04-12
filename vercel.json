@@ -16,7 +16,11 @@
       "destination": "/api/index.js"
     },
     {
-      "source": "/((?!api|uploads).*)",
+      "source": "/((?!api|uploads|assets|images|vite.svg).*)",
+      "destination": "/frontend/dist/index.html"
+    },
+    {
+      "source": "/(.*)",
       "destination": "/frontend/dist/$1"
     }
   ]

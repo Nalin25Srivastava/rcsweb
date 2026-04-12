@@ -52,9 +52,16 @@ app.use('/api/stats', require('./routes/statRoutes'));
 const path = require('path');
 const fs = require('fs');
 const uploadDir = path.join(__dirname, 'uploads/images');
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-    console.log('Created uploads/images directory');
+// Only try to create directory if NOT on Vercel (read-only filesystem)
+if (!process.env.VERCEL) {
+    if (!fs.existsSync(uploadDir)) {
+        try {
+            fs.mkdirSync(uploadDir, { recursive: true });
+            console.log('Created uploads/images directory');
+        } catch (err) {
+            console.error('Error creating uploads directory:', err);
+        }
+    }
 }
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
