@@ -106,6 +106,13 @@ const connectDB = async () => {
             console.error('MONGO_URI is not defined in environment variables');
             return;
         }
+
+        // Safety check for Vercel
+        if (process.env.VERCEL && process.env.MONGO_URI.includes('localhost')) {
+            console.error('CRITICAL: MONGO_URI is set to localhost on Vercel. Please set a remote MongoDB URI in the Vercel Dashboard.');
+            return;
+        }
+
         await mongoose.connect(process.env.MONGO_URI);
         console.log('MongoDB Connected');
     } catch (err) {
