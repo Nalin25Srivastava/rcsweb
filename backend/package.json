@@ -30,7 +30,7 @@
     "nodemon": "^3.1.14"
   },
   "overrides": {
-    "node-domexception": "$node-domexception"
+    "node-domexception": "npm:true"
   },
   "resolutions": {
     "glob": "^11.0.0",
