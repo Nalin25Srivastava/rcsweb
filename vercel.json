@@ -15,19 +15,12 @@
       "destination": "/api/index.js"
     },
     {
-      "source": "/assets/(.*)",
-      "destination": "/frontend/dist/assets/$1"
+      "source": "/(.*)",
+      "destination": "/frontend/dist/$1",
+      "check": true
     },
     {
-      "source": "/images/(.*)",
-      "destination": "/frontend/dist/images/$1"
-    },
-    {
-      "source": "/vite.svg",
-      "destination": "/frontend/dist/vite.svg"
-    },
-    {
-      "source": "/((?!api|uploads|assets|images|vite.svg).*)",
+      "source": "/(.*)",
       "destination": "/frontend/dist/index.html"
     }
   ]
