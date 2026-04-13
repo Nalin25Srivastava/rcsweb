@@ -27,7 +27,7 @@
       "destination": "/frontend/dist/vite.svg"
     },
     {
-      "source": "/((?!api|uploads|assets|images|vite.svg).*)",
+      "source": "/(.*)",
       "destination": "/frontend/dist/index.html"
     }
   ]
