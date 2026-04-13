@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "cd frontend && npm install && vite build && cd .. && node scripts/mirror-build.js",
+    "build": "cd frontend && npm install && npm run build && cd .. && node scripts/mirror-build.js",
     "vercel-build": "npm run build",
     "install-backend": "cd backend && npm install",
     "install-frontend": "cd frontend && npm install",
