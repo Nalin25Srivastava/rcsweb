@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "outputDirectory": "public",
+  "outputDirectory": "dist",
   "functions": {
     "api/index.js": {
       "includeFiles": "backend/**"
@@ -17,19 +17,19 @@
     },
     {
       "source": "/assets/(.*)",
-      "destination": "/public/assets/$1"
+      "destination": "/dist/assets/$1"
     },
     {
       "source": "/images/(.*)",
-      "destination": "/public/images/$1"
+      "destination": "/dist/images/$1"
     },
     {
       "source": "/vite.svg",
-      "destination": "/public/vite.svg"
+      "destination": "/dist/vite.svg"
     },
     {
       "source": "/(.*)",
-      "destination": "/public/index.html"
+      "destination": "/dist/index.html"
     }
   ]
 }

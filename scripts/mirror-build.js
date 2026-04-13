@@ -10,7 +10,7 @@ function mirrorBuild() {
     
     const rootDir = process.cwd();
     const sourceDir = path.join(rootDir, 'frontend', 'dist');
-    const targetDir = path.join(rootDir, 'public');
+    const targetDir = path.join(rootDir, 'dist');
 
     console.log(`Source: ${sourceDir}`);
     console.log(`Target: ${targetDir}`);
