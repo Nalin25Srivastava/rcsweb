@@ -16,20 +16,8 @@
       "destination": "/api/index.js"
     },
     {
-      "source": "/assets/(.*)",
-      "destination": "/dist/assets/$1"
-    },
-    {
-      "source": "/images/(.*)",
-      "destination": "/dist/images/$1"
-    },
-    {
-      "source": "/vite.svg",
-      "destination": "/dist/vite.svg"
-    },
-    {
       "source": "/(.*)",
-      "destination": "/dist/index.html"
+      "destination": "/index.html"
     }
   ]
 }
