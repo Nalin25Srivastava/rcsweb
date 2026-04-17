@@ -144,6 +144,15 @@ const Home = () => {
                                 </li>
                             ))}
                         </ul>
+                        <div className="pt-8">
+                            <Link 
+                                to="/services" 
+                                className="inline-flex items-center gap-2 px-8 py-4 bg-slate-900 hover:bg-slate-800 text-white font-black uppercase tracking-widest rounded-2xl transition-all shadow-xl shadow-slate-200 group"
+                            >
+                                Explore Our Services 
+                                <span className="text-emerald-400 group-hover:translate-x-1 transition-transform">→</span>
+                            </Link>
+                        </div>
                     </motion.div>
                 </div>
             </div>
