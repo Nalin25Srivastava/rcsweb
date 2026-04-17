@@ -111,12 +111,6 @@ const AdminPanel = () => {
         }
     };
 
-    const getImageUrl = (image) => {
-        if (!image) return 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&q=80&w=200';
-        if (image.startsWith('data:image') || image.startsWith('http') || image.startsWith('/uploads')) return image;
-        return `/images/${image}`;
-    };
-
     useEffect(() => {
         if (!user || user.role !== 'admin' || !isSecretVerified) {
             navigate('/login');
@@ -164,6 +158,7 @@ const AdminPanel = () => {
                         onAdd={handleAddStudent}
                         onEdit={handleEditStudent}
                         onDelete={handleDeleteStudent}
+                        getImageUrl={getImageUrl}
                     />
                 );
             case 'stats':
@@ -469,7 +464,7 @@ const JobManagementView = ({ jobs, onAdd, onEdit, onDelete }) => {
     );
 };
 
-const StudentManagementView = ({ students, onAdd, onEdit, onDelete }) => {
+const StudentManagementView = ({ students, onAdd, onEdit, onDelete, getImageUrl }) => {
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
