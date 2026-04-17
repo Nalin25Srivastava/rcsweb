@@ -98,9 +98,7 @@ app.use((req, res) => {
 
 // Port configuration
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+
 // MongoDB Connection with improved error handling for serverless
 const connectDB = async () => {
     try {
