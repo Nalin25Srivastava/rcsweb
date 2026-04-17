@@ -294,7 +294,7 @@ const AdminPanel = () => {
                 </header>
 
                 {/* Content Area */}
-                <div className="flex-grow overflow-y-auto p-8 custom-scrollbar">
+                <div className="flex-grow overflow-y-auto p-4 md:p-8 custom-scrollbar min-h-screen">
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={activeTab}

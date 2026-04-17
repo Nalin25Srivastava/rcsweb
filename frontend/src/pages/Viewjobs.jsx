@@ -340,18 +340,18 @@ const Viewjobs = () => {
         <div className="bg-white min-h-screen ">
             {/* Header Section */}
             {/* Header Banner */}
-            <div className="relative bg-slate-900 py-32 px-4 overflow-hidden flex flex-col items-center">
-                <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center opacity-20"></div>
-                <div className="absolute inset-0 bg-gradient-to-t from-white to-transparent"></div>
+            <div className="relative bg-slate-900 py-20 px-4 overflow-hidden flex flex-col items-center">
+                <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center opacity-40"></div>
+                <div className="absolute inset-0 bg-slate-900/40"></div>
                 <motion.div 
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="relative z-10 text-center max-w-3xl mx-auto"
                 >
-                    <h1 className="text-5xl md:text-7xl font-black text-slate-900 tracking-tighter mb-6">
-                        Explore <span className="text-emerald-500">Opportunities</span>
+                    <h1 className="text-5xl md:text-7xl font-black text-white tracking-tighter mb-6 drop-shadow-2xl">
+                        Explore <span className="text-emerald-400">Opportunities</span>
                     </h1>
-                    <p className="text-slate-700 text-lg md:text-xl font-bold leading-relaxed">
+                    <p className="text-slate-100 text-lg md:text-xl font-bold leading-relaxed drop-shadow-lg">
                         Find unparalleled career paths across our enterprise network.
                     </p>
                     
