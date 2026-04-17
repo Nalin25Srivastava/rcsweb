@@ -13,7 +13,9 @@ const razorpay = new Razorpay({
 // Configure multer for file storage
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const dir = path.join(__dirname, '..', 'uploads', 'resumes');
+        const isVercel = process.env.VERCEL === '1' || !!process.env.VERCEL;
+        const dir = isVercel ? '/tmp/uploads/resumes' : path.join(__dirname, '..', 'uploads', 'resumes');
+        
         if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir, { recursive: true });
         }

@@ -51,26 +51,33 @@ app.use('/api/stats', require('./routes/statRoutes'));
 // Serve uploads folder
 const path = require('path');
 const fs = require('fs');
-const uploadDir = path.join(__dirname, 'uploads/images');
-// Only try to create directory if NOT on Vercel (read-only filesystem)
-if (!process.env.VERCEL) {
-    const dirs = [
-        path.join(__dirname, 'uploads/images'),
-        path.join(__dirname, 'uploads/resumes')
-    ];
-    
-    dirs.forEach(dir => {
-        if (!fs.existsSync(dir)) {
-            try {
-                fs.mkdirSync(dir, { recursive: true });
-                console.log(`Created ${path.relative(__dirname, dir)} directory`);
-            } catch (err) {
-                console.error(`Error creating directory ${dir}:`, err);
-            }
+
+// Vercel read-only filesystem workaround: use /tmp in production
+const isVercel = process.env.VERCEL === '1' || !!process.env.VERCEL;
+const UPLOAD_BASE = isVercel ? '/tmp/uploads' : path.join(__dirname, 'uploads');
+
+const dirs = [
+    path.join(UPLOAD_BASE, 'images'),
+    path.join(UPLOAD_BASE, 'resumes')
+];
+
+dirs.forEach(dir => {
+    if (!fs.existsSync(dir)) {
+        try {
+            fs.mkdirSync(dir, { recursive: true });
+            console.log(`Created directory: ${dir}`);
+        } catch (err) {
+            console.error(`Error creating directory ${dir}:`, err);
         }
-    });
-}
+    }
+});
+
+// Serve static files from the standard uploads folder
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// Additionally serve from /tmp on Vercel
+if (isVercel) {
+    app.use('/uploads', express.static('/tmp/uploads'));
+}
 
 
 app.get('/api/health', (req, res) => {
