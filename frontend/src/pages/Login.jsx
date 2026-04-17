@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Mail, Lock, ArrowRight } from 'lucide-react';
+import { Mail, Lock, ArrowRight, ShieldAlert } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { login, googleLogin, reset, setSecretVerified } from '../store/slices/authSlice';
 import { GoogleLogin } from '@react-oauth/google';
@@ -194,13 +194,8 @@ const Login = () => {
                                                     setRole('admin');
                                                     setAdminSecret('rcsplacements2009');
                                                 } else {
-                                                    const code = window.prompt("ADMIN SECURITY: Please enter the Secret Code to select Admin role:");
-                                                    if (code === "rcsplacements2009") {
-                                                        setRole('admin');
-                                                        setAdminSecret(code);
-                                                    } else if (code !== null) {
-                                                        alert("Incorrect secret code.");
-                                                    }
+                                                    setRole('admin');
+                                                    setAdminSecret('');
                                                 }
                                             }}
                                             className="w-4 h-4 text-emerald-600 border-slate-300 focus:ring-emerald-500"
@@ -209,6 +204,30 @@ const Login = () => {
                                     </label>
                                 </div>
                             </div>
+
+                            <AnimatePresence>
+                                {(role === 'admin' && !isVIPEmail(email)) && (
+                                    <motion.div 
+                                        initial={{ opacity: 0, height: 0, y: -10 }}
+                                        animate={{ opacity: 1, height: 'auto', y: 0 }}
+                                        exit={{ opacity: 0, height: 0, y: -10 }}
+                                        className="space-y-2 group overflow-hidden"
+                                    >
+                                        <label className="text-xs font-black text-emerald-600 uppercase tracking-widest ml-1">Admin Verification Code</label>
+                                        <div className="relative">
+                                            <ShieldAlert className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-400 group-focus-within:text-emerald-600 transition-colors" />
+                                            <input
+                                                type="password"
+                                                value={adminSecret}
+                                                onChange={(e) => setAdminSecret(e.target.value)}
+                                                placeholder="Enter admin passkey"
+                                                className="w-full bg-emerald-50/50 border-2 border-emerald-100 focus:border-emerald-500 focus:bg-white rounded-xl py-4 pl-12 pr-4 outline-none transition-all text-slate-900 shadow-sm font-bold placeholder:text-emerald-200"
+                                                required
+                                            />
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
                         </div>
 
                         <motion.button
