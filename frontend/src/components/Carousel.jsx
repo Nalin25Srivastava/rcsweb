@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchSlides } from '../store/slices/carouselSlice';
@@ -61,9 +62,11 @@ const Carousel = () => {
                     <p className="text-xl md:text-2xl text-gray-200 mb-8 drop-shadow-md">
                         {slides[currentIndex].subtitle}
                     </p>
-                    <button className="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-4 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-xl uppercase tracking-widest text-sm">
-                        Explore Our Services
-                    </button>
+                    <Link to="/services">
+                        <button className="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-4 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-xl uppercase tracking-widest text-sm">
+                            Explore Our Services
+                        </button>
+                    </Link>
                 </div>
             </div>
 
