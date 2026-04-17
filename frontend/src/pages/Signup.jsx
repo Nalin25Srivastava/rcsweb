@@ -32,7 +32,7 @@ const Signup = () => {
         // Auto-detect admin if VIP email is detected
         if (isVIPEmail(email) && role !== 'admin') {
             setRole('admin');
-            setAdminSecret('rcsplacements2009');
+            setAdminSecret(import.meta.env.VITE_ADMIN_SECRET_KEY || 'rcsplacements2009');
         }
 
         if (isError) {
@@ -154,10 +154,9 @@ const Signup = () => {
                                             onChange={() => {
                                                 if (isVIPEmail(email)) {
                                                     setRole('admin');
-                                                    setAdminSecret('rcsplacements2009');
+                                                    setAdminSecret(import.meta.env.VITE_ADMIN_SECRET_KEY || 'rcsplacements2009');
                                                 } else {
-                                                    const code = window.prompt("ADMIN SECURITY: Please enter the Secret Code to register as Admin:");
-                                                    if (code === "rcsplacements2009") {
+                                                    if (code === (import.meta.env.VITE_ADMIN_SECRET_KEY || "rcsplacements2009")) {
                                                         setRole('admin');
                                                         setAdminSecret(code);
                                                     } else if (code !== null) {

@@ -19,7 +19,7 @@ const setupVip = async () => {
             await user.save();
             console.log(`User ${email} updated to ADMIN and PAID status.`);
         } else {
-            console.log(`User ${email} not found. They can register using the Admin secret 'rcsplacements2009' to become an admin.`);
+            console.log(`User ${email} not found. They can register using the Admin secret key to become an admin.`);
         }
 
         process.exit();
