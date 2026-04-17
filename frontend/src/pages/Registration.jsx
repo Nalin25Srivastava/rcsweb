@@ -124,7 +124,26 @@ const Registration = () => {
                 prefill: {
                     name: `${formData.firstName} ${formData.lastName}`,
                     email: formData.email,
-                    contact: formData.phone
+                    contact: formData.phone,
+                    method: 'upi'
+                },
+                config: {
+                    display: {
+                        blocks: {
+                            upi: {
+                                name: "UPI (PhonePe, GPay, etc.)",
+                                instruments: [
+                                    {
+                                        method: "upi"
+                                    }
+                                ]
+                            }
+                        },
+                        sequence: ["block.upi"],
+                        preferences: {
+                            show_default_blocks: true
+                        }
+                    }
                 },
                 theme: { color: "#10b981" }
             };
