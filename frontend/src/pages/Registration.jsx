@@ -17,7 +17,6 @@ const Registration = () => {
         email: '',
         phone: '',
         functionalArea: '',
-        agencyName: '',
     });
     const [file, setFile] = useState(null);
     const [paymentStatus, setPaymentStatus] = useState(null); // 'processing' | 'success' | null
@@ -72,7 +71,6 @@ const Registration = () => {
             data.append('email', formData.email);
             data.append('phone', formData.phone);
             data.append('functionalArea', formData.functionalArea);
-            data.append('agencyName', formData.agencyName);
             data.append('resume', file);
             data.append('amount', 1000);
 
@@ -104,7 +102,7 @@ const Registration = () => {
                     // Clear form for future use
                     setFormData({
                         firstName: '', lastName: '', email: '', 
-                        phone: '', functionalArea: '', agencyName: ''
+                        phone: '', functionalArea: ''
                     });
                     setFile(null);
                     
@@ -234,19 +232,7 @@ const Registration = () => {
                         <div className={`transition-opacity duration-500 ${paymentStatus === 'success' ? 'opacity-30 pointer-events-none' : 'opacity-100'}`}>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
-                                    <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Agency Name</label>
-                                    <input
-                                        type="text"
-                                        name="agencyName"
-                                        value={formData.agencyName}
-                                        onChange={handleChange}
-                                        required
-                                        placeholder="Company Ltd."
-                                        className="w-full bg-slate-50 border-2 border-slate-50 focus:border-emerald-500 focus:bg-white rounded-xl py-3 px-4 outline-none transition-all text-slate-900 font-bold"
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Contact Person (First Name)</label>
+                                    <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">First Name</label>
                                     <input
                                         type="text"
                                         name="firstName"
