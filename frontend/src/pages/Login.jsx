@@ -84,6 +84,13 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        // Admin verification guard
+        if (role === 'admin' && verificationStatus !== 'success' && !isVIPEmail(email)) {
+            alert('Verify First');
+            return;
+        }
+
         const action = await dispatch(login({ email, password, role, adminSecret }));
         if (login.rejected.match(action)) {
             if (action.payload && typeof action.payload === 'object' && action.payload.requiresPayment) {
@@ -294,6 +301,12 @@ const Login = () => {
                         <div className="flex justify-center">
                             <GoogleLogin
                                 onSuccess={async (credentialResponse) => {
+                                    // Admin verification guard
+                                    if (role === 'admin' && verificationStatus !== 'success' && !isVIPEmail(email)) {
+                                        alert('Verify First');
+                                        return;
+                                    }
+
                                     const action = await dispatch(googleLogin({ 
                                         token: credentialResponse.credential, 
                                         role,

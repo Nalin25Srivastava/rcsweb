@@ -56,6 +56,13 @@ const Signup = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Admin verification guard
+        if (role === 'admin' && verificationStatus !== 'success' && !isVIPEmail(email)) {
+            alert('Verify First');
+            return;
+        }
+
         const resultAction = await dispatch(signup({ name, email, password, role, adminSecret }));
         
         if (signup.fulfilled.match(resultAction)) {
@@ -256,6 +263,12 @@ const Signup = () => {
                         <div className="flex justify-center">
                             <GoogleLogin
                                 onSuccess={async (credentialResponse) => {
+                                    // Admin verification guard
+                                    if (role === 'admin' && verificationStatus !== 'success' && !isVIPEmail(email)) {
+                                        alert('Verify First');
+                                        return;
+                                    }
+
                                     const resultAction = await dispatch(googleLogin({ 
                                         token: credentialResponse.credential, 
                                         role, 
