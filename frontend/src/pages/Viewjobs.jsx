@@ -230,9 +230,9 @@ const Viewjobs = () => {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, []);
 
-    const totalPages = Math.ceil(jobs.length / itemsPerPage);
+    const totalPages = Math.ceil((jobs?.length || 0) / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
-    const currentJobs = jobs.slice(startIndex, startIndex + itemsPerPage);
+    const currentJobs = (jobs || []).slice(startIndex, startIndex + itemsPerPage);
 
     const goToFirst = () => setCurrentPage(1);
     const goToPrev = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
@@ -379,15 +379,15 @@ const Viewjobs = () => {
 
                 {isLoading ? (
                     <div className="col-span-full text-center py-10">
-                        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-green-500 mx-auto"></div>
-                        <p className="mt-2 text-sm text-gray-600">Loading jobs...</p>
+                        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-emerald-500 mx-auto"></div>
+                        <p className="mt-2 text-sm text-gray-600 font-bold italic tracking-widest">LOADING OPPORTUNITIES...</p>
                     </div>
                 ) : isError ? (
-                    <div className="col-span-full text-center py-10 text-red-500">
-                        <p>Error: {message}</p>
+                    <div className="col-span-full text-center py-10 text-red-500 font-black">
+                        <p>ERROR: {message || 'Connection lost. Please refresh.'}</p>
                     </div>
-                ) : currentJobs.length > 0 ? (
-                    currentJobs.map((job, index) => (
+                ) : (currentJobs || []).length > 0 ? (
+                    (currentJobs || []).map((job, index) => (
                         <motion.div 
                             key={index} 
                             className="flex flex-col p-6 rounded-3xl bg-white border border-slate-100 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-emerald-500/10 cursor-pointer h-full relative overflow-hidden group"

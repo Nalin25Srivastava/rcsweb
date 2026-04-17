@@ -141,11 +141,11 @@ const AdminPanel = () => {
     const renderContent = () => {
         switch (activeTab) {
             case 'dashboard':
-                return <DashboardView jobs={jobs} students={placedStudents} stats={stats} />;
+                return <DashboardView jobs={jobs || []} students={placedStudents || []} stats={stats || []} onNavigate={setActiveTab} />;
             case 'jobs':
                 return (
                     <JobManagementView 
-                        jobs={jobs} 
+                        jobs={jobs || []} 
                         onAdd={handleAddJob}
                         onEdit={handleEditJob}
                         onDelete={handleDeleteJob}
@@ -154,7 +154,7 @@ const AdminPanel = () => {
             case 'students':
                 return (
                     <StudentManagementView 
-                        students={placedStudents} 
+                        students={placedStudents || []} 
                         onAdd={handleAddStudent}
                         onEdit={handleEditStudent}
                         onDelete={handleDeleteStudent}
@@ -164,7 +164,7 @@ const AdminPanel = () => {
             case 'stats':
                 return (
                     <StatManagementView 
-                        stats={stats} 
+                        stats={stats || []} 
                         onAdd={handleAddStat}
                         onEdit={handleEditStat}
                         onDelete={handleDeleteStat}
@@ -173,7 +173,7 @@ const AdminPanel = () => {
             case 'carousel':
                 return (
                     <CarouselManagementView 
-                        slides={slides} 
+                        slides={slides || []} 
                         onAdd={() => setIsCarouselModalOpen(true)}
                         onDelete={handleDeleteSlide}
                         getImageUrl={getImageUrl}
@@ -339,11 +339,11 @@ const AdminPanel = () => {
 };
 
 // Sub-components
-const DashboardView = ({ jobs, students, stats, onNavigate }) => {
+const DashboardView = ({ jobs = [], students = [], stats = [], onNavigate }) => {
     const cards = [
-        { label: 'Total Jobs', value: jobs.length, color: 'emerald', icon: Briefcase },
-        { label: 'Placed Students', value: students.length, color: 'blue', icon: Users },
-        { label: 'Live Stats', value: stats.length, color: 'purple', icon: BarChart3 },
+        { label: 'Total Jobs', value: jobs?.length || 0, color: 'emerald', icon: Briefcase },
+        { label: 'Placed Students', value: students?.length || 0, color: 'blue', icon: Users },
+        { label: 'Live Stats', value: stats?.length || 0, color: 'purple', icon: BarChart3 },
     ];
 
     return (
@@ -371,7 +371,7 @@ const DashboardView = ({ jobs, students, stats, onNavigate }) => {
                         <Star className="w-5 h-5 text-amber-500 fill-amber-500" /> Recent Job Postings
                     </h3>
                     <div className="space-y-4">
-                        {jobs.slice(0, 5).map((job, i) => (
+                        {(jobs || []).slice(0, 5).map((job, i) => (
                             <div key={i} className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100 group hover:border-emerald-200 transition-colors">
                                 <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-emerald-500 shadow-sm">
                                     <Briefcase className="w-5 h-5" />
@@ -401,7 +401,7 @@ const DashboardView = ({ jobs, students, stats, onNavigate }) => {
     );
 };
 
-const JobManagementView = ({ jobs, onAdd, onEdit, onDelete }) => {
+const JobManagementView = ({ jobs = [], onAdd, onEdit, onDelete }) => {
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
@@ -426,7 +426,7 @@ const JobManagementView = ({ jobs, onAdd, onEdit, onDelete }) => {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
-                        {jobs.map((job, i) => (
+                        {(jobs || []).map((job, i) => (
                             <tr key={i} className="hover:bg-slate-50 transition-colors group">
                                 <td className="px-6 py-4">
                                     <span className="font-bold text-slate-900 block">{job.title}</span>
@@ -464,7 +464,7 @@ const JobManagementView = ({ jobs, onAdd, onEdit, onDelete }) => {
     );
 };
 
-const StudentManagementView = ({ students, onAdd, onEdit, onDelete, getImageUrl }) => {
+const StudentManagementView = ({ students = [], onAdd, onEdit, onDelete, getImageUrl }) => {
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
@@ -478,7 +478,7 @@ const StudentManagementView = ({ students, onAdd, onEdit, onDelete, getImageUrl 
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {students.map((student, i) => (
+                {(students || []).map((student, i) => (
                     <div key={i} className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm relative group overflow-hidden">
                         <div className="absolute top-0 right-0 p-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                             <button 
@@ -495,11 +495,11 @@ const StudentManagementView = ({ students, onAdd, onEdit, onDelete, getImageUrl 
                             </button>
                         </div>
                         <div className="w-20 h-20 bg-slate-100 rounded-2xl mb-4 overflow-hidden shadow-inner border border-slate-200">
-                            <img 
-                                src={getImageUrl(student.image)} 
-                                alt={student.name} 
-                                className="w-full h-full object-cover" 
-                            />
+                                <img 
+                                    src={getImageUrl?.(student?.image)} 
+                                    alt={student?.name} 
+                                    className="w-full h-full object-cover" 
+                                />
                         </div>
                         <h4 className="font-black text-slate-900 text-lg">{student.name}</h4>
                         <p className="text-slate-500 font-bold text-sm mt-1">{student.company}</p>
@@ -514,7 +514,7 @@ const StudentManagementView = ({ students, onAdd, onEdit, onDelete, getImageUrl 
     );
 };
 
-const StatManagementView = ({ stats, onAdd, onEdit, onDelete }) => {
+const StatManagementView = ({ stats = [], onAdd, onEdit, onDelete }) => {
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
@@ -528,7 +528,7 @@ const StatManagementView = ({ stats, onAdd, onEdit, onDelete }) => {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {stats.map((stat, i) => (
+                {(stats || []).map((stat, i) => (
                     <div key={i} className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm group hover:border-emerald-500 transition-all">
                         <div className="flex justify-between items-start mb-4">
                             <div className="p-3 bg-slate-50 text-slate-600 rounded-2xl group-hover:bg-emerald-50 group-hover:text-emerald-600 transition-all">
@@ -558,7 +558,7 @@ const StatManagementView = ({ stats, onAdd, onEdit, onDelete }) => {
     );
 };
 
-const CarouselManagementView = ({ slides, onAdd, onDelete, getImageUrl }) => {
+const CarouselManagementView = ({ slides = [], onAdd, onDelete, getImageUrl }) => {
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
@@ -572,7 +572,7 @@ const CarouselManagementView = ({ slides, onAdd, onDelete, getImageUrl }) => {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {slides.map((slide, i) => (
+                {(slides || []).map((slide, i) => (
                     <div key={i} className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden group relative">
                         <div className="aspect-video relative overflow-hidden">
                             <img 
