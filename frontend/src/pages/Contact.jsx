@@ -84,7 +84,7 @@ const Contact = () => {
                                     </div>
                                     <div>
                                         <h3 className="font-bold text-slate-900 text-lg mb-1">Headquarters</h3>
-                                        <p className="text-slate-500 font-medium">100 Corporate Edge Building,<br/>Bangalore, India 560001</p>
+                                        <p className="text-slate-500 font-medium whitespace-pre-line">Building No. 645, Behind Allahabad Bank,<br/>In front of Gumanpura Thana, Aerodrome Circle,<br/>Kota, Rajasthan - 324001</p>
                                     </div>
                                 </motion.div>
 
