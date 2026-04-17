@@ -24,7 +24,7 @@ const App = () => {
 
     console.log('App with Routes rendering');
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col">
+        <div className="min-h-screen bg-gray-50 flex flex-col w-full overflow-x-hidden">
             <Navbar />
             <main className="flex-grow pt-20">
                 <AppRoutes />
