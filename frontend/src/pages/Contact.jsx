@@ -94,7 +94,11 @@ const Contact = () => {
                                     </div>
                                     <div>
                                         <h3 className="font-bold text-slate-900 text-lg mb-1">Call Center</h3>
-                                        <p className="text-slate-500 font-medium">+91 800 123 4567<br/>Mon-Fri, 9am to 6pm IST</p>
+                                        <p className="text-slate-500 font-medium">
+                                            +91 8104083002, +91 9783945080,<br/>
+                                            +91 8209635081<br/>
+                                            Mon-Fri, 9am to 6pm IST
+                                        </p>
                                     </div>
                                 </motion.div>
 
