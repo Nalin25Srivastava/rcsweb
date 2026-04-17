@@ -16,7 +16,7 @@
       "destination": "/api/index.js"
     },
     {
-      "source": "/(.*)",
+      "source": "/((?!api/|uploads/|assets/).*)",
       "destination": "/index.html"
     }
   ]
