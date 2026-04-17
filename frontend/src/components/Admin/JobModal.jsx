@@ -121,6 +121,7 @@ const JobModal = ({ isOpen, onClose, job = null, isEditing = false }) => {
                                         placeholder="Company Name"
                                         value={formData.companyName}
                                         onChange={(e) => setFormData({...formData, companyName: e.target.value})}
+                                        required
                                     />
                                 </div>
                             </div>
@@ -141,6 +142,7 @@ const JobModal = ({ isOpen, onClose, job = null, isEditing = false }) => {
                                             placeholder="e.g. Remote, New Delhi"
                                             value={formData.location}
                                             onChange={(e) => setFormData({...formData, location: e.target.value})}
+                                            required
                                         />
                                     </div>
                                 </div>
@@ -153,6 +155,7 @@ const JobModal = ({ isOpen, onClose, job = null, isEditing = false }) => {
                                             placeholder="e.g. 5-8 LPA"
                                             value={formData.salary}
                                             onChange={(e) => setFormData({...formData, salary: e.target.value})}
+                                            required
                                         />
                                     </div>
                                 </div>

@@ -34,8 +34,13 @@ const createJob = async (req, res) => {
         job_posting // New structured field
     } = req.body;
 
-    if (!title || !description || !email) {
-        return res.status(400).json({ message: 'Please add all fields' });
+    const requiredFields = { title: 'Job Title', description: 'Job Description', email: 'Contact Email', companyName: 'Company Name', location: 'Location', salary: 'Salary' };
+    const missingFields = Object.keys(requiredFields).filter(field => !req.body[field]);
+
+    if (missingFields.length > 0) {
+        return res.status(400).json({ 
+            message: `Missing required fields: ${missingFields.map(f => requiredFields[f]).join(', ')}` 
+        });
     }
 
     try {
