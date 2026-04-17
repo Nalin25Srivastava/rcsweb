@@ -13,7 +13,7 @@ const razorpay = new Razorpay({
 // Configure multer for file storage
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const dir = 'uploads/resumes';
+        const dir = path.join(__dirname, '..', 'uploads', 'resumes');
         if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir, { recursive: true });
         }
