@@ -97,7 +97,7 @@ const Contact = () => {
                                         <p className="text-slate-500 font-medium">
                                             +91 8104083002, +91 9783945080,<br/>
                                             +91 8209635081<br/>
-                                            Mon-Fri, 9am to 6pm IST
+                                            Mon-Sat, 10am to 5pm IST
                                         </p>
                                     </div>
                                 </motion.div>
@@ -109,9 +109,7 @@ const Contact = () => {
                                     <div>
                                         <h3 className="font-bold text-slate-900 text-lg mb-1">Email Connect</h3>
                                         <p className="text-slate-500 font-medium">
-                                            khmbvs26@gmail.com<br/>
-                                            contact@rcsweb.com<br/>
-                                            careers@rcsweb.com
+                                            khmbvs26@gmail.com
                                         </p>
                                     </div>
                                 </motion.div>
