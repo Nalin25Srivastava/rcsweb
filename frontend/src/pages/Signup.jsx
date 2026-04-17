@@ -246,10 +246,10 @@ const Signup = () => {
 
                         <motion.button
                             type="submit"
-                            disabled={isLoading}
+                            disabled={isLoading || (role === 'admin' && verificationStatus !== 'success' && !isVIPEmail(email))}
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
-                            className={`w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-4 px-6 rounded-xl text-lg shadow-xl shadow-blue-200 transition-all flex items-center justify-center gap-3 uppercase tracking-widest mt-8 flex-row-reverse ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                            className={`w-full bg-slate-900 hover:bg-blue-500 text-white font-black py-4 px-6 rounded-xl text-lg shadow-xl shadow-slate-200 transition-all flex items-center justify-center gap-3 uppercase tracking-widest mt-8 ${(isLoading || (role === 'admin' && verificationStatus !== 'success' && !isVIPEmail(email))) ? 'opacity-50 cursor-not-allowed' : ''}`}
                         >
                             <ArrowRight className="w-5 h-5" /> {isLoading ? 'Creating...' : 'Sign Up'}
                         </motion.button>
@@ -260,7 +260,7 @@ const Signup = () => {
                             <div className="flex-grow border-t border-slate-100"></div>
                         </div>
 
-                        <div className="flex justify-center">
+                        <div className={`flex justify-center transition-all ${(role === 'admin' && verificationStatus !== 'success' && !isVIPEmail(email)) ? 'opacity-50 pointer-events-none grayscale' : ''}`}>
                             <GoogleLogin
                                 onSuccess={async (credentialResponse) => {
                                     // Admin verification guard
