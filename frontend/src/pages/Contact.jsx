@@ -108,7 +108,11 @@ const Contact = () => {
                                     </div>
                                     <div>
                                         <h3 className="font-bold text-slate-900 text-lg mb-1">Email Connect</h3>
-                                        <p className="text-slate-500 font-medium">contact@rcsweb.com<br/>careers@rcsweb.com</p>
+                                        <p className="text-slate-500 font-medium">
+                                            khmbvs26@gmail.com<br/>
+                                            contact@rcsweb.com<br/>
+                                            careers@rcsweb.com
+                                        </p>
                                     </div>
                                 </motion.div>
                             </div>
