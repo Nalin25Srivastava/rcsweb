@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Mail, Lock, ArrowRight, ShieldAlert } from 'lucide-react';
+import { Mail, Lock, ArrowRight, ShieldAlert, CheckCircle, XCircle } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { login, googleLogin, reset, setSecretVerified } from '../store/slices/authSlice';
 import { GoogleLogin } from '@react-oauth/google';
@@ -16,6 +16,7 @@ const Login = () => {
 
     const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
     const [unpaidEmail, setUnpaidEmail] = useState(null);
+    const [verificationStatus, setVerificationStatus] = useState(null); // 'success' | 'error' | null
 
     const VIP_EMAILS = ['hitkarikusum.ngo@gmail.com', 'khmbvs26@gmail.com'];
     const isVIPEmail = (e) => e && VIP_EMAILS.includes(e.trim().toLowerCase());
@@ -67,6 +68,19 @@ const Login = () => {
             }
         }
     }, [user, isError, isSuccess, message, navigate, dispatch, email, role]);
+
+    const handleVerifyAdmin = () => {
+        if (adminSecret === 'rcsplacements2009') {
+            setVerificationStatus('success');
+        } else {
+            setVerificationStatus('error');
+            setTimeout(() => {
+                setRole('user');
+                setAdminSecret('');
+                setVerificationStatus(null);
+            }, 1500);
+        }
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -219,12 +233,43 @@ const Login = () => {
                                             <input
                                                 type="password"
                                                 value={adminSecret}
-                                                onChange={(e) => setAdminSecret(e.target.value)}
+                                                onChange={(e) => {
+                                                    setAdminSecret(e.target.value);
+                                                    if (verificationStatus) setVerificationStatus(null);
+                                                }}
                                                 placeholder="Enter admin passkey"
-                                                className="w-full bg-emerald-50/50 border-2 border-emerald-100 focus:border-emerald-500 focus:bg-white rounded-xl py-4 pl-12 pr-4 outline-none transition-all text-slate-900 shadow-sm font-bold placeholder:text-emerald-200"
+                                                className={`w-full bg-emerald-50/50 border-2 rounded-xl py-4 pl-12 pr-16 outline-none transition-all text-slate-900 shadow-sm font-bold placeholder:text-emerald-200 ${
+                                                    verificationStatus === 'success' ? 'border-emerald-500 bg-emerald-50' : 
+                                                    verificationStatus === 'error' ? 'border-red-500 bg-red-50' : 
+                                                    'border-emerald-100 focus:border-emerald-500 focus:bg-white'
+                                                }`}
                                                 required
                                             />
+                                            <button
+                                                type="button"
+                                                onClick={handleVerifyAdmin}
+                                                className="absolute right-2 top-1/2 -translate-y-1/2 bg-emerald-500 hover:bg-emerald-600 text-white text-[10px] font-black px-3 py-2 rounded-lg transition-all active:scale-95 uppercase tracking-tighter"
+                                            >
+                                                GO
+                                            </button>
                                         </div>
+                                        <AnimatePresence>
+                                            {verificationStatus && (
+                                                <motion.p 
+                                                    initial={{ opacity: 0, x: -10 }}
+                                                    animate={{ opacity: 1, x: 0 }}
+                                                    className={`text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 ml-1 ${
+                                                        verificationStatus === 'success' ? 'text-emerald-600' : 'text-red-600'
+                                                    }`}
+                                                >
+                                                    {verificationStatus === 'success' ? (
+                                                        <><CheckCircle className="w-3 h-3" /> Verification Successful</>
+                                                    ) : (
+                                                        <><XCircle className="w-3 h-3" /> Verification Failed</>
+                                                    )}
+                                                </motion.p>
+                                            )}
+                                        </AnimatePresence>
                                     </motion.div>
                                 )}
                             </AnimatePresence>
