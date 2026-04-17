@@ -9,7 +9,7 @@ const razorpay = new Razorpay({
     key_secret: process.env.RAZORPAY_KEY_SECRET || 'your_key_secret'
 });
 
-const VIP_EMAILS = ['hitkarikusum.ngo@gmail.com', 'khmbvs26@gmail.com'];
+const VIP_EMAILS = ['hitkarikusum.ngo@gmail.com', 'khmbvs26@gmail.com', 'hitkarikusu.org@gmail.com'];
 const isVIP = (email) => email && VIP_EMAILS.includes(email.trim().toLowerCase());
 
 // @desc    Register user

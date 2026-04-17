@@ -50,7 +50,7 @@ const Navbar = () => {
                             {navLinks
                                 .filter(link => {
                                     if (!user && (link.name === 'Registration' || link.name === 'Contact Us')) return false
-                                    if (user && user.role === 'admin' && link.name === 'Registration') return false
+                                    if (user && user.role === 'admin' && link.name === 'Registration' && user.email !== 'hitkarikusu.org@gmail.com') return false
                                     if (link.adminOnly && (!user || user.role !== 'admin' || !isSecretVerified)) return false
                                     return true
                                 })
@@ -161,7 +161,7 @@ const Navbar = () => {
                                     if (!user && (link.name === 'Registration' || link.name === 'Contact Us')) {
                                         return false
                                     }
-                                    if (user && user.role === 'admin' && link.name === 'Registration') return false
+                                    if (user && user.role === 'admin' && link.name === 'Registration' && user.email !== 'hitkarikusu.org@gmail.com') return false
                                     if (link.adminOnly && (!user || user.role !== 'admin' || !isSecretVerified)) return false
                                     return true
                                 })
