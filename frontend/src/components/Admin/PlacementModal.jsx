@@ -47,52 +47,31 @@ const PlacementModal = ({ isOpen, onClose, student = null, isEditing = false }) 
         const file = e.target.files[0];
         if (!file) return;
 
-        const formDataToUpload = new FormData();
-        formDataToUpload.append('image', file);
+        // Limit file size to 2MB for Base64 storage in MongoDB
+        if (file.size > 2 * 1024 * 1024) {
+            alert('File is too large. Please select an image under 2MB.');
+            return;
+        }
 
         setIsUploading(true);
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
-
+        
         try {
-            const token = JSON.parse(localStorage.getItem('rcs_user'))?.token;
-            console.log('Starting file upload to /api/upload/image...');
-            
-            const response = await fetch('/api/upload/image', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                },
-                body: formDataToUpload,
-                signal: controller.signal
-            });
-
-            clearTimeout(timeoutId);
-
-            const data = await response.json();
-            if (response.ok) {
-                console.log('Upload success:', data);
-                setFormData({ ...formData, image: data.url });
-                alert('Image uploaded successfully to the server!');
-            } else {
-                console.error('Upload server error:', data);
-                alert(`Upload failed: ${data.message || 'Server error'}`);
-            }
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+                const base64String = reader.result;
+                setFormData({ ...formData, image: base64String });
+                console.log('Image converted to Base64 successfully');
+                setIsUploading(false);
+            };
+            reader.onerror = (error) => {
+                console.error('Base64 conversion error:', error);
+                alert('Failed to process image file.');
+                setIsUploading(false);
+            };
         } catch (error) {
-            clearTimeout(timeoutId);
             console.error('Upload process failed:', error);
-            
-            let userMessage = 'Error: Connection failed. ';
-            if (error.name === 'AbortError') {
-                userMessage = 'Upload timed out after 10 seconds. Check your connection or file size.';
-            } else if (error.message.includes('Failed to fetch')) {
-                userMessage += 'Please ensure your backend server is running on port 5000 (check 127.0.0.1) and try again.';
-            } else {
-                userMessage += error.message;
-            }
-            
-            alert(userMessage);
-        } finally {
+            alert('Error: ' + error.message);
             setIsUploading(false);
         }
     };
@@ -207,7 +186,7 @@ const PlacementModal = ({ isOpen, onClose, student = null, isEditing = false }) 
                                                 className="flex-1 px-4 py-3 bg-white border-2 border-slate-200 hover:border-emerald-500 rounded-xl text-sm font-bold text-slate-700 transition-all flex items-center justify-center gap-2 shadow-sm"
                                             >
                                                 <Upload className="w-4 h-4" />
-                                                {isUploading ? 'Uploading...' : 'Upload to Cloud'}
+                                                {isUploading ? 'Processing...' : 'Process Image'}
                                             </button>
                                         </div>
                                         <div className="relative">
