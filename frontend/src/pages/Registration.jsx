@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Upload, CheckCircle, AlertCircle, LoaderCircle, ShieldCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -7,6 +7,7 @@ import { setPaid } from '../store/slices/authSlice';
 
 const Registration = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { isLoading, isSuccess, isError, message } = useSelector((state) => state.resumes);
 
     const [formData, setFormData] = useState({
@@ -110,7 +111,8 @@ const Registration = () => {
                     setTimeout(() => {
                         dispatch(resetResumeState());
                         setPaymentStatus(null);
-                    }, 8000);
+                        navigate('/');
+                    }, 3000);
                 },
                 modal: {
                     ondismiss: function() {

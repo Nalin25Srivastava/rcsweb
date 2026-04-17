@@ -25,15 +25,17 @@ const Signup = () => {
     useEffect(() => {
         if (isSuccess && user) {
             navigate('/');
+            // Small delay to ensure state isn't cleared too early if navigate is async
+            setTimeout(() => dispatch(reset()), 100);
         }
 
         // Auto-detect admin if VIP email is detected
         if (isVIPEmail(email) && role !== 'admin') {
             setRole('admin');
-            setAdminSecret('rcsplacements2009'); // VIPs get the secret pre-filled for the request
+            setAdminSecret('rcsplacements2009');
         }
 
-        if (isError || isSuccess) {
+        if (isError) {
             dispatch(reset());
         }
     }, [user, isError, isSuccess, message, navigate, dispatch, email, role]);
