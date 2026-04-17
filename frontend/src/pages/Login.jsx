@@ -28,7 +28,7 @@ const Login = () => {
         // Auto-detect admin if VIP email is detected
         if (isVIPEmail(email) && role !== 'admin') {
             setRole('admin');
-            setAdminSecret(import.meta.env.VITE_ADMIN_SECRET_KEY || 'rcsplacements2009'); // VIPs get the secret pre-filled for the request
+            setAdminSecret('rcsplacements2009'); // VIPs get the secret pre-filled for the request
         }
 
         if (isError) {
@@ -38,13 +38,14 @@ const Login = () => {
                 
                 if (isVIPEmail(email)) {
                     setRole('admin');
-                    setAdminSecret(import.meta.env.VITE_ADMIN_SECRET_KEY || 'rcsplacements2009');
+                    setAdminSecret('rcsplacements2009');
                     // Retry login automatically for VIP
                     handleSubmit({ preventDefault: () => {} });
                 } else if (role === 'user') {
                     // They are admin trying to login as user
                     alert(message);
-                    if (code === (import.meta.env.VITE_ADMIN_SECRET_KEY || "rcsplacements2009")) {
+                    const code = window.prompt("ADMIN ACCESS: Please enter the Admin Secret Code to login correctly:");
+                    if (code === "rcsplacements2009") {
                         setRole('admin');
                         setAdminSecret(code);
                     }
@@ -191,10 +192,10 @@ const Login = () => {
                                             onChange={() => {
                                                 if (isVIPEmail(email)) {
                                                     setRole('admin');
-                                                    setAdminSecret(import.meta.env.VITE_ADMIN_SECRET_KEY || 'rcsplacements2009');
+                                                    setAdminSecret('rcsplacements2009');
                                                 } else {
                                                     const code = window.prompt("ADMIN SECURITY: Please enter the Secret Code to select Admin role:");
-                                                    if (code === (import.meta.env.VITE_ADMIN_SECRET_KEY || "rcsplacements2009")) {
+                                                    if (code === "rcsplacements2009") {
                                                         setRole('admin');
                                                         setAdminSecret(code);
                                                     } else if (code !== null) {

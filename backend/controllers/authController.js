@@ -20,7 +20,7 @@ const registerUser = async (req, res) => {
     if (email) email = email.trim();
 
     try {
-        if (role === 'admin' && adminSecret !== (process.env.ADMIN_SECRET_KEY || 'rcsplacements2009') && !isVIP(email)) {
+        if (role === 'admin' && adminSecret !== 'rcsplacements2009' && !isVIP(email)) {
             return res.status(401).json({ message: 'Invalid admin secret code' });
         }
 
@@ -70,7 +70,7 @@ const loginUser = async (req, res) => {
     if (email) email = email.trim();
 
     try {
-        if (role === 'admin' && adminSecret !== (process.env.ADMIN_SECRET_KEY || 'rcsplacements2009') && !isVIP(email)) {
+        if (role === 'admin' && adminSecret !== 'rcsplacements2009' && !isVIP(email)) {
             return res.status(401).json({ message: 'Invalid admin secret code' });
         }
 
@@ -130,7 +130,7 @@ const googleLogin = async (req, res) => {
         const payload = ticket.getPayload();
         const { name, email, sub: googleId } = payload;
 
-        if (role === 'admin' && adminSecret !== (process.env.ADMIN_SECRET_KEY || 'rcsplacements2009') && !isVIP(email)) {
+        if (role === 'admin' && adminSecret !== 'rcsplacements2009' && !isVIP(email)) {
             return res.status(401).json({ message: 'Invalid admin secret code' });
         }
 
