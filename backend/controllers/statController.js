@@ -30,7 +30,24 @@ const createStat = async (req, res) => {
     }
 };
 
+// @desc    Delete a stat
+// @route   DELETE /api/stats/:id
+// @access  Private/Admin
+const deleteStat = async (req, res) => {
+    try {
+        const stat = await Stat.findById(req.params.id);
+        if (!stat) {
+            return res.status(404).json({ message: 'Stat not found' });
+        }
+        await stat.deleteOne();
+        res.status(200).json({ id: req.params.id });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 module.exports = {
     getStats,
-    createStat
+    createStat,
+    deleteStat
 };

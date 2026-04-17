@@ -23,11 +23,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { fetchJobs, deleteJob, createJob, updateJob } from '../store/slices/jobsSlice';
 import { fetchPlacedStudents, deletePlacedStudent, createPlacedStudent, updatePlacedStudent } from '../store/slices/placedStudentsSlice';
-import { fetchStats } from '../store/slices/statsSlice';
+import { fetchSlides, deleteSlide } from '../store/slices/carouselSlice';
+import { fetchStats, deleteStat } from '../store/slices/statsSlice';
 import { logout } from '../store/slices/authSlice';
 import PlacementModal from '../components/Admin/PlacementModal';
 import JobModal from '../components/Admin/JobModal';
 import StatModal from '../components/Admin/StatModal';
+import CarouselModal from '../components/Admin/CarouselModal';
 
 const AdminPanel = () => {
     const dispatch = useDispatch();
@@ -39,6 +41,7 @@ const AdminPanel = () => {
 
     const [activeTab, setActiveTab] = useState('dashboard');
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    const { slides } = useSelector((state) => state.carousel);
 
     // Student Modal State
     const [isStudentModalOpen, setIsStudentModalOpen] = useState(false);
@@ -50,6 +53,9 @@ const AdminPanel = () => {
     // Stat Modal State
     const [isStatModalOpen, setIsStatModalOpen] = useState(false);
     const [statModalMode, setStatModalMode] = useState({ isEditing: false, stat: null });
+
+    // Carousel Modal State
+    const [isCarouselModalOpen, setIsCarouselModalOpen] = useState(false);
 
     const handleAddJob = () => {
         setJobModalMode({ isEditing: false, job: null });
@@ -79,18 +85,13 @@ const AdminPanel = () => {
 
     const handleDeleteStat = async (id) => {
         if (window.confirm('Are you sure you want to delete this statistic?')) {
-            try {
-                const token = JSON.parse(localStorage.getItem('rcs_user'))?.token;
-                const response = await fetch(`/api/stats/${id}`, {
-                    method: 'DELETE',
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                if (response.ok) {
-                    dispatch(fetchStats());
-                }
-            } catch (error) {
-                alert('Failed to delete stat');
-            }
+            dispatch(deleteStat(id));
+        }
+    };
+
+    const handleDeleteSlide = (id) => {
+        if (window.confirm('Are you sure you want to delete this slide?')) {
+            dispatch(deleteSlide(id));
         }
     };
 
@@ -112,7 +113,7 @@ const AdminPanel = () => {
 
     const getImageUrl = (image) => {
         if (!image) return 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&q=80&w=200';
-        if (image.startsWith('http') || image.startsWith('/uploads')) return image;
+        if (image.startsWith('data:image') || image.startsWith('http') || image.startsWith('/uploads')) return image;
         return `/images/${image}`;
     };
 
@@ -126,6 +127,7 @@ const AdminPanel = () => {
         dispatch(fetchJobs());
         dispatch(fetchPlacedStudents());
         dispatch(fetchStats());
+        dispatch(fetchSlides());
     }, [dispatch]);
 
     const handleLogout = () => {
@@ -174,7 +176,14 @@ const AdminPanel = () => {
                     />
                 );
             case 'carousel':
-                return <CarouselManagementView />;
+                return (
+                    <CarouselManagementView 
+                        slides={slides} 
+                        onAdd={() => setIsCarouselModalOpen(true)}
+                        onDelete={handleDeleteSlide}
+                        getImageUrl={getImageUrl}
+                    />
+                );
             default:
                 return (
                     <div className="flex flex-col items-center justify-center h-full text-slate-400">
@@ -324,13 +333,18 @@ const AdminPanel = () => {
                     stat={statModalMode.stat}
                     isEditing={statModalMode.isEditing}
                 />
+
+                <CarouselModal 
+                    isOpen={isCarouselModalOpen}
+                    onClose={() => setIsCarouselModalOpen(false)}
+                />
             </main>
         </div>
     );
 };
 
 // Sub-components
-const DashboardView = ({ jobs, students, stats }) => {
+const DashboardView = ({ jobs, students, stats, onNavigate }) => {
     const cards = [
         { label: 'Total Jobs', value: jobs.length, color: 'emerald', icon: Briefcase },
         { label: 'Placed Students', value: students.length, color: 'blue', icon: Users },
@@ -367,7 +381,7 @@ const DashboardView = ({ jobs, students, stats }) => {
                                 <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-emerald-500 shadow-sm">
                                     <Briefcase className="w-5 h-5" />
                                 </div>
-                                <div className="flex-grow">
+                                <div className="flex-grow cursor-pointer" onClick={() => onNavigate('jobs')}>
                                     <h4 className="font-black text-slate-900 leading-tight">{job.title}</h4>
                                     <p className="text-xs text-slate-500 font-bold mt-1">{job.location} • {job.salary}</p>
                                 </div>
@@ -549,22 +563,48 @@ const StatManagementView = ({ stats, onAdd, onEdit, onDelete }) => {
     );
 };
 
-const CarouselManagementView = () => {
+const CarouselManagementView = ({ slides, onAdd, onDelete, getImageUrl }) => {
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-black text-slate-900">Carousel Slider Settings</h2>
-                <button className="bg-emerald-500 hover:bg-emerald-600 text-white font-black px-6 py-3 rounded-xl flex items-center gap-2 shadow-lg shadow-emerald-500/20 transition-all uppercase tracking-widest text-xs">
+                <h2 className="text-2xl font-black text-slate-900">Carousel Slider Management</h2>
+                <button 
+                    onClick={onAdd}
+                    className="bg-emerald-500 hover:bg-emerald-600 text-white font-black px-6 py-3 rounded-xl flex items-center gap-2 shadow-lg shadow-emerald-500/20 transition-all uppercase tracking-widest text-sm"
+                >
                     <Plus className="w-5 h-5" /> Upload Image
                 </button>
             </div>
             
-            <div className="bg-amber-50 border border-amber-100 p-6 rounded-3xl flex items-center gap-4 text-amber-800">
-                <ImageIcon className="w-8 h-8 opacity-50" />
-                <div>
-                    <h4 className="font-black">Carousel Manager</h4>
-                    <p className="text-sm font-medium opacity-80">This module is currently being optimized for high-resolution image uploads. You can preview existing slides below.</p>
-                </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {slides.map((slide, i) => (
+                    <div key={i} className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden group relative">
+                        <div className="aspect-video relative overflow-hidden">
+                            <img 
+                                src={getImageUrl(slide.url)} 
+                                alt={slide.title} 
+                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
+                            <div className="absolute bottom-0 left-0 p-6">
+                                <h4 className="text-white font-black text-xl leading-tight">{slide.title}</h4>
+                                <p className="text-white/70 text-sm font-bold mt-1">{slide.subtitle}</p>
+                            </div>
+                            <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button 
+                                    onClick={() => onDelete(slide._id)}
+                                    className="p-3 bg-red-500 text-white rounded-xl shadow-lg hover:bg-red-600 transition-colors"
+                                >
+                                    <Trash2 className="w-5 h-5" />
+                                </button>
+                            </div>
+                        </div>
+                        <div className="p-4 bg-slate-50 flex items-center justify-between">
+                            <span className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Slide Order: {slide.order}</span>
+                            <span className="text-[10px] font-black uppercase text-emerald-600 bg-emerald-50 px-2 py-1 rounded border border-emerald-100">Active</span>
+                        </div>
+                    </div>
+                ))}
             </div>
         </div>
     );

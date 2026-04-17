@@ -30,7 +30,24 @@ const createSlide = async (req, res) => {
     }
 };
 
+// @desc    Delete a carousel slide
+// @route   DELETE /api/carousel/:id
+// @access  Private/Admin
+const deleteSlide = async (req, res) => {
+    try {
+        const slide = await CarouselSlide.findById(req.params.id);
+        if (!slide) {
+            return res.status(404).json({ message: 'Slide not found' });
+        }
+        await slide.deleteOne();
+        res.status(200).json({ id: req.params.id });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 module.exports = {
     getSlides,
-    createSlide
+    createSlide,
+    deleteSlide
 };

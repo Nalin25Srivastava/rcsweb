@@ -22,6 +22,48 @@ export const fetchSlides = createAsyncThunk('carousel/fetchAll', async (_, thunk
     }
 });
 
+export const createSlide = createAsyncThunk('carousel/create', async (slideData, thunkAPI) => {
+    try {
+        const token = thunkAPI.getState().auth.user.token;
+        const response = await fetch('/api/carousel', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(slideData)
+        });
+        const data = await response.json();
+        if (response.ok) {
+            return data;
+        } else {
+            return thunkAPI.rejectWithValue(data.message);
+        }
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.message);
+    }
+});
+
+export const deleteSlide = createAsyncThunk('carousel/delete', async (id, thunkAPI) => {
+    try {
+        const token = thunkAPI.getState().auth.user.token;
+        const response = await fetch(`/api/carousel/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        const data = await response.json();
+        if (response.ok) {
+            return data.id;
+        } else {
+            return thunkAPI.rejectWithValue(data.message);
+        }
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.message);
+    }
+});
+
 export const carouselSlice = createSlice({
     name: 'carousel',
     initialState,
@@ -39,6 +81,32 @@ export const carouselSlice = createSlice({
                 state.slides = action.payload;
             })
             .addCase(fetchSlides.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.message = action.payload;
+            })
+            .addCase(createSlide.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(createSlide.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.slides.push(action.payload);
+            })
+            .addCase(createSlide.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.message = action.payload;
+            })
+            .addCase(deleteSlide.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(deleteSlide.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.slides = state.slides.filter(slide => slide._id !== action.payload);
+            })
+            .addCase(deleteSlide.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.message = action.payload;
