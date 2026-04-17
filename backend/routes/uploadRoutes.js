@@ -59,8 +59,8 @@ router.post('/image', protect, admin, (req, res) => {
 
         console.log('File successfully received:', req.file.filename);
 
-        // Normalize path to use forward slashes for browser accessibility
-        const imageUrl = `/${req.file.path.replace(/\\/g, '/')}`;
+        // Normalize path to use a web-relative path that matches our static serving route
+        const imageUrl = `/uploads/images/${req.file.filename}`;
 
         res.status(200).json({
             success: true,

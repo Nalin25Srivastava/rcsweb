@@ -58,8 +58,8 @@ exports.submitResume = (req, res) => {
         const registrationFee = amount || 1000;
 
         try {
-            // Normalize path
-            const normalizedPath = req.file.path.replace(/\\/g, '/');
+            // Use a web-relative path that matches our static serving route
+            const normalizedPath = `/uploads/resumes/${req.file.filename}`;
 
             // 1. Create Pending Resume in DB
             const resume = await Resume.create({
