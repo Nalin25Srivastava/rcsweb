@@ -10,9 +10,19 @@ const Viewjobs = () => {
     const navigate = useNavigate();
     const { jobs, isLoading, isError, message } = useSelector((state) => state.jobs);
     const { user: reduxUser } = useSelector((state) => state.auth);
-    const storedUser = JSON.parse(localStorage.getItem('rcs_user') || 'null');
-    const user = reduxUser || storedUser;
-    const isVIP = user?.email === 'hitkarikusum.ngo@gmail.com';
+    
+    // Safer localStorage access
+    const getStoredUser = () => {
+        try {
+            const stored = localStorage.getItem('rcs_user');
+            return stored ? JSON.parse(stored) : null;
+        } catch (e) {
+            return null;
+        }
+    };
+    
+    const user = reduxUser || getStoredUser();
+    const isVIP = user?.email === 'hitkarikusum.ngo@gmail.com' || user?.email === 'hitkarikusu.org@gmail.com';
 
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedJob, setSelectedJob] = useState(null);
@@ -33,7 +43,7 @@ const Viewjobs = () => {
         website: 'www.rcsconsultant.com',
         companyName: 'RCS PLACEMENT KOTA'
     });
-    const itemsPerPage = 4;
+    const itemsPerPage = 8;
 
     // Animation Variants
     const containerVariants = {
@@ -363,7 +373,7 @@ const Viewjobs = () => {
                 key={currentPage} 
                 className="max-w-9xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-2 px-4"
                 variants={containerVariants}
-                initial="hidden"
+                initial="visible"
                 animate="visible"
             >
 
@@ -382,6 +392,7 @@ const Viewjobs = () => {
                             key={index} 
                             className="flex flex-col p-6 rounded-3xl bg-white border border-slate-100 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-emerald-500/10 cursor-pointer h-full relative overflow-hidden group"
                             variants={cardVariants}
+                            initial="visible"
                             whileHover="hover"
                         >
                             <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-emerald-100 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-bl-full"></div>
