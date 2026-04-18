@@ -8,16 +8,28 @@ const initialState = {
     message: ''
 };
 
+// Helper to handle fetch responses safely
+const handleResponse = async (response, thunkAPI, fallbackMessage) => {
+    const text = await response.text();
+    let data;
+    try {
+        data = JSON.parse(text);
+    } catch (e) {
+        return thunkAPI.rejectWithValue(`Server error (${response.status}): The server returned an unexpected response format.`);
+    }
+
+    if (response.ok) {
+        return data;
+    } else {
+        return thunkAPI.rejectWithValue(data.message || fallbackMessage);
+    }
+};
+
 // Fetch all placed students
 export const fetchPlacedStudents = createAsyncThunk('placedStudents/fetchAll', async (_, thunkAPI) => {
     try {
         const response = await fetch('/api/placed-students');
-        const data = await response.json();
-        if (response.ok) {
-            return data;
-        } else {
-            return thunkAPI.rejectWithValue(data.message);
-        }
+        return await handleResponse(response, thunkAPI, 'Failed to fetch success stories');
     } catch (error) {
         return thunkAPI.rejectWithValue(error.message);
     }
@@ -35,12 +47,7 @@ export const createPlacedStudent = createAsyncThunk('placedStudents/create', asy
             },
             body: JSON.stringify(studentData)
         });
-        const data = await response.json();
-        if (response.ok) {
-            return data;
-        } else {
-            return thunkAPI.rejectWithValue(data.message);
-        }
+        return await handleResponse(response, thunkAPI, 'Failed to create success story');
     } catch (error) {
         return thunkAPI.rejectWithValue(error.message);
     }
@@ -58,12 +65,7 @@ export const updatePlacedStudent = createAsyncThunk('placedStudents/update', asy
             },
             body: JSON.stringify(studentData)
         });
-        const data = await response.json();
-        if (response.ok) {
-            return data;
-        } else {
-            return thunkAPI.rejectWithValue(data.message);
-        }
+        return await handleResponse(response, thunkAPI, 'Failed to update success story');
     } catch (error) {
         return thunkAPI.rejectWithValue(error.message);
     }
@@ -79,12 +81,7 @@ export const deletePlacedStudent = createAsyncThunk('placedStudents/delete', asy
                 'Authorization': `Bearer ${token}`
             }
         });
-        const data = await response.json();
-        if (response.ok) {
-            return data;
-        } else {
-            return thunkAPI.rejectWithValue(data.message);
-        }
+        return await handleResponse(response, thunkAPI, 'Failed to delete success story');
     } catch (error) {
         return thunkAPI.rejectWithValue(error.message);
     }
