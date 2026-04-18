@@ -43,61 +43,35 @@ const PlacementModal = ({ isOpen, onClose, student = null, isEditing = false }) 
         return `/images/${image}`;
     };
 
-    const compressImage = (file) => {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = (event) => {
-                const img = new Image();
-                img.src = event.target.result;
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 800;
-                    const MAX_HEIGHT = 800;
-                    let width = img.width;
-                    let height = img.height;
-
-                    if (width > height) {
-                        if (width > MAX_WIDTH) {
-                            height *= MAX_WIDTH / width;
-                            width = MAX_WIDTH;
-                        }
-                    } else {
-                        if (height > MAX_HEIGHT) {
-                            width *= MAX_HEIGHT / height;
-                            height = MAX_HEIGHT;
-                        }
-                    }
-
-                    canvas.width = width;
-                    canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-                    
-                    // Compress to JPEG with 0.7 quality
-                    const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
-                    resolve(dataUrl);
-                };
-                img.onerror = (error) => reject(error);
-            };
-            reader.onerror = (error) => reject(error);
-        });
-    };
-
     const handleFileUpload = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
 
+        // Limit file size to 2MB for Base64 storage in MongoDB
+        if (file.size > 2 * 1024 * 1024) {
+            alert('File is too large. Please select an image under 2MB.');
+            return;
+        }
+
         setIsUploading(true);
         
         try {
-            const compressedBase64 = await compressImage(file);
-            setFormData({ ...formData, image: compressedBase64 });
-            console.log('Image compressed and converted successfully');
-            setIsUploading(false);
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+                const base64String = reader.result;
+                setFormData({ ...formData, image: base64String });
+                console.log('Image converted to Base64 successfully');
+                setIsUploading(false);
+            };
+            reader.onerror = (error) => {
+                console.error('Base64 conversion error:', error);
+                alert('Failed to process image file.');
+                setIsUploading(false);
+            };
         } catch (error) {
-            console.error('Compression/Upload process failed:', error);
-            alert('Failed to process image file: ' + error.message);
+            console.error('Upload process failed:', error);
+            alert('Error: ' + error.message);
             setIsUploading(false);
         }
     };

@@ -498,7 +498,6 @@ const StudentManagementView = ({ students = [], onAdd, onEdit, onDelete, getImag
                                 <img 
                                     src={getImageUrl?.(student?.image)} 
                                     alt={student?.name} 
-                                    onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&q=80&w=200'; }}
                                     className="w-full h-full object-cover" 
                                 />
                         </div>
