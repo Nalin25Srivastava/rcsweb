@@ -238,6 +238,7 @@ const Home = () => {
                                     <img 
                                         src={getImageUrl(student.image)} 
                                         alt={student.name}
+                                        onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&q=80&w=400'; }}
                                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out"
                                     />
                                     <div className="absolute bottom-0 left-0 right-0 p-6 z-20">

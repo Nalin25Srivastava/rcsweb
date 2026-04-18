@@ -27,10 +27,12 @@ app.use(helmet());
 // app.use(limiter);
 app.use(cors());
 app.use(express.json({
+    limit: '50mb',
     verify: (req, res, buf) => {
         req.rawBody = buf;
     }
 }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // Routes
 app.use('/api/services', require('./routes/serviceRoutes'));
