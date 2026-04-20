@@ -248,7 +248,7 @@ const Home = () => {
                                     <div className="flex justify-between items-center mb-2">
                                         <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest">Hired By</p>
                                         <div className="bg-emerald-500/20 px-2 py-0.5 rounded-full border border-emerald-500/30">
-                                            <p className="text-emerald-400 text-[10px] font-black uppercase tracking-widest">{student.package || '---'}</p>
+                                            <p className="text-emerald-400 text-[10px] font-black uppercase tracking-widest">{student.compensation || '---'}</p>
                                         </div>
                                     </div>
                                     <p className="text-xl font-extrabold text-white truncate">{student.company}</p>

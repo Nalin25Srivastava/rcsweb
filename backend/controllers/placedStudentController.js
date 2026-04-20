@@ -5,6 +5,14 @@ const PlacedStudent = require('../models/PlacedStudent');
 // @access  Public
 const getPlacedStudents = async (req, res, next) => {
     try {
+        // Fail fast if database is not connected
+        if (mongoose.connection.readyState !== 1) {
+            return res.status(503).json({ 
+                success: false, 
+                message: 'Database connection is currently unavailable. Please try again in 30 seconds.' 
+            });
+        }
+
         console.log('Fetching placed students...');
         const students = await PlacedStudent.find().sort({ placedDate: -1 });
         console.log(`Found ${students.length} students`);
@@ -31,7 +39,7 @@ const createPlacedStudent = async (req, res) => {
             name,
             company,
             position,
-            package: salaryPackage,
+            compensation: salaryPackage,
             image,
             placedDate
         });

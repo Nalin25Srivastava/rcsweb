@@ -10,7 +10,7 @@ const PlacementModal = ({ isOpen, onClose, student = null, isEditing = false }) 
         name: '',
         company: '',
         position: '',
-        package: '',
+        compensation: '',
         image: ''
     });
     const [isUploading, setIsUploading] = useState(false);
@@ -22,7 +22,7 @@ const PlacementModal = ({ isOpen, onClose, student = null, isEditing = false }) 
                 name: student.name || '',
                 company: student.company || '',
                 position: student.position || '',
-                package: student.package || '',
+                compensation: student.compensation || '',
                 image: student.image || ''
             });
         } else {
@@ -30,7 +30,7 @@ const PlacementModal = ({ isOpen, onClose, student = null, isEditing = false }) 
                 name: '',
                 company: '',
                 position: '',
-                package: '',
+                compensation: '',
                 image: ''
             });
         }
@@ -142,12 +142,12 @@ const PlacementModal = ({ isOpen, onClose, student = null, isEditing = false }) 
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Package (CTC)</label>
+                                    <label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Compensation (CTC)</label>
                                     <input 
                                         className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-emerald-500 focus:bg-white transition-all outline-none font-bold text-slate-700 placeholder:text-slate-300"
                                         placeholder="e.g. 6.5 LPA"
-                                        value={formData.package}
-                                        onChange={(e) => setFormData({...formData, package: e.target.value})}
+                                        value={formData.compensation}
+                                        onChange={(e) => setFormData({...formData, compensation: e.target.value})}
                                         required
                                     />
                                 </div>
