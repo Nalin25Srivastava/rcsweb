@@ -34,6 +34,14 @@ app.use(express.json({
 }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
+// Diagnostic Routes
+app.get('/api/ping', (req, res) => res.json({ 
+  status: 'active', 
+  time: new Date().toISOString(),
+  env: process.env.NODE_ENV,
+  isVercel: !!process.env.VERCEL
+}));
+
 // Routes
 app.use('/api/registered-candidates', require('./routes/registeredCandidateRoutes'));
 app.use('/api/auth', require('./routes/authRoutes'));
