@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, UserPlus, Info, Search, List } from 'lucide-react';
-import { createRegisteredStudent, updateRegisteredStudent } from '../../store/slices/registeredStudentsSlice';
+import { createRegisteredCandidate, updateRegisteredCandidate } from '../../store/slices/registeredCandidatesSlice';
 
-const RegisteredStudentModal = ({ isOpen, onClose, student = null, isEditing = false, users = [] }) => {
+const RegisteredCandidateModal = ({ isOpen, onClose, candidate = null, isEditing = false, users = [] }) => {
     const dispatch = useDispatch();
     const [formData, setFormData] = useState({
         userId: '',
@@ -21,16 +21,20 @@ const RegisteredStudentModal = ({ isOpen, onClose, student = null, isEditing = f
     const [isUserListOpen, setIsUserListOpen] = useState(false);
 
     useEffect(() => {
-        if (isEditing && student) {
+        if (candidate) {
+            // If it's an existing registered candidate record, it will have a 'user' field containing the ID
+            // If it's a raw user selected from 'Discover', it won't have 'user' but will be the user object itself
+            const isUserObject = !candidate.user && candidate.email;
+            
             setFormData({
-                userId: student.user || '',
-                name: student.name || '',
-                email: student.email || '',
-                phone: student.phone || '',
-                course: student.course || '',
-                batch: student.batch || '',
-                status: student.status || 'Active',
-                image: student.image || ''
+                userId: isUserObject ? candidate._id : (candidate.user || ''),
+                name: candidate.name || '',
+                email: candidate.email || '',
+                phone: candidate.phone || '',
+                course: candidate.course || '',
+                batch: candidate.batch || '',
+                status: candidate.status || 'Active',
+                image: candidate.image || ''
             });
         } else {
             setFormData({
@@ -44,7 +48,7 @@ const RegisteredStudentModal = ({ isOpen, onClose, student = null, isEditing = f
                 image: ''
             });
         }
-    }, [isEditing, student, isOpen]);
+    }, [candidate, isOpen]);
 
     const filteredUsers = users.filter(u => 
         u.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -66,9 +70,9 @@ const RegisteredStudentModal = ({ isOpen, onClose, student = null, isEditing = f
         e.preventDefault();
         try {
             if (isEditing) {
-                await dispatch(updateRegisteredStudent({ id: student._id, studentData: formData })).unwrap();
+                await dispatch(updateRegisteredCandidate({ id: candidate._id, candidateData: formData })).unwrap();
             } else {
-                await dispatch(createRegisteredStudent(formData)).unwrap();
+                await dispatch(createRegisteredCandidate(formData)).unwrap();
             }
             onClose();
         } catch (error) {
@@ -93,7 +97,7 @@ const RegisteredStudentModal = ({ isOpen, onClose, student = null, isEditing = f
                 >
                     <div className="flex justify-between items-center mb-6">
                         <h2 className="text-3xl font-black text-slate-900 uppercase tracking-tight">
-                            {isEditing ? 'Edit Registration' : 'Register New Student'}
+                            {isEditing ? 'Edit Candidate Details' : 'Register New Candidate'}
                         </h2>
                         <button onClick={onClose} className="p-2 hover:bg-slate-100 rounded-full transition-colors">
                             <X className="w-6 h-6 text-slate-400" />
@@ -103,14 +107,14 @@ const RegisteredStudentModal = ({ isOpen, onClose, student = null, isEditing = f
                     <form onSubmit={handleSubmit} className="flex-grow overflow-y-auto pr-2 custom-scrollbar space-y-6 pb-2">
                         {!isEditing && (
                             <div className="relative">
-                                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Select Candidate from Users</label>
+                                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Select from Registered Candidates List</label>
                                 <div 
                                     className="relative cursor-pointer"
                                     onClick={() => setIsUserListOpen(!isUserListOpen)}
                                 >
                                     <div className="w-full pl-12 pr-4 py-4 bg-emerald-50 border-2 border-emerald-100 rounded-2xl font-bold text-slate-900 flex items-center">
                                         <Search className="absolute left-4 w-5 h-5 text-emerald-500" />
-                                        {formData.name ? `${formData.name} (${formData.email})` : 'Search & Select Candidate...'}
+                                        {formData.name ? `${formData.name} (${formData.email})` : 'Search & Select from Fetched Records...'}
                                         <List className="ml-auto w-5 h-5 text-emerald-300" />
                                     </div>
                                 </div>
@@ -125,7 +129,7 @@ const RegisteredStudentModal = ({ isOpen, onClose, student = null, isEditing = f
                                             <input 
                                                 autoFocus
                                                 type="text" 
-                                                placeholder="Type to search..." 
+                                                placeholder="Type to search candidates..." 
                                                 value={searchTerm}
                                                 onChange={(e) => setSearchTerm(e.target.value)}
                                                 onClick={(e) => e.stopPropagation()}
@@ -133,7 +137,7 @@ const RegisteredStudentModal = ({ isOpen, onClose, student = null, isEditing = f
                                             />
                                         </div>
                                         {filteredUsers.length === 0 ? (
-                                            <div className="p-4 text-center text-slate-400 text-sm font-bold">No users found</div>
+                                            <div className="p-4 text-center text-slate-400 text-sm font-bold">No candidates found</div>
                                         ) : (
                                             filteredUsers.map(u => (
                                                 <div 
@@ -153,7 +157,7 @@ const RegisteredStudentModal = ({ isOpen, onClose, student = null, isEditing = f
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Full Name</label>
+                                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Candidate Name</label>
                                 <input 
                                     value={formData.name} 
                                     onChange={(e) => setFormData({...formData, name: e.target.value})} 
@@ -176,7 +180,7 @@ const RegisteredStudentModal = ({ isOpen, onClose, student = null, isEditing = f
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Phone Number</label>
+                                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Contact Number</label>
                                 <input 
                                     value={formData.phone} 
                                     onChange={(e) => setFormData({...formData, phone: e.target.value})} 
@@ -185,7 +189,7 @@ const RegisteredStudentModal = ({ isOpen, onClose, student = null, isEditing = f
                                 />
                             </div>
                             <div>
-                                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Course / Domain</label>
+                                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Training Domain</label>
                                 <input 
                                     value={formData.course} 
                                     onChange={(e) => setFormData({...formData, course: e.target.value})} 
@@ -198,25 +202,25 @@ const RegisteredStudentModal = ({ isOpen, onClose, student = null, isEditing = f
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Batch Code</label>
+                                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Batch Identifier</label>
                                 <input 
                                     value={formData.batch} 
                                     onChange={(e) => setFormData({...formData, batch: e.target.value})} 
-                                    placeholder="e.g. BATCH-2024-A" 
+                                    placeholder="e.g. BATCH-2024-C" 
                                     required
                                     className="w-full px-4 py-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl font-bold text-slate-900 outline-none"
                                 />
                             </div>
                             <div>
-                                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Current Status</label>
+                                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Current Enrollment Status</label>
                                 <select 
                                     value={formData.status} 
                                     onChange={(e) => setFormData({...formData, status: e.target.value})} 
                                     className="w-full px-4 py-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl font-bold text-slate-900 outline-none appearance-none"
                                 >
-                                    <option value="Active">Active Student</option>
-                                    <option value="Completed">Course Completed</option>
-                                    <option value="Dropped">Dropped Out</option>
+                                    <option value="Active">Active Participant</option>
+                                    <option value="Completed">Training Completed</option>
+                                    <option value="Dropped">Discontinued</option>
                                 </select>
                             </div>
                         </div>
@@ -234,7 +238,7 @@ const RegisteredStudentModal = ({ isOpen, onClose, student = null, isEditing = f
                                 disabled={!formData.userId}
                                 className="flex-[2] bg-slate-900 hover:bg-emerald-500 text-white font-black py-4 px-4 rounded-2xl shadow-xl transition-colors uppercase tracking-widest text-xs disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                                {isEditing ? 'Update Registration' : 'Complete Registration'}
+                                {isEditing ? 'Update Records' : 'Confirm Registration'}
                             </button>
                         </div>
                     </form>
@@ -244,4 +248,4 @@ const RegisteredStudentModal = ({ isOpen, onClose, student = null, isEditing = f
     );
 };
 
-export default RegisteredStudentModal;
+export default RegisteredCandidateModal;

@@ -25,7 +25,7 @@ const Navbar = () => {
     const navLinks = [
         { name: 'Home', href: '/' },
         { name: 'About', href: '/about' },
-        { name: 'Registered Students', href: '/registered-students' },
+        { name: 'Registered Candidates', href: '/registered-candidates' },
         { name: 'Registration', href: '/postres' },
         { name: 'View Jobs', href: '/viewjobs' },
         { name: 'Contact Us', href: '/contact' },

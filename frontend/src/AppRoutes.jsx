@@ -2,7 +2,7 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import Home from './pages/Home';
 import About from './pages/About';
-import RegisteredStudents from './pages/RegisteredStudents';
+import RegisteredCandidates from './pages/RegisteredCandidates';
 import Registration from './pages/Registration';
 import Contact from './pages/Contact';
 import Viewjobs from './pages/Viewjobs';
@@ -33,7 +33,7 @@ const AppRoutes = () => {
             <Routes location={location} key={location.pathname}>
                 <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
                 <Route path="/about" element={<PageWrapper><About /></PageWrapper>} />
-                <Route path="/registered-students" element={<PageWrapper><RegisteredStudents /></PageWrapper>} />
+                <Route path="/registered-candidates" element={<PageWrapper><RegisteredCandidates /></PageWrapper>} />
                 <Route path="/postres" element={<PageWrapper><Registration /></PageWrapper>} />
                 <Route path="/contact" element={<PageWrapper><Contact /></PageWrapper>} />
                 <Route path="/viewjobs" element={<PageWrapper><Viewjobs /></PageWrapper>} />

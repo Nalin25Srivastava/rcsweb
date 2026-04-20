@@ -22,13 +22,13 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { fetchRegisteredStudents, deleteRegisteredStudent, createRegisteredStudent, updateRegisteredStudent } from '../store/slices/registeredStudentsSlice';
+import { fetchRegisteredCandidates, deleteRegisteredCandidate, createRegisteredCandidate, updateRegisteredCandidate } from '../store/slices/registeredCandidatesSlice';
 import { logout, fetchUsers } from '../store/slices/authSlice';
 import PlacementModal from '../components/Admin/PlacementModal';
 import JobModal from '../components/Admin/JobModal';
 import StatModal from '../components/Admin/StatModal';
 import CarouselModal from '../components/Admin/CarouselModal';
-import RegisteredStudentModal from '../components/Admin/RegisteredStudentModal';
+import RegisteredCandidateModal from '../components/Admin/RegisteredCandidateModal';
 
 const AdminPanel = () => {
     const dispatch = useDispatch();
@@ -37,7 +37,7 @@ const AdminPanel = () => {
     const { jobs } = useSelector((state) => state.jobs);
     const { placedStudents } = useSelector((state) => state.placedStudents);
     const { stats } = useSelector((state) => state.stats);
-    const { registeredStudents } = useSelector((state) => state.registeredStudents);
+    const { registeredCandidates } = useSelector((state) => state.registeredCandidates);
     const { users } = useSelector((state) => state.auth);
 
     const [activeTab, setActiveTab] = useState('dashboard');
@@ -58,9 +58,9 @@ const AdminPanel = () => {
     // Carousel Modal State
     const [isCarouselModalOpen, setIsCarouselModalOpen] = useState(false);
 
-    // Registered Student Modal State
-    const [isRegStudentModalOpen, setIsRegStudentModalOpen] = useState(false);
-    const [regStudentModalMode, setRegStudentModalMode] = useState({ isEditing: false, student: null });
+    // Registered Candidate Modal State
+    const [isRegCandidateModalOpen, setIsRegCandidateModalOpen] = useState(false);
+    const [regCandidateModalMode, setRegCandidateModalMode] = useState({ isEditing: false, candidate: null });
 
     const handleAddJob = () => {
         setJobModalMode({ isEditing: false, job: null });
@@ -116,19 +116,19 @@ const AdminPanel = () => {
         }
     };
 
-    const handleAddRegStudent = () => {
-        setRegStudentModalMode({ isEditing: false, student: null });
-        setIsRegStudentModalOpen(true);
+    const handleAddRegCandidate = () => {
+        setRegCandidateModalMode({ isEditing: false, candidate: null });
+        setIsRegCandidateModalOpen(true);
     };
 
-    const handleEditRegStudent = (student) => {
-        setRegStudentModalMode({ isEditing: true, student });
-        setIsRegStudentModalOpen(true);
+    const handleEditRegCandidate = (candidate) => {
+        setRegCandidateModalMode({ isEditing: true, candidate });
+        setIsRegCandidateModalOpen(true);
     };
 
-    const handleDeleteRegStudent = (id) => {
-        if (window.confirm('Are you sure you want to remove this registered student?')) {
-            dispatch(deleteRegisteredStudent(id));
+    const handleDeleteRegCandidate = (id) => {
+        if (window.confirm('Are you sure you want to remove this registered candidate?')) {
+            dispatch(deleteRegisteredCandidate(id));
         }
     };
 
@@ -143,7 +143,7 @@ const AdminPanel = () => {
         dispatch(fetchPlacedStudents());
         dispatch(fetchStats());
         dispatch(fetchSlides());
-        dispatch(fetchRegisteredStudents());
+        dispatch(fetchRegisteredCandidates());
         dispatch(fetchUsers());
     }, [dispatch]);
 
@@ -162,7 +162,7 @@ const AdminPanel = () => {
         { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
         { id: 'jobs', label: 'Manage Jobs', icon: Briefcase },
         { id: 'students', label: 'Placed Students', icon: Users },
-        { id: 'regStudents', label: 'Registered Students', icon: GraduationCap },
+        { id: 'regCandidates', label: 'Registered Candidates', icon: GraduationCap },
         { id: 'stats', label: 'Statistics', icon: BarChart3 },
         { id: 'carousel', label: 'Carousel Slider', icon: ImageIcon },
         { id: 'settings', label: 'Settings', icon: Settings },
@@ -191,13 +191,13 @@ const AdminPanel = () => {
                         getImageUrl={getImageUrl}
                     />
                 );
-            case 'regStudents':
+            case 'regCandidates':
                 return (
-                    <RegisteredStudentManagementView 
-                        students={registeredStudents || []}
-                        onAdd={handleAddRegStudent}
-                        onEdit={handleEditRegStudent}
-                        onDelete={handleDeleteRegStudent}
+                    <RegisteredCandidateManagementView 
+                        candidates={registeredCandidates || []}
+                        onAdd={handleAddRegCandidate}
+                        onEdit={handleEditRegCandidate}
+                        onDelete={handleDeleteRegCandidate}
                         getImageUrl={getImageUrl}
                     />
                 );
@@ -374,11 +374,11 @@ const AdminPanel = () => {
                     onClose={() => setIsCarouselModalOpen(false)}
                 />
 
-                <RegisteredStudentModal 
-                    isOpen={isRegStudentModalOpen}
-                    onClose={() => setIsRegStudentModalOpen(false)}
-                    student={regStudentModalMode.student}
-                    isEditing={regStudentModalMode.isEditing}
+                <RegisteredCandidateModal 
+                    isOpen={isRegCandidateModalOpen}
+                    onClose={() => setIsRegCandidateModalOpen(false)}
+                    candidate={regCandidateModalMode.candidate}
+                    isEditing={regCandidateModalMode.isEditing}
                     users={users || []}
                 />
             </main>
@@ -653,56 +653,132 @@ const CarouselManagementView = ({ slides = [], onAdd, onDelete, getImageUrl }) =
     );
 };
 
-const RegisteredStudentManagementView = ({ students = [], onAdd, onEdit, onDelete, getImageUrl }) => {
+const RegisteredCandidateManagementView = ({ candidates = [], onAdd, onEdit, onDelete, getImageUrl, users = [] }) => {
+    const [viewMode, setViewMode] = useState('registered'); // 'registered' | 'discover'
+
+    // Filter out users who are already registered
+    const registeredUserIds = candidates.map(c => c.user);
+    const availableUsers = users.filter(u => !registeredUserIds.includes(u._id));
+
     return (
-        <div className="space-y-6">
-            <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-black text-slate-900">Manage Registered Students</h2>
-                <button 
-                    onClick={onAdd}
-                    className="bg-emerald-500 hover:bg-emerald-600 text-white font-black px-6 py-3 rounded-xl flex items-center gap-2 shadow-lg shadow-emerald-500/20 transition-all uppercase tracking-widest text-xs"
-                >
-                    <Plus className="w-5 h-5" /> Register Student
-                </button>
+        <div className="space-y-8">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h2 className="text-3xl font-black text-slate-900 tracking-tight">Registered Candidates</h2>
+                    <p className="text-slate-500 font-bold mt-1">Manage public gallery and register new participants.</p>
+                </div>
+                <div className="flex bg-slate-100 p-1.5 rounded-2xl">
+                    <button 
+                        onClick={() => setViewMode('registered')}
+                        className={`px-6 py-2.5 rounded-xl font-black text-xs uppercase tracking-widest transition-all ${
+                            viewMode === 'registered' ? 'bg-white text-slate-900 shadow-md' : 'text-slate-400 hover:text-slate-600'
+                        }`}
+                    >
+                        Public Gallery ({candidates.length})
+                    </button>
+                    <button 
+                        onClick={() => setViewMode('discover')}
+                        className={`px-6 py-2.5 rounded-xl font-black text-xs uppercase tracking-widest transition-all ${
+                            viewMode === 'discover' ? 'bg-white text-slate-900 shadow-md' : 'text-slate-400 hover:text-slate-600'
+                        }`}
+                    >
+                        Discover Candidates ({availableUsers.length})
+                    </button>
+                </div>
             </div>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {(students || []).map((student, i) => (
-                    <div key={i} className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm relative group overflow-hidden">
-                        <div className="absolute top-0 right-0 p-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button 
-                                onClick={() => onEdit(student)}
-                                className="p-2 bg-white/90 backdrop-blur-sm text-blue-600 rounded-xl shadow-lg hover:bg-blue-600 hover:text-white transition-all"
-                            >
-                                <Pencil className="w-4 h-4" />
-                            </button>
-                            <button 
-                                onClick={() => onDelete(student._id)}
-                                className="p-2 bg-white/90 backdrop-blur-sm text-red-500 rounded-xl shadow-lg hover:bg-red-500 hover:text-white transition-all"
-                            >
-                                <Trash2 className="w-4 h-4" />
-                            </button>
+
+            {viewMode === 'registered' ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <button 
+                        onClick={onAdd}
+                        className="bg-slate-50 border-4 border-dashed border-slate-200 rounded-[2.5rem] p-8 flex flex-col items-center justify-center gap-4 group hover:border-emerald-400 hover:bg-emerald-50 transition-all min-h-[300px]"
+                    >
+                        <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                            <Plus className="w-8 h-8 text-emerald-500" />
                         </div>
-                        <div className="w-20 h-20 bg-slate-100 rounded-2xl mb-4 overflow-hidden shadow-inner border border-slate-200">
+                        <div className="text-center">
+                            <p className="font-black text-slate-900 uppercase tracking-tighter text-lg">Add Manually</p>
+                            <p className="text-slate-400 font-bold text-sm">Create a record from scratch</p>
+                        </div>
+                    </button>
+
+                    {candidates.map((candidate, i) => (
+                        <div key={i} className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-xl shadow-slate-200/50 relative group overflow-hidden">
+                            <div className="absolute top-0 right-0 p-6 flex gap-2 opacity-0 group-hover:opacity-100 transition-all translate-y-[-10px] group-hover:translate-y-0">
+                                <button 
+                                    onClick={() => onEdit(candidate)}
+                                    className="p-3 bg-white/90 backdrop-blur-sm text-blue-600 rounded-2xl shadow-xl hover:bg-blue-600 hover:text-white transition-all"
+                                >
+                                    <Pencil className="w-5 h-5" />
+                                </button>
+                                <button 
+                                    onClick={() => onDelete(candidate._id)}
+                                    className="p-3 bg-white/90 backdrop-blur-sm text-red-500 rounded-2xl shadow-xl hover:bg-red-500 hover:text-white transition-all"
+                                >
+                                    <Trash2 className="w-5 h-5" />
+                                </button>
+                            </div>
+                            <div className="w-24 h-24 bg-slate-100 rounded-3xl mb-6 overflow-hidden shadow-inner border border-slate-200 group-hover:scale-105 transition-transform duration-500">
                                 <img 
-                                    src={getImageUrl?.(student?.image)} 
-                                    alt={student?.name} 
+                                    src={getImageUrl?.(candidate?.image)} 
+                                    alt={candidate?.name} 
                                     className="w-full h-full object-cover" 
                                 />
+                            </div>
+                            <h4 className="font-black text-slate-900 text-xl tracking-tight leading-tight mb-1">{candidate.name}</h4>
+                            <p className="text-slate-500 font-bold text-sm flex items-center gap-2">
+                                <GraduationCap className="w-4 h-4 text-emerald-500" /> {candidate.course}
+                            </p>
+                            
+                            <div className="mt-8 flex items-center justify-between pt-6 border-t border-slate-50">
+                                <div className="flex flex-col">
+                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Batch</span>
+                                    <span className="text-slate-900 font-black text-sm uppercase">{candidate.batch}</span>
+                                </div>
+                                <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest ${
+                                    candidate.status === 'Active' ? 'bg-emerald-50 text-emerald-600' : 'bg-blue-50 text-blue-600'
+                                }`}>
+                                    {candidate.status}
+                                </span>
+                            </div>
                         </div>
-                        <h4 className="font-black text-slate-900 text-lg">{student.name}</h4>
-                        <p className="text-slate-500 font-bold text-sm mt-1">{student.course}</p>
-                        <div className="mt-4 flex items-center justify-between">
-                            <span className="text-emerald-600 font-black text-xs uppercase tracking-widest">{student.batch}</span>
-                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest ${
-                                student.status === 'Active' ? 'bg-emerald-50 text-emerald-600' : 'bg-blue-50 text-blue-600'
-                            }`}>
-                                {student.status}
-                            </span>
+                    ))}
+                </div>
+            ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {availableUsers.length === 0 ? (
+                        <div className="col-span-full py-20 text-center bg-slate-50 rounded-[2.5rem] border-4 border-dashed border-slate-100">
+                            <ShieldCheck className="w-16 h-16 text-slate-200 mx-auto mb-4" />
+                            <h3 className="text-xl font-black text-slate-400">All available candidates are registered!</h3>
                         </div>
-                    </div>
-                ))}
-            </div>
+                    ) : (
+                        availableUsers.map((u, i) => (
+                            <div key={i} className="bg-white p-8 rounded-[3rem] border border-slate-100 shadow-xl shadow-slate-200/40 group hover:border-emerald-200 transition-colors">
+                                <div className="flex items-start justify-between mb-6">
+                                    <div className="w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center">
+                                        <Plus className="w-8 h-8 text-emerald-500" />
+                                    </div>
+                                    <button 
+                                        onClick={() => onEdit(u)} // Modal handles both candidate data and raw user data if configured
+                                        className="bg-slate-900 text-white px-5 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-emerald-500 transition-colors shadow-lg shadow-slate-900/10"
+                                    >
+                                        Select & Register
+                                    </button>
+                                </div>
+                                <h4 className="font-black text-slate-900 text-lg mb-1">{u.name}</h4>
+                                <p className="text-slate-400 font-bold text-sm truncate mb-4">{u.email}</p>
+                                <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Status</p>
+                                    <p className="text-emerald-500 font-black text-xs uppercase flex items-center gap-2">
+                                        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                                        Ready for Placement
+                                    </p>
+                                </div>
+                            </div>
+                        ))
+                    )}
+                </div>
+            )}
         </div>
     );
 };

@@ -35,7 +35,7 @@ app.use(express.json({
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // Routes
-app.use('/api/registered-students', require('./routes/registeredStudentRoutes'));
+app.use('/api/registered-candidates', require('./routes/registeredCandidateRoutes'));
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/jobs', require('./routes/jobRoutes'));
 app.use('/api/contacts', require('./routes/contactRoutes'));

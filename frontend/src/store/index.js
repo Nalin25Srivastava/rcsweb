@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './slices/authSlice';
 import jobsReducer from './slices/jobsSlice';
-import registeredStudentsReducer from './slices/registeredStudentsSlice';
+import registeredCandidatesReducer from './slices/registeredCandidatesSlice';
 import contactsReducer from './slices/contactsSlice';
 import resumesReducer from './slices/resumesSlice';
 import placedStudentsReducer from './slices/placedStudentsSlice';
@@ -13,7 +13,7 @@ export const store = configureStore({
     reducer: {
         auth: authReducer,
         jobs: jobsReducer,
-        registeredStudents: registeredStudentsReducer,
+        registeredCandidates: registeredCandidatesReducer,
         contacts: contactsReducer,
         resumes: resumesReducer,
         placedStudents: placedStudentsReducer,

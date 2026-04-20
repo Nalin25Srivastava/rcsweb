@@ -1,22 +1,22 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchRegisteredStudents, reset } from '../store/slices/registeredStudentsSlice';
+import { fetchRegisteredCandidates, reset } from '../store/slices/registeredCandidatesSlice';
 import { Users, GraduationCap, Calendar, CheckCircle2, Search } from 'lucide-react';
 
-const RegisteredStudents = () => {
+const RegisteredCandidates = () => {
     const dispatch = useDispatch();
-    const { registeredStudents, isLoading, isError, message } = useSelector((state) => state.registeredStudents);
+    const { registeredCandidates, isLoading, isError, message } = useSelector((state) => state.registeredCandidates);
     const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
-        dispatch(fetchRegisteredStudents());
+        dispatch(fetchRegisteredCandidates());
         return () => dispatch(reset());
     }, [dispatch]);
 
-    const filteredStudents = registeredStudents.filter(student => 
-        student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        student.course.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredCandidates = registeredCandidates.filter(candidate => 
+        candidate.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        candidate.course.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const getImageUrl = (image) => {
@@ -40,7 +40,7 @@ const RegisteredStudents = () => {
                         Our Community
                     </div>
                     <h1 className="text-5xl md:text-7xl font-black text-white tracking-tighter mb-6 drop-shadow-2xl">
-                        Registered <span className="text-emerald-400">Students</span>
+                        Registered <span className="text-emerald-400">Candidates</span>
                     </h1>
                     <p className="text-slate-100 text-lg md:text-xl font-bold leading-relaxed drop-shadow-lg">
                         Meet the ambitious individuals currently advancing their careers through our specialized training programs.
@@ -64,13 +64,13 @@ const RegisteredStudents = () => {
                     <div className="flex gap-4 w-full md:w-auto">
                         <div className="bg-slate-900 text-white px-6 py-4 rounded-2xl font-black text-sm uppercase tracking-widest flex items-center gap-2 whitespace-nowrap">
                             <Users className="w-5 h-5" />
-                            {filteredStudents.length} Students
+                            {filteredCandidates.length} Candidates
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Students Grid */}
+            {/* Candidates Grid */}
             <div className="max-w-7xl mx-auto px-4 mt-16">
                 {isLoading ? (
                     <div className="flex flex-col items-center justify-center py-20">
@@ -83,10 +83,10 @@ const RegisteredStudents = () => {
                             Error: {message}
                         </div>
                     </div>
-                ) : filteredStudents.length === 0 ? (
+                ) : filteredCandidates.length === 0 ? (
                     <div className="text-center py-20 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
                         <GraduationCap className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-                        <h3 className="text-2xl font-black text-slate-900">No students found</h3>
+                        <h3 className="text-2xl font-black text-slate-900">No candidates found</h3>
                         <p className="text-slate-500 font-bold">Try adjusting your search criteria.</p>
                     </div>
                 ) : (
@@ -102,9 +102,9 @@ const RegisteredStudents = () => {
                             }
                         }}
                     >
-                        {filteredStudents.map((student, index) => (
+                        {filteredCandidates.map((candidate) => (
                             <motion.div 
-                                key={student._id}
+                                key={candidate._id}
                                 className="bg-white rounded-[2.5rem] p-8 shadow-xl shadow-slate-200/50 border border-slate-100 group relative overflow-hidden flex flex-col"
                                 variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
                                 whileHover={{ y: -8 }}
@@ -114,14 +114,14 @@ const RegisteredStudents = () => {
                                 <div className="flex items-center gap-6 mb-8">
                                     <div className="w-24 h-24 rounded-3xl overflow-hidden border-4 border-white shadow-lg flex-shrink-0">
                                         <img 
-                                            src={getImageUrl(student.image)} 
-                                            alt={student.name} 
+                                            src={getImageUrl(candidate.image)} 
+                                            alt={candidate.name} 
                                             className="w-full h-full object-cover"
                                         />
                                     </div>
                                     <div>
                                         <h3 className="text-2xl font-black text-slate-900 tracking-tight leading-tight group-hover:text-emerald-600 transition-colors">
-                                            {student.name}
+                                            {candidate.name}
                                         </h3>
                                         <div className="flex items-center gap-1.5 mt-1">
                                             <CheckCircle2 className="w-4 h-4 text-emerald-500" />
@@ -133,22 +133,22 @@ const RegisteredStudents = () => {
                                 <div className="space-y-4 flex-grow">
                                     <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-2xl group-hover:bg-emerald-50 transition-colors">
                                         <GraduationCap className="w-5 h-5 text-slate-400 group-hover:text-emerald-500" />
-                                        <span className="text-sm font-bold text-slate-700">{student.course}</span>
+                                        <span className="text-sm font-bold text-slate-700">{candidate.course}</span>
                                     </div>
                                     <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-2xl group-hover:bg-emerald-50 transition-colors">
                                         <Calendar className="w-5 h-5 text-slate-400 group-hover:text-emerald-500" />
-                                        <span className="text-sm font-bold text-slate-700">Batch: {student.batch}</span>
+                                        <span className="text-sm font-bold text-slate-700">Batch: {candidate.batch}</span>
                                     </div>
                                 </div>
 
                                 <div className="mt-8 pt-6 border-t border-slate-100 flex items-center justify-between">
                                     <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest ${
-                                        student.status === 'Active' ? 'bg-emerald-100 text-emerald-600' : 'bg-blue-100 text-blue-600'
+                                        candidate.status === 'Active' ? 'bg-emerald-100 text-emerald-600' : 'bg-blue-100 text-blue-600'
                                     }`}>
-                                        {student.status}
+                                        {candidate.status}
                                     </span>
                                     <span className="text-[10px] font-black uppercase text-slate-400 tracking-widest">
-                                        Since {new Date(student.registrationDate).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}
+                                        Since {new Date(candidate.registrationDate).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}
                                     </span>
                                 </div>
                             </motion.div>
@@ -160,4 +160,4 @@ const RegisteredStudents = () => {
     );
 };
 
-export default RegisteredStudents;
+export default RegisteredCandidates;

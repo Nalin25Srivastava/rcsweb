@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const registeredStudentSchema = new mongoose.Schema({
+const registeredCandidateSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -41,4 +41,4 @@ const registeredStudentSchema = new mongoose.Schema({
     timestamps: true
 });
 
-module.exports = mongoose.model('RegisteredStudent', registeredStudentSchema);
+module.exports = mongoose.model('RegisteredCandidate', registeredCandidateSchema);
