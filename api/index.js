@@ -10,7 +10,7 @@ try {
     console.error('FATAL STARTUP ERROR:', error);
     res.status(500).json({
       success: false,
-      message: 'Server failed to initialize',
+      message: 'Server failed to initialize. Root cause: ' + error.message,
       error: error.message,
       stack: error.stack,
       dir: __dirname,
