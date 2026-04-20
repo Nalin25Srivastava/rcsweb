@@ -91,11 +91,22 @@ if (isVercel) {
 
 
 app.get('/api/health', (req, res) => {
-    res.json({ 
-        status: 'ok', 
-        message: 'API is running...',
+    const dbState = mongoose.connection.readyState;
+    const dbStatus = {
+        0: 'disconnected',
+        1: 'connected',
+        2: 'connecting',
+        3: 'disconnecting'
+    };
+
+    const status = (dbState === 1) ? 'ok' : 'pending';
+    
+    res.status(dbState === 1 ? 200 : 503).json({ 
+        status, 
+        message: dbState === 1 ? 'API and Database are healthy' : 'API is running but Database is not connected',
         environment: process.env.NODE_ENV,
-        dbConnected: mongoose.connection.readyState === 1
+        dbState: dbStatus[dbState] || 'unknown',
+        hasUri: !!process.env.MONGO_URI
     });
 });
 
@@ -103,20 +114,23 @@ app.get('/', (req, res) => {
     res.json({ 
         message: 'RCS Placements Backend API is active',
         healthCheck: '/api/health',
+        dbStatus: mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected',
         timestamp: new Date().toISOString()
     });
 });
 
 app.get('/api/test', (req, res) => {
-    res.json({ message: 'Hello from Backend!' });
+    res.json({ 
+        message: 'Hello from Backend!',
+        dbStatus: mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected'
+    });
 });
 
 // 404 Handler for undefined routes
 app.use((req, res, next) => {
     res.status(404).json({
         success: false,
-        message: `Route not found: ${req.originalUrl}`,
-        availableRoutes: ['/', '/api/health', '/api/test']
+        message: `Route not found: ${req.originalUrl}`
     });
 });
 
@@ -134,7 +148,10 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 5000;
 
 // MongoDB Connection with improved error handling for serverless
+let isConnected = false;
 const connectDB = async () => {
+    if (isConnected) return;
+
     try {
         if (!process.env.MONGO_URI) {
             console.error('MONGO_URI is not defined in environment variables');
@@ -148,12 +165,21 @@ const connectDB = async () => {
         }
 
         mongoose.set('bufferCommands', false);
-        await mongoose.connect(process.env.MONGO_URI, {
-            serverSelectionTimeoutMS: 5000 // Timeout after 5 seconds instead of 30
+        
+        console.log('Attempting MongoDB connection...');
+        const conn = await mongoose.connect(process.env.MONGO_URI, {
+            serverSelectionTimeoutMS: 8000, // Timeout after 8 seconds
+            heartbeatFrequencyMS: 2000
         });
-        console.log('MongoDB Connected');
+        
+        isConnected = true;
+        console.log(`MongoDB Connected: ${conn.connection.host}`);
     } catch (err) {
-        console.error('MongoDB connection error:', err);
+        console.error('MongoDB connection error details:', {
+            name: err.name,
+            message: err.message,
+            code: err.code
+        });
     }
 };
 
