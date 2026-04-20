@@ -5,7 +5,6 @@ import { IoBriefcase, IoSchool, IoPeople, IoTrendingUp } from "react-icons/io5";
 import { Plus, Pencil, Trash2, X, Download, Image as ImageIcon, Upload, Loader2 } from 'lucide-react';
 import Carousel from '../components/Carousel';
 import PlacementModal from '../components/Admin/PlacementModal';
-import { fetchServices, reset as resetServices } from '../store/slices/servicesSlice';
 import { fetchPlacedStudents, reset as resetPlacedStudents, deletePlacedStudent } from '../store/slices/placedStudentsSlice';
 import { fetchStats, reset as resetStats } from '../store/slices/statsSlice';
 import { Link } from 'react-router-dom';
@@ -20,11 +19,9 @@ const Home = () => {
     const [modalMode, setModalMode] = useState({ isEditing: false, student: null });
 
     useEffect(() => {
-        dispatch(fetchServices());
         dispatch(fetchPlacedStudents());
         dispatch(fetchStats());
         return () => {
-            dispatch(resetServices());
             dispatch(resetPlacedStudents());
             dispatch(resetStats());
         };
@@ -144,15 +141,17 @@ const Home = () => {
                                 </li>
                             ))}
                         </ul>
-                        <div className="pt-8">
-                            <Link 
-                                to="/services" 
-                                className="inline-flex items-center gap-2 px-8 py-4 bg-slate-900 hover:bg-slate-800 text-white font-black uppercase tracking-widest rounded-2xl transition-all shadow-xl shadow-slate-200 group"
-                            >
-                                Explore Our Services 
-                                <span className="text-emerald-400 group-hover:translate-x-1 transition-transform">→</span>
-                            </Link>
-                        </div>
+                        {user?.role === 'admin' && (
+                            <div className="pt-8">
+                                <Link 
+                                    to="/registered-candidates" 
+                                    className="inline-flex items-center gap-2 px-8 py-4 bg-slate-900 hover:bg-slate-800 text-white font-black uppercase tracking-widest rounded-2xl transition-all shadow-xl shadow-slate-200 group"
+                                >
+                                    Manage Records
+                                    <span className="text-emerald-400 group-hover:translate-x-1 transition-transform">→</span>
+                                </Link>
+                            </div>
+                        )}
                     </motion.div>
                 </div>
             </div>
