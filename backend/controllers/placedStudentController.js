@@ -3,12 +3,15 @@ const PlacedStudent = require('../models/PlacedStudent');
 // @desc    Get all placed students
 // @route   GET /api/placed-students
 // @access  Public
-const getPlacedStudents = async (req, res) => {
+const getPlacedStudents = async (req, res, next) => {
     try {
+        console.log('Fetching placed students...');
         const students = await PlacedStudent.find().sort({ placedDate: -1 });
+        console.log(`Found ${students.length} students`);
         res.status(200).json(students);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error('Error in getPlacedStudents:', error);
+        next(error);
     }
 };
 

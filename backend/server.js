@@ -104,11 +104,21 @@ app.get('/api/test', (req, res) => {
 });
 
 // 404 Handler for undefined routes
-app.use((req, res) => {
+app.use((req, res, next) => {
     res.status(404).json({
         success: false,
         message: `Route not found: ${req.originalUrl}`,
         availableRoutes: ['/', '/api/health', '/api/test']
+    });
+});
+
+// Global Error Handler
+app.use((err, req, res, next) => {
+    console.error('SERVER ERROR:', err);
+    res.status(req.res.statusCode === 200 ? 500 : req.res.statusCode).json({
+        success: false,
+        message: err.message || 'Internal Server Error',
+        stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
     });
 });
 
