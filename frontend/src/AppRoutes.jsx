@@ -33,7 +33,11 @@ const AppRoutes = () => {
             <Routes location={location} key={location.pathname}>
                 <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
                 <Route path="/about" element={<PageWrapper><About /></PageWrapper>} />
-                <Route path="/registered-candidates" element={<PageWrapper><RegisteredCandidates /></PageWrapper>} />
+                <Route path="/registered-candidates" element={
+                    <PrivateRoute>
+                        <PageWrapper><RegisteredCandidates /></PageWrapper>
+                    </PrivateRoute>
+                } />
                 <Route path="/postres" element={<PageWrapper><Registration /></PageWrapper>} />
                 <Route path="/contact" element={<PageWrapper><Contact /></PageWrapper>} />
                 <Route path="/viewjobs" element={<PageWrapper><Viewjobs /></PageWrapper>} />
