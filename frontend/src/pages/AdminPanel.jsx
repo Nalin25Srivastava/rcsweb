@@ -22,6 +22,10 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { fetchJobs, deleteJob } from '../store/slices/jobsSlice';
+import { fetchPlacedStudents, deletePlacedStudent } from '../store/slices/placedStudentsSlice';
+import { fetchStats, deleteStat } from '../store/slices/statsSlice';
+import { fetchSlides, deleteSlide } from '../store/slices/carouselSlice';
 import { fetchRegisteredCandidates, deleteRegisteredCandidate, createRegisteredCandidate, updateRegisteredCandidate } from '../store/slices/registeredCandidatesSlice';
 import { logout, fetchUsers } from '../store/slices/authSlice';
 import PlacementModal from '../components/Admin/PlacementModal';
