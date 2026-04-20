@@ -6,6 +6,9 @@
       "maxDuration": 10,
       "memory": 1024,
       "includeFiles": "backend/**"
+    },
+    "api/test.js": {
+      "memory": 128
     }
   },
   "rewrites": [
