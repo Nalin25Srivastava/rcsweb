@@ -1,0 +1,247 @@
+import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X, UserPlus, Info, Search, List } from 'lucide-react';
+import { createRegisteredStudent, updateRegisteredStudent } from '../../store/slices/registeredStudentsSlice';
+
+const RegisteredStudentModal = ({ isOpen, onClose, student = null, isEditing = false, users = [] }) => {
+    const dispatch = useDispatch();
+    const [formData, setFormData] = useState({
+        userId: '',
+        name: '',
+        email: '',
+        phone: '',
+        course: '',
+        batch: '',
+        status: 'Active',
+        image: ''
+    });
+
+    const [searchTerm, setSearchTerm] = useState('');
+    const [isUserListOpen, setIsUserListOpen] = useState(false);
+
+    useEffect(() => {
+        if (isEditing && student) {
+            setFormData({
+                userId: student.user || '',
+                name: student.name || '',
+                email: student.email || '',
+                phone: student.phone || '',
+                course: student.course || '',
+                batch: student.batch || '',
+                status: student.status || 'Active',
+                image: student.image || ''
+            });
+        } else {
+            setFormData({
+                userId: '',
+                name: '',
+                email: '',
+                phone: '',
+                course: '',
+                batch: '',
+                status: 'Active',
+                image: ''
+            });
+        }
+    }, [isEditing, student, isOpen]);
+
+    const filteredUsers = users.filter(u => 
+        u.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        u.email.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const handleSelectUser = (u) => {
+        setFormData({
+            ...formData,
+            userId: u._id,
+            name: u.name,
+            email: u.email,
+            image: u.image || ''
+        });
+        setIsUserListOpen(false);
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            if (isEditing) {
+                await dispatch(updateRegisteredStudent({ id: student._id, studentData: formData })).unwrap();
+            } else {
+                await dispatch(createRegisteredStudent(formData)).unwrap();
+            }
+            onClose();
+        } catch (error) {
+            alert(`Failed to save: ${error}`);
+        }
+    };
+
+    if (!isOpen) return null;
+
+    return (
+        <AnimatePresence>
+            <motion.div 
+                className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-md"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+            >
+                <motion.div 
+                    className="bg-white rounded-[2.5rem] p-8 max-w-2xl w-full relative shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
+                    initial={{ scale: 0.9, y: 20 }}
+                    animate={{ scale: 1, y: 0 }}
+                >
+                    <div className="flex justify-between items-center mb-6">
+                        <h2 className="text-3xl font-black text-slate-900 uppercase tracking-tight">
+                            {isEditing ? 'Edit Registration' : 'Register New Student'}
+                        </h2>
+                        <button onClick={onClose} className="p-2 hover:bg-slate-100 rounded-full transition-colors">
+                            <X className="w-6 h-6 text-slate-400" />
+                        </button>
+                    </div>
+
+                    <form onSubmit={handleSubmit} className="flex-grow overflow-y-auto pr-2 custom-scrollbar space-y-6 pb-2">
+                        {!isEditing && (
+                            <div className="relative">
+                                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Select Candidate from Users</label>
+                                <div 
+                                    className="relative cursor-pointer"
+                                    onClick={() => setIsUserListOpen(!isUserListOpen)}
+                                >
+                                    <div className="w-full pl-12 pr-4 py-4 bg-emerald-50 border-2 border-emerald-100 rounded-2xl font-bold text-slate-900 flex items-center">
+                                        <Search className="absolute left-4 w-5 h-5 text-emerald-500" />
+                                        {formData.name ? `${formData.name} (${formData.email})` : 'Search & Select Candidate...'}
+                                        <List className="ml-auto w-5 h-5 text-emerald-300" />
+                                    </div>
+                                </div>
+
+                                {isUserListOpen && (
+                                    <motion.div 
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="absolute z-50 w-full mt-2 bg-white border border-slate-100 shadow-2xl rounded-2xl overflow-hidden max-h-60 overflow-y-auto"
+                                    >
+                                        <div className="p-2 bg-slate-50 sticky top-0">
+                                            <input 
+                                                autoFocus
+                                                type="text" 
+                                                placeholder="Type to search..." 
+                                                value={searchTerm}
+                                                onChange={(e) => setSearchTerm(e.target.value)}
+                                                onClick={(e) => e.stopPropagation()}
+                                                className="w-full px-4 py-2 rounded-xl text-sm border-none focus:ring-2 focus:ring-emerald-500/20"
+                                            />
+                                        </div>
+                                        {filteredUsers.length === 0 ? (
+                                            <div className="p-4 text-center text-slate-400 text-sm font-bold">No users found</div>
+                                        ) : (
+                                            filteredUsers.map(u => (
+                                                <div 
+                                                    key={u._id}
+                                                    onClick={() => handleSelectUser(u)}
+                                                    className="px-4 py-3 hover:bg-emerald-50 cursor-pointer border-b border-slate-50 flex flex-col"
+                                                >
+                                                    <span className="font-black text-slate-800 text-sm">{u.name}</span>
+                                                    <span className="text-slate-400 text-xs font-bold">{u.email}</span>
+                                                </div>
+                                            ))
+                                        )}
+                                    </motion.div>
+                                )}
+                            </div>
+                        )}
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Full Name</label>
+                                <input 
+                                    value={formData.name} 
+                                    onChange={(e) => setFormData({...formData, name: e.target.value})} 
+                                    placeholder="Confirm Name" 
+                                    required 
+                                    className="w-full px-4 py-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl font-bold text-slate-900 outline-none"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Email Address</label>
+                                <input 
+                                    value={formData.email} 
+                                    onChange={(e) => setFormData({...formData, email: e.target.value})} 
+                                    placeholder="Confirm Email" 
+                                    required 
+                                    className="w-full px-4 py-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl font-bold text-slate-900 outline-none"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Phone Number</label>
+                                <input 
+                                    value={formData.phone} 
+                                    onChange={(e) => setFormData({...formData, phone: e.target.value})} 
+                                    placeholder="e.g. +91 9999999999" 
+                                    className="w-full px-4 py-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl font-bold text-slate-900 outline-none"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Course / Domain</label>
+                                <input 
+                                    value={formData.course} 
+                                    onChange={(e) => setFormData({...formData, course: e.target.value})} 
+                                    placeholder="e.g. Full Stack Web Development" 
+                                    required
+                                    className="w-full px-4 py-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl font-bold text-slate-900 outline-none"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Batch Code</label>
+                                <input 
+                                    value={formData.batch} 
+                                    onChange={(e) => setFormData({...formData, batch: e.target.value})} 
+                                    placeholder="e.g. BATCH-2024-A" 
+                                    required
+                                    className="w-full px-4 py-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl font-bold text-slate-900 outline-none"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Current Status</label>
+                                <select 
+                                    value={formData.status} 
+                                    onChange={(e) => setFormData({...formData, status: e.target.value})} 
+                                    className="w-full px-4 py-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl font-bold text-slate-900 outline-none appearance-none"
+                                >
+                                    <option value="Active">Active Student</option>
+                                    <option value="Completed">Course Completed</option>
+                                    <option value="Dropped">Dropped Out</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div className="pt-4 flex gap-4">
+                            <button 
+                                type="button" 
+                                onClick={onClose}
+                                className="flex-1 px-4 py-4 border-2 border-slate-100 rounded-2xl font-black text-slate-400 uppercase tracking-widest text-xs hover:bg-slate-50 transition-colors"
+                            >
+                                Cancel
+                            </button>
+                            <button 
+                                type="submit" 
+                                disabled={!formData.userId}
+                                className="flex-[2] bg-slate-900 hover:bg-emerald-500 text-white font-black py-4 px-4 rounded-2xl shadow-xl transition-colors uppercase tracking-widest text-xs disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                {isEditing ? 'Update Registration' : 'Complete Registration'}
+                            </button>
+                        </div>
+                    </form>
+                </motion.div>
+            </motion.div>
+        </AnimatePresence>
+    );
+};
+
+export default RegisteredStudentModal;

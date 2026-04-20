@@ -3,7 +3,7 @@ import { Briefcase, Mail, X, ArrowRight, Plus, Pencil, Phone, Globe, Clock, MapP
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchJobs, deleteJob, reset, createJob, updateJob } from '../store/slices/jobsSlice';
+import { fetchJobs, deleteJob, createJob, updateJob } from '../store/slices/jobsSlice';
 
 const Viewjobs = () => {
     const dispatch = useDispatch();
@@ -16,7 +16,7 @@ const Viewjobs = () => {
         try {
             const stored = localStorage.getItem('rcs_user');
             return stored ? JSON.parse(stored) : null;
-        } catch (e) {
+        } catch {
             return null;
         }
     };
@@ -268,23 +268,7 @@ const Viewjobs = () => {
         setCurrentPage(totalPages);
     };
  
-    const getJobCategory = (title) => {
-        if (!title) return 'Active Hiring';
-        const upperTitle = title.toUpperCase();
-        if (upperTitle.includes('MAINTENANCE')) return 'MAINTENANCE';
-        if (upperTitle.includes('PRODUCTION')) return 'PRODUCTION';
-        if (upperTitle.includes('ON ROLL')) return 'ON ROLL';
-        return 'Active Hiring';
-    };
 
-    const getCategoryStyles = (category) => {
-        switch (category) {
-            case 'MAINTENANCE': return 'bg-blue-600 border-blue-200 text-white';
-            case 'PRODUCTION': return 'bg-orange-500 border-orange-200 text-white';
-            case 'ON ROLL': return 'bg-emerald-600 border-emerald-200 text-white';
-            default: return 'bg-green-500 border-green-200 text-white';
-        }
-    };
 
     // Helper to parse unstructured description into key-value pairs
     const parseJobDetails = (desc) => {

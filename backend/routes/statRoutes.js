@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getStats, createStat, deleteStat } = require('../controllers/statController');
+const { getStats, createStat, updateStat, deleteStat } = require('../controllers/statController');
 const { protect, admin } = require('../middleware/authMiddleware');
 
 router.route('/')
@@ -8,6 +8,7 @@ router.route('/')
     .post(protect, admin, createStat);
 
 router.route('/:id')
+    .put(protect, admin, updateStat)
     .delete(protect, admin, deleteStat);
 
 module.exports = router;

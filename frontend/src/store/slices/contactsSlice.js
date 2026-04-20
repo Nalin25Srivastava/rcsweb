@@ -29,7 +29,7 @@ export const contactsSlice = createSlice({
     name: 'contacts',
     initialState,
     reducers: {
-        reset: (state) => initialState
+        reset: () => initialState
     },
     extraReducers: (builder) => {
         builder

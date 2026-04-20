@@ -34,7 +34,7 @@ export const resumesSlice = createSlice({
     name: 'resumes',
     initialState,
     reducers: {
-        resetResumeState: (state) => initialState
+        resetResumeState: () => initialState
     },
     extraReducers: (builder) => {
         builder

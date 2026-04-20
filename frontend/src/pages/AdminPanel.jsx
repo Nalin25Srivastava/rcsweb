@@ -3,6 +3,7 @@ import {
     LayoutDashboard, 
     Briefcase, 
     Users, 
+    GraduationCap,
     Image as ImageIcon, 
     BarChart3, 
     Settings, 
@@ -21,15 +22,13 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { fetchJobs, deleteJob, createJob, updateJob } from '../store/slices/jobsSlice';
-import { fetchPlacedStudents, deletePlacedStudent, createPlacedStudent, updatePlacedStudent } from '../store/slices/placedStudentsSlice';
-import { fetchSlides, deleteSlide } from '../store/slices/carouselSlice';
-import { fetchStats, deleteStat } from '../store/slices/statsSlice';
-import { logout } from '../store/slices/authSlice';
+import { fetchRegisteredStudents, deleteRegisteredStudent, createRegisteredStudent, updateRegisteredStudent } from '../store/slices/registeredStudentsSlice';
+import { logout, fetchUsers } from '../store/slices/authSlice';
 import PlacementModal from '../components/Admin/PlacementModal';
 import JobModal from '../components/Admin/JobModal';
 import StatModal from '../components/Admin/StatModal';
 import CarouselModal from '../components/Admin/CarouselModal';
+import RegisteredStudentModal from '../components/Admin/RegisteredStudentModal';
 
 const AdminPanel = () => {
     const dispatch = useDispatch();
@@ -38,6 +37,8 @@ const AdminPanel = () => {
     const { jobs } = useSelector((state) => state.jobs);
     const { placedStudents } = useSelector((state) => state.placedStudents);
     const { stats } = useSelector((state) => state.stats);
+    const { registeredStudents } = useSelector((state) => state.registeredStudents);
+    const { users } = useSelector((state) => state.auth);
 
     const [activeTab, setActiveTab] = useState('dashboard');
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -56,6 +57,10 @@ const AdminPanel = () => {
 
     // Carousel Modal State
     const [isCarouselModalOpen, setIsCarouselModalOpen] = useState(false);
+
+    // Registered Student Modal State
+    const [isRegStudentModalOpen, setIsRegStudentModalOpen] = useState(false);
+    const [regStudentModalMode, setRegStudentModalMode] = useState({ isEditing: false, student: null });
 
     const handleAddJob = () => {
         setJobModalMode({ isEditing: false, job: null });
@@ -111,6 +116,22 @@ const AdminPanel = () => {
         }
     };
 
+    const handleAddRegStudent = () => {
+        setRegStudentModalMode({ isEditing: false, student: null });
+        setIsRegStudentModalOpen(true);
+    };
+
+    const handleEditRegStudent = (student) => {
+        setRegStudentModalMode({ isEditing: true, student });
+        setIsRegStudentModalOpen(true);
+    };
+
+    const handleDeleteRegStudent = (id) => {
+        if (window.confirm('Are you sure you want to remove this registered student?')) {
+            dispatch(deleteRegisteredStudent(id));
+        }
+    };
+
     useEffect(() => {
         if (!user || user.role !== 'admin' || !isSecretVerified) {
             navigate('/login');
@@ -122,6 +143,8 @@ const AdminPanel = () => {
         dispatch(fetchPlacedStudents());
         dispatch(fetchStats());
         dispatch(fetchSlides());
+        dispatch(fetchRegisteredStudents());
+        dispatch(fetchUsers());
     }, [dispatch]);
 
     const getImageUrl = (image) => {
@@ -139,6 +162,7 @@ const AdminPanel = () => {
         { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
         { id: 'jobs', label: 'Manage Jobs', icon: Briefcase },
         { id: 'students', label: 'Placed Students', icon: Users },
+        { id: 'regStudents', label: 'Registered Students', icon: GraduationCap },
         { id: 'stats', label: 'Statistics', icon: BarChart3 },
         { id: 'carousel', label: 'Carousel Slider', icon: ImageIcon },
         { id: 'settings', label: 'Settings', icon: Settings },
@@ -164,6 +188,16 @@ const AdminPanel = () => {
                         onAdd={handleAddStudent}
                         onEdit={handleEditStudent}
                         onDelete={handleDeleteStudent}
+                        getImageUrl={getImageUrl}
+                    />
+                );
+            case 'regStudents':
+                return (
+                    <RegisteredStudentManagementView 
+                        students={registeredStudents || []}
+                        onAdd={handleAddRegStudent}
+                        onEdit={handleEditRegStudent}
+                        onDelete={handleDeleteRegStudent}
                         getImageUrl={getImageUrl}
                     />
                 );
@@ -338,6 +372,14 @@ const AdminPanel = () => {
                 <CarouselModal 
                     isOpen={isCarouselModalOpen}
                     onClose={() => setIsCarouselModalOpen(false)}
+                />
+
+                <RegisteredStudentModal 
+                    isOpen={isRegStudentModalOpen}
+                    onClose={() => setIsRegStudentModalOpen(false)}
+                    student={regStudentModalMode.student}
+                    isEditing={regStudentModalMode.isEditing}
+                    users={users || []}
                 />
             </main>
         </div>
@@ -603,6 +645,60 @@ const CarouselManagementView = ({ slides = [], onAdd, onDelete, getImageUrl }) =
                         <div className="p-4 bg-slate-50 flex items-center justify-between">
                             <span className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Slide Order: {slide.order}</span>
                             <span className="text-[10px] font-black uppercase text-emerald-600 bg-emerald-50 px-2 py-1 rounded border border-emerald-100">Active</span>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
+
+const RegisteredStudentManagementView = ({ students = [], onAdd, onEdit, onDelete, getImageUrl }) => {
+    return (
+        <div className="space-y-6">
+            <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-black text-slate-900">Manage Registered Students</h2>
+                <button 
+                    onClick={onAdd}
+                    className="bg-emerald-500 hover:bg-emerald-600 text-white font-black px-6 py-3 rounded-xl flex items-center gap-2 shadow-lg shadow-emerald-500/20 transition-all uppercase tracking-widest text-xs"
+                >
+                    <Plus className="w-5 h-5" /> Register Student
+                </button>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {(students || []).map((student, i) => (
+                    <div key={i} className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm relative group overflow-hidden">
+                        <div className="absolute top-0 right-0 p-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button 
+                                onClick={() => onEdit(student)}
+                                className="p-2 bg-white/90 backdrop-blur-sm text-blue-600 rounded-xl shadow-lg hover:bg-blue-600 hover:text-white transition-all"
+                            >
+                                <Pencil className="w-4 h-4" />
+                            </button>
+                            <button 
+                                onClick={() => onDelete(student._id)}
+                                className="p-2 bg-white/90 backdrop-blur-sm text-red-500 rounded-xl shadow-lg hover:bg-red-500 hover:text-white transition-all"
+                            >
+                                <Trash2 className="w-4 h-4" />
+                            </button>
+                        </div>
+                        <div className="w-20 h-20 bg-slate-100 rounded-2xl mb-4 overflow-hidden shadow-inner border border-slate-200">
+                                <img 
+                                    src={getImageUrl?.(student?.image)} 
+                                    alt={student?.name} 
+                                    className="w-full h-full object-cover" 
+                                />
+                        </div>
+                        <h4 className="font-black text-slate-900 text-lg">{student.name}</h4>
+                        <p className="text-slate-500 font-bold text-sm mt-1">{student.course}</p>
+                        <div className="mt-4 flex items-center justify-between">
+                            <span className="text-emerald-600 font-black text-xs uppercase tracking-widest">{student.batch}</span>
+                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest ${
+                                student.status === 'Active' ? 'bg-emerald-50 text-emerald-600' : 'bg-blue-50 text-blue-600'
+                            }`}>
+                                {student.status}
+                            </span>
                         </div>
                     </div>
                 ))}

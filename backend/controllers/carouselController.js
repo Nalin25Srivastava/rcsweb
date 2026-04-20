@@ -30,6 +30,28 @@ const createSlide = async (req, res) => {
     }
 };
 
+// @desc    Update a carousel slide
+// @route   PUT /api/carousel/:id
+// @access  Private/Admin
+const updateSlide = async (req, res) => {
+    try {
+        const slide = await CarouselSlide.findById(req.params.id);
+        if (!slide) {
+            return res.status(404).json({ message: 'Slide not found' });
+        }
+        
+        const updatedSlide = await CarouselSlide.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true, runValidators: true }
+        );
+        
+        res.status(200).json(updatedSlide);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+};
+
 // @desc    Delete a carousel slide
 // @route   DELETE /api/carousel/:id
 // @access  Private/Admin
@@ -49,5 +71,6 @@ const deleteSlide = async (req, res) => {
 module.exports = {
     getSlides,
     createSlide,
+    updateSlide,
     deleteSlide
 };

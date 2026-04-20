@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getSlides, createSlide, deleteSlide } = require('../controllers/carouselController');
+const { getSlides, createSlide, updateSlide, deleteSlide } = require('../controllers/carouselController');
 const { protect, admin } = require('../middleware/authMiddleware');
 
 router.route('/')
@@ -8,6 +8,7 @@ router.route('/')
     .post(protect, admin, createSlide);
 
 router.route('/:id')
+    .put(protect, admin, updateSlide)
     .delete(protect, admin, deleteSlide);
 
 module.exports = router;

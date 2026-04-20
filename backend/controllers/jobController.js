@@ -14,52 +14,34 @@ const getJobs = async (req, res) => {
     }
 };
 
+// Helper to handle array fields from strings
+const handleArrayFields = (data) => {
+    const updated = { ...data };
+    if (typeof data.profiles === 'string') {
+        updated.profiles = data.profiles.split(',').map(s => s.trim()).filter(s => s !== '');
+    }
+    if (typeof data.contactNumbers === 'string') {
+        updated.contactNumbers = data.contactNumbers.split(',').map(s => s.trim()).filter(s => s !== '');
+    }
+    return updated;
+};
+
 // @desc    Create a job
 // @route   POST /api/jobs
-// @access  Public (for seeding/admin)
+// @access  Private (Admin)
 const createJob = async (req, res) => {
-    const { 
-        title, 
-        description, 
-        email, 
-        companyName, 
-        location, 
-        salary, 
-        qualification, 
-        ageLimit, 
-        gender, 
-        dutyTime, 
-        profiles, 
-        contactNumbers,
-        job_posting // New structured field
-    } = req.body;
-
-    const requiredFields = { title: 'Job Title', description: 'Job Description', email: 'Contact Email', companyName: 'Company Name', location: 'Location', salary: 'Salary' };
-    const missingFields = Object.keys(requiredFields).filter(field => !req.body[field]);
-
-    if (missingFields.length > 0) {
-        return res.status(400).json({ 
-            message: `Missing required fields: ${missingFields.map(f => requiredFields[f]).join(', ')}` 
-        });
-    }
-
     try {
-        const job = await Job.create({ 
-            title, 
-            description, 
-            email,
-            companyName,
-            location,
-            salary,
-            qualification,
-            ageLimit,
-            gender,
-            dutyTime,
-            profiles,
-            contactNumbers,
-            job_posting // Save structured data if provided
-        });
+        const jobData = handleArrayFields(req.body);
+        
+        const { title, description, email } = jobData;
 
+        if (!title || !description || !email) {
+            return res.status(400).json({ 
+                message: 'Please add all required fields: Title, Description, and Contact Email' 
+            });
+        }
+
+        const job = await Job.create(jobData);
         res.status(201).json(job);
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -68,7 +50,7 @@ const createJob = async (req, res) => {
 
 // @desc    Update a job
 // @route   PUT /api/jobs/:id
-// @access  Public (for admin)
+// @access  Private (Admin)
 const updateJob = async (req, res) => {
     try {
         const job = await Job.findById(req.params.id);
@@ -77,10 +59,12 @@ const updateJob = async (req, res) => {
             return res.status(404).json({ message: 'Job not found' });
         }
 
+        const jobData = handleArrayFields(req.body);
+
         const updatedJob = await Job.findByIdAndUpdate(
             req.params.id,
-            req.body,
-            { new: true }
+            jobData,
+            { new: true, runValidators: true }
         );
 
         res.status(200).json(updatedJob);

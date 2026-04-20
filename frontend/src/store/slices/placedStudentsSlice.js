@@ -14,7 +14,7 @@ const handleResponse = async (response, thunkAPI, fallbackMessage) => {
     let data;
     try {
         data = JSON.parse(text);
-    } catch (e) {
+    } catch {
         return thunkAPI.rejectWithValue(`Server error (${response.status}): The server returned an unexpected response format.`);
     }
 

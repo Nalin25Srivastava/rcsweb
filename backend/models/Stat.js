@@ -3,8 +3,7 @@ const mongoose = require('mongoose');
 const statSchema = new mongoose.Schema({
     id: {
         type: String,
-        required: [true, 'Please add a unique ID for the stat'],
-        unique: true
+        required: false
     },
     value: {
         type: String,

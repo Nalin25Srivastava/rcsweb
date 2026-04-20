@@ -18,7 +18,8 @@ const initialState = {
     isSuccess: false,
     isError: false,
     message: '',
-    isSecretVerified: isSecretVerifiedInitial
+    isSecretVerified: isSecretVerifiedInitial,
+    users: [] // Added users list for admin selection
 };
 
 // Helper to handle fetch responses safely
@@ -27,7 +28,7 @@ const handleResponse = async (response, thunkAPI, fallbackMessage) => {
     let data;
     try {
         data = JSON.parse(text);
-    } catch (e) {
+    } catch {
         return thunkAPI.rejectWithValue('Server returned an invalid response. Is the backend running?');
     }
 
@@ -101,6 +102,21 @@ export const verifyRegistrationPayment = createAsyncThunk('auth/verifyPayment', 
             body: JSON.stringify(paymentData)
         });
         return await handleResponse(response, thunkAPI, 'Payment verification failed');
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.message);
+    }
+});
+
+// Fetch all users (admin only)
+export const fetchUsers = createAsyncThunk('auth/fetchUsers', async (_, thunkAPI) => {
+    try {
+        const token = thunkAPI.getState().auth.user.token;
+        const response = await fetch('/api/auth/users', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        return await handleResponse(response, thunkAPI, 'Failed to fetch users');
     } catch (error) {
         return thunkAPI.rejectWithValue(error.message);
     }
@@ -201,6 +217,19 @@ export const authSlice = createSlice({
                 state.isSuccess = true;
             })
             .addCase(verifyRegistrationPayment.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.message = action.payload;
+            })
+            .addCase(fetchUsers.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(fetchUsers.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.users = action.payload;
+            })
+            .addCase(fetchUsers.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.message = action.payload;

@@ -1,16 +1,16 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 const initialState = {
-    jobs: [],
+    registeredStudents: [],
     isLoading: false,
     isSuccess: false,
     isError: false,
     message: ''
 };
 
-export const fetchJobs = createAsyncThunk('jobs/fetchAll', async (_, thunkAPI) => {
+export const fetchRegisteredStudents = createAsyncThunk('registeredStudents/fetchAll', async (_, thunkAPI) => {
     try {
-        const response = await fetch('/api/jobs');
+        const response = await fetch('/api/registered-students');
         const data = await response.json();
         if (response.ok) {
             return data;
@@ -22,16 +22,16 @@ export const fetchJobs = createAsyncThunk('jobs/fetchAll', async (_, thunkAPI) =
     }
 });
 
-export const createJob = createAsyncThunk('jobs/create', async (jobData, thunkAPI) => {
+export const createRegisteredStudent = createAsyncThunk('registeredStudents/create', async (studentData, thunkAPI) => {
     try {
         const token = thunkAPI.getState().auth.user.token;
-        const response = await fetch('/api/jobs', {
+        const response = await fetch('/api/registered-students', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify(jobData)
+            body: JSON.stringify(studentData)
         });
         const data = await response.json();
         if (response.ok) {
@@ -44,16 +44,16 @@ export const createJob = createAsyncThunk('jobs/create', async (jobData, thunkAP
     }
 });
 
-export const updateJob = createAsyncThunk('jobs/update', async ({ id, jobData }, thunkAPI) => {
+export const updateRegisteredStudent = createAsyncThunk('registeredStudents/update', async ({ id, studentData }, thunkAPI) => {
     try {
         const token = thunkAPI.getState().auth.user.token;
-        const response = await fetch(`/api/jobs/${id}`, {
+        const response = await fetch(`/api/registered-students/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify(jobData)
+            body: JSON.stringify(studentData)
         });
         const data = await response.json();
         if (response.ok) {
@@ -66,10 +66,10 @@ export const updateJob = createAsyncThunk('jobs/update', async ({ id, jobData },
     }
 });
 
-export const deleteJob = createAsyncThunk('jobs/delete', async (id, thunkAPI) => {
+export const deleteRegisteredStudent = createAsyncThunk('registeredStudents/delete', async (id, thunkAPI) => {
     try {
         const token = thunkAPI.getState().auth.user.token;
-        const response = await fetch(`/api/jobs/${id}`, {
+        const response = await fetch(`/api/registered-students/${id}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -77,7 +77,7 @@ export const deleteJob = createAsyncThunk('jobs/delete', async (id, thunkAPI) =>
         });
         const data = await response.json();
         if (response.ok) {
-            return data.id;
+            return id;
         } else {
             return thunkAPI.rejectWithValue(data.message);
         }
@@ -86,64 +86,64 @@ export const deleteJob = createAsyncThunk('jobs/delete', async (id, thunkAPI) =>
     }
 });
 
-export const jobsSlice = createSlice({
-    name: 'jobs',
+export const registeredStudentsSlice = createSlice({
+    name: 'registeredStudents',
     initialState,
     reducers: {
         reset: () => initialState
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchJobs.pending, (state) => {
+            .addCase(fetchRegisteredStudents.pending, (state) => {
                 state.isLoading = true;
             })
-            .addCase(fetchJobs.fulfilled, (state, action) => {
+            .addCase(fetchRegisteredStudents.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.isSuccess = true;
-                state.jobs = action.payload;
+                state.registeredStudents = action.payload;
             })
-            .addCase(fetchJobs.rejected, (state, action) => {
+            .addCase(fetchRegisteredStudents.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.message = action.payload;
             })
-            .addCase(deleteJob.pending, (state) => {
+            .addCase(createRegisteredStudent.pending, (state) => {
                 state.isLoading = true;
             })
-            .addCase(deleteJob.fulfilled, (state, action) => {
+            .addCase(createRegisteredStudent.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.isSuccess = true;
-                state.jobs = state.jobs.filter(job => job._id !== action.payload);
+                state.registeredStudents.unshift(action.payload);
             })
-            .addCase(deleteJob.rejected, (state, action) => {
+            .addCase(createRegisteredStudent.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.message = action.payload;
             })
-            .addCase(createJob.pending, (state) => {
+            .addCase(updateRegisteredStudent.pending, (state) => {
                 state.isLoading = true;
             })
-            .addCase(createJob.fulfilled, (state, action) => {
+            .addCase(updateRegisteredStudent.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.isSuccess = true;
-                state.jobs.unshift(action.payload);
-            })
-            .addCase(createJob.rejected, (state, action) => {
-                state.isLoading = false;
-                state.isError = true;
-                state.message = action.payload;
-            })
-            .addCase(updateJob.pending, (state) => {
-                state.isLoading = true;
-            })
-            .addCase(updateJob.fulfilled, (state, action) => {
-                state.isLoading = false;
-                state.isSuccess = true;
-                state.jobs = state.jobs.map(job => 
-                    job._id === action.payload._id ? action.payload : job
+                state.registeredStudents = state.registeredStudents.map(student =>
+                    student._id === action.payload._id ? action.payload : student
                 );
             })
-            .addCase(updateJob.rejected, (state, action) => {
+            .addCase(updateRegisteredStudent.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.message = action.payload;
+            })
+            .addCase(deleteRegisteredStudent.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(deleteRegisteredStudent.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.registeredStudents = state.registeredStudents.filter(student => student._id !== action.payload);
+            })
+            .addCase(deleteRegisteredStudent.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.message = action.payload;
@@ -151,5 +151,5 @@ export const jobsSlice = createSlice({
     }
 });
 
-export const { reset } = jobsSlice.actions;
-export default jobsSlice.reducer;
+export const { reset } = registeredStudentsSlice.actions;
+export default registeredStudentsSlice.reducer;

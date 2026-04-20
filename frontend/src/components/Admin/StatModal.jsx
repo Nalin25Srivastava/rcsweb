@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, BarChart3, Star, CheckCircle2 } from 'lucide-react';
-import { fetchStats } from '../../store/slices/statsSlice';
+import { fetchStats, createStat, updateStat } from '../../store/slices/statsSlice';
 
 const StatModal = ({ isOpen, onClose, stat = null, isEditing = false }) => {
     const dispatch = useDispatch();
@@ -32,28 +32,14 @@ const StatModal = ({ isOpen, onClose, stat = null, isEditing = false }) => {
         e.preventDefault();
         
         try {
-            const token = JSON.parse(localStorage.getItem('rcs_user'))?.token;
-            const url = isEditing ? `/api/stats/${stat._id}` : '/api/stats';
-            const method = isEditing ? 'PUT' : 'POST';
-
-            const response = await fetch(url, {
-                method,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(formData)
-            });
-
-            if (response.ok) {
-                dispatch(fetchStats());
-                onClose();
+            if (isEditing) {
+                await dispatch(updateStat({ id: stat._id, statData: formData })).unwrap();
             } else {
-                const data = await response.json();
-                alert(`Error: ${data.message}`);
+                await dispatch(createStat(formData)).unwrap();
             }
+            onClose();
         } catch (error) {
-            alert('Failed to save statistic');
+            alert(`Failed to save statistic: ${error}`);
         }
     };
 

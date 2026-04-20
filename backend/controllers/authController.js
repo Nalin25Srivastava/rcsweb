@@ -174,6 +174,18 @@ const googleLogin = async (req, res) => {
     }
 };
 
+// @desc    Get all users (candidates)
+// @route   GET /api/auth/users
+// @access  Private/Admin
+const getUsers = async (req, res) => {
+    try {
+        const users = await User.find({ role: 'user' }).select('-password');
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 // Generate JWT
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -184,5 +196,6 @@ const generateToken = (id) => {
 module.exports = {
     registerUser,
     loginUser,
-    googleLogin
+    googleLogin,
+    getUsers
 };
