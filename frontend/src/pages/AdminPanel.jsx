@@ -162,7 +162,7 @@ const AdminPanel = () => {
         { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
         { id: 'jobs', label: 'Manage Jobs', icon: Briefcase },
         { id: 'students', label: 'Placed Students', icon: Users },
-        { id: 'regCandidates', label: 'Registered Candidates', icon: GraduationCap },
+        { id: 'regCandidates', label: 'Registered', icon: GraduationCap },
         { id: 'stats', label: 'Statistics', icon: BarChart3 },
         { id: 'carousel', label: 'Carousel Slider', icon: ImageIcon },
         { id: 'settings', label: 'Settings', icon: Settings },
