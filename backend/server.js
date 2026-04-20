@@ -90,6 +90,10 @@ if (isVercel) {
 }
 
 
+// MongoDB Connection with improved error handling for serverless
+let isConnected = false;
+let lastDbError = null;
+
 app.get('/api/health', (req, res) => {
     const dbState = mongoose.connection.readyState;
     const dbStatus = {
@@ -104,9 +108,11 @@ app.get('/api/health', (req, res) => {
     res.status(dbState === 1 ? 200 : 503).json({ 
         status, 
         message: dbState === 1 ? 'API and Database are healthy' : 'API is running but Database is not connected',
+        dbError: lastDbError ? lastDbError.message : (dbState === 1 ? null : 'Still attempting connection...'),
         environment: process.env.NODE_ENV,
         dbState: dbStatus[dbState] || 'unknown',
-        hasUri: !!process.env.MONGO_URI
+        hasUri: !!process.env.MONGO_URI,
+        timestamp: new Date().toISOString()
     });
 });
 
@@ -115,6 +121,7 @@ app.get('/', (req, res) => {
         message: 'RCS Placements Backend API is active',
         healthCheck: '/api/health',
         dbStatus: mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected',
+        dbError: lastDbError ? lastDbError.message : null,
         timestamp: new Date().toISOString()
     });
 });
@@ -148,7 +155,6 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 5000;
 
 // MongoDB Connection with improved error handling for serverless
-let isConnected = false;
 const connectDB = async () => {
     if (isConnected) return;
 
@@ -173,8 +179,10 @@ const connectDB = async () => {
         });
         
         isConnected = true;
+        lastDbError = null;
         console.log(`MongoDB Connected: ${conn.connection.host}`);
     } catch (err) {
+        lastDbError = err;
         console.error('MongoDB connection error details:', {
             name: err.name,
             message: err.message,
