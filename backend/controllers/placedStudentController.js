@@ -1,4 +1,5 @@
 const PlacedStudent = require('../models/PlacedStudent');
+const mongoose = require('mongoose');
 
 // @desc    Get all placed students
 // @route   GET /api/placed-students
