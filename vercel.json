@@ -8,7 +8,7 @@
       "includeFiles": "backend/**"
     },
     "api/test.js": {
-      "memory": 128
+      "maxDuration": 5
     }
   },
   "rewrites": [
