@@ -1,12 +1,17 @@
 {
   "version": 2,
-  
-  "outputDirectory": "dist",
-  "functions": {
-    "api/index.js": {
-      "includeFiles": "backend/**"
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": { "distDir": "dist" }
+    },
+    {
+      "src": "api/index.js",
+      "use": "@vercel/node",
+      "config": { "includeFiles": ["backend/**"] }
     }
-  },
+  ],
   "rewrites": [
     {
       "source": "/api/(.*)",
