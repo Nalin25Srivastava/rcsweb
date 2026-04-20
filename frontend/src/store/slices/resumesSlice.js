@@ -9,8 +9,14 @@ const initialState = {
 
 export const submitResume = createAsyncThunk('resumes/submit', async (resumeData, thunkAPI) => {
     try {
+        const { auth: { user } } = thunkAPI.getState();
+        const token = user?.token;
+
         const response = await fetch('/api/resumes', {
             method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
             body: resumeData // Using FormData directly
         });
         const data = await response.json();

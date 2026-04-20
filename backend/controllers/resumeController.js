@@ -72,7 +72,8 @@ exports.submitResume = (req, res) => {
                 originalName: req.file.originalname,
                 fileMimetype: req.file.mimetype,
                 amount: registrationFee,
-                paymentStatus: 'Pending'
+                paymentStatus: 'Pending',
+                user: req.user._id // Link registration to logged-in user
             });
 
             // Update user's registration status if they have an account

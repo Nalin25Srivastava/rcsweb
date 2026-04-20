@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const { protect } = require('../middleware/authMiddleware');
 const { submitResume } = require('../controllers/resumeController');
 
-router.post('/', submitResume);
+router.post('/', protect, submitResume);
 
 module.exports = router;

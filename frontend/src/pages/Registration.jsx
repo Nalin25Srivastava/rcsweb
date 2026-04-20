@@ -10,6 +10,7 @@ const Registration = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { isLoading, isSuccess, isError, message } = useSelector((state) => state.resumes);
+    const { user } = useSelector((state) => state.auth);
 
     const [formData, setFormData] = useState({
         firstName: '',
@@ -20,6 +21,21 @@ const Registration = () => {
     });
     const [file, setFile] = useState(null);
     const [paymentStatus, setPaymentStatus] = useState(null); // 'processing' | 'success' | null
+
+    useEffect(() => {
+        if (!user) {
+            navigate('/login?redirect=postres');
+        } else if (user && !formData.email) {
+            // Pre-fill from user account
+            const nameParts = user.name ? user.name.split(' ') : ['', ''];
+            setFormData({
+                ...formData,
+                firstName: nameParts[0] || '',
+                lastName: nameParts.slice(1).join(' ') || '',
+                email: user.email || '',
+            });
+        }
+    }, [user, navigate, formData.email]);
 
     useEffect(() => {
         if (isError) {
@@ -170,10 +186,10 @@ const Registration = () => {
                             Partner Network
                         </div>
                         <h2 className="text-4xl lg:text-5xl font-black mb-6 tracking-tight leading-tight">
-                            Placement Agency <span className="text-emerald-400">Portal</span>
+                            Candidate <span className="text-emerald-400">Registration</span>
                         </h2>
                         <p className="text-slate-300 font-medium text-lg leading-relaxed mb-10">
-                            Register your agency with the RCS ecosystem to unlock premium hiring tools, enterprise client access, and dedicated technical support.
+                            Complete your registration to unlock premium hiring tools, enterprise client access, and 24/7 dedicated placement support.
                         </p>
 
                         <div className="space-y-6">
@@ -239,7 +255,9 @@ const Registration = () => {
                                         value={formData.firstName}
                                         onChange={handleChange}
                                         required
-                                        className="w-full bg-slate-50 border-2 border-slate-50 focus:border-emerald-500 focus:bg-white rounded-xl py-3 px-4 outline-none transition-all text-slate-900 font-bold"
+                                        readOnly
+                                        className="w-full bg-slate-100 border-2 border-slate-100 focus:border-slate-200 rounded-xl py-3 px-4 outline-none transition-all text-slate-500 font-bold cursor-not-allowed"
+                                        title="Fetched from account"
                                     />
                                 </div>
                                 <div className="space-y-2">
@@ -250,7 +268,9 @@ const Registration = () => {
                                         value={formData.lastName}
                                         onChange={handleChange}
                                         required
-                                        className="w-full bg-slate-50 border-2 border-slate-50 focus:border-emerald-500 focus:bg-white rounded-xl py-3 px-4 outline-none transition-all text-slate-900 font-bold"
+                                        readOnly
+                                        className="w-full bg-slate-100 border-2 border-slate-100 focus:border-slate-200 rounded-xl py-3 px-4 outline-none transition-all text-slate-500 font-bold cursor-not-allowed"
+                                        title="Fetched from account"
                                     />
                                 </div>
                                 <div className="space-y-2">
@@ -261,7 +281,9 @@ const Registration = () => {
                                         value={formData.email}
                                         onChange={handleChange}
                                         required
-                                        className="w-full bg-slate-50 border-2 border-slate-50 focus:border-emerald-500 focus:bg-white rounded-xl py-3 px-4 outline-none transition-all text-slate-900 font-bold"
+                                        readOnly
+                                        className="w-full bg-slate-100 border-2 border-slate-100 focus:border-slate-200 rounded-xl py-3 px-4 outline-none transition-all text-slate-500 font-bold cursor-not-allowed"
+                                        title="Fetched from account"
                                     />
                                 </div>
                                 <div className="space-y-2">
@@ -297,7 +319,7 @@ const Registration = () => {
 
                             {/* File Upload */}
                             <div className="space-y-2 mt-6">
-                                <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Agency Profile (PDF/DOC)</label>
+                                <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Resume / Documents (PDF/DOC)</label>
                                 <label className="flex items-center justify-center w-full bg-slate-50 border-2 border-dashed border-slate-200 hover:border-emerald-400 hover:bg-emerald-50 rounded-2xl py-8 px-4 cursor-pointer transition-all group">
                                     <div className="flex flex-col items-center gap-2">
                                         <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center text-slate-400 group-hover:text-emerald-500 group-hover:scale-110 transition-all shadow-sm">

@@ -63,6 +63,11 @@ const resumeSchema = new mongoose.Schema({
     razorpaySignature: {
         type: String,
         required: false
+    },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: false // Optional for backward compatibility, but we will enforce it in the controller
     }
 }, {
     timestamps: true
