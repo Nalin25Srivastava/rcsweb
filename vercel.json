@@ -1,14 +1,29 @@
 {
   "version": 2,
-  "functions": {
-    "api/index.js": {
-      "maxDuration": 10,
-      "includeFiles": "backend/**"
+  "builds": [
+    {
+      "src": "api/index.js",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": "backend/**",
+        "maxDuration": 10
+      }
     },
-    "api/test.js": {
-      "maxDuration": 5
+    {
+      "src": "api/test.js",
+      "use": "@vercel/node",
+      "config": {
+        "maxDuration": 5
+      }
+    },
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
     }
-  },
+  ],
   "rewrites": [
     {
       "source": "/api/test",
