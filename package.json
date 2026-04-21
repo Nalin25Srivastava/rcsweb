@@ -6,8 +6,8 @@
     "node": "22.x"
   },
   "scripts": {
-    "build": "cd frontend && npm install && npm run build && cd .. && node scripts/mirror-build.js",
-    "vercel-build": "npm install --include=dev && npm run build",
+    "build": "npm install --prefix frontend && npm run build --prefix frontend && node scripts/mirror-build.js",
+    "vercel-build": "npm run build",
     "install-backend": "cd backend && npm install",
     "install-frontend": "cd frontend && npm install",
     "install-all": "npm run install-backend && npm run install-frontend"
