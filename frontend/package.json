@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "build:backend": "echo 'Redundant frontend build hook triggered'",
     "dev": "vite",
     "build": "vite build",
     "vercel-build": "npm run build",

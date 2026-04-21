@@ -7,6 +7,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
+    "build:backend": "echo 'Redundant backend build hook triggered'",
     "build": "echo 'No build step required'",
     "start": "node server.js",
     "run-dev": "nodemon server.js",
