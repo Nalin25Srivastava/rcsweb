@@ -42,6 +42,25 @@ app.get('/api/ping', (req, res) => res.json({
   isVercel: !!process.env.VERCEL
 }));
 
+app.get('/api/debug-collections', async (req, res) => {
+    try {
+        const User = require('./models/User');
+        const RegisteredCandidate = require('./models/RegisteredCandidate');
+        const Job = require('./models/Job');
+        const PlacedStudent = require('./models/PlacedStudent');
+
+        const counts = {
+            users: await User.countDocuments(),
+            candidates: await RegisteredCandidate.countDocuments(),
+            jobs: await Job.countDocuments(),
+            placedStudents: await PlacedStudent.countDocuments()
+        };
+        res.json({ success: true, counts, dbState: mongoose.connection.readyState });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
 // Routes
 app.use('/api/registered-candidates', require('./routes/registeredCandidateRoutes'));
 app.use('/api/auth', require('./routes/authRoutes'));

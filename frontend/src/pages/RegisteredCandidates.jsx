@@ -165,10 +165,17 @@ const RegisteredCandidates = () => {
                             exit={{ opacity: 0, y: -20 }}
                             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
                         >
+                            {isError && (
+                                <div className="col-span-full mb-8 p-6 bg-red-50 border-2 border-red-100 rounded-3xl text-red-600 font-bold text-center">
+                                    <p className="uppercase tracking-widest text-xs mb-2">Fetch Error Detected</p>
+                                    <p>{message}</p>
+                                </div>
+                            )}
                             {filteredCandidates.length === 0 ? (
                                 <div className="col-span-full py-20 text-center bg-white rounded-[2.5rem] border-4 border-dashed border-slate-100">
                                     <Users className="w-16 h-16 text-slate-200 mx-auto mb-4" />
                                     <h3 className="text-2xl font-black text-slate-300 uppercase">No Registered Matches</h3>
+                                    <p className="text-slate-400 font-bold mt-2">Check the database or adjust your search.</p>
                                 </div>
                             ) : (
                                 filteredCandidates.map((candidate) => (
