@@ -6,8 +6,7 @@
     "node": "22.x"
   },
   "scripts": {
-    "build:backend": "echo 'Backend build successful'",
-    "build": "npm run build:backend && npx vite build frontend --outDir ../dist && node scripts/mirror-build.js",
+    "build": "echo 'Building backend...' && npx vite build frontend --outDir ../dist && node scripts/mirror-build.js",
     "vercel-build": "npm run build",
     "install-backend": "cd backend && npm install",
     "install-frontend": "cd frontend && npm install",
