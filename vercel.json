@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "outputDirectory": "dist",
+  "outputDirectory": ".",
   "functions": {
     "api/index.js": {
       "maxDuration": 10,
