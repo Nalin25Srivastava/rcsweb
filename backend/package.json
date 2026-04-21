@@ -7,7 +7,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "build": "echo 'No build step required'",
+    "build": "echo 'CRITICAL ERROR: Vercel is building from the BACKEND folder instead of the project ROOT. Please clear the Root Directory setting in your Vercel Dashboard Settings -> General.' && exit 1",
     "start": "node server.js",
     "run-dev": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
