@@ -49,13 +49,13 @@ app.get('/api/debug-dns', async (req, res) => {
         hasUri: !!process.env.MONGO_URI,
         uriCensored: process.env.MONGO_URI ? process.env.MONGO_URI.replace(/:([^@]+)@/, ':****@') : null,
         dns: {},
-        socket: {}
+        socket: {},
+        shards: []
     };
 
     if (!process.env.MONGO_URI) return res.json(results);
 
     try {
-        // Extract hostname from mongodb+srv://user:pass@hostname/db
         const match = process.env.MONGO_URI.match(/@([^/]+)/);
         if (!match) {
             results.error = "Could not parse hostname from MONGO_URI";
@@ -65,58 +65,64 @@ app.get('/api/debug-dns', async (req, res) => {
         const host = match[1];
         results.targetHost = host;
 
-        // 1. Test DNS Resolution
+        // 1. Test SRV Resolution (Essential for mongodb+srv)
         try {
-            const addresses = await new Promise((resolve, reject) => {
-                dns.resolve(host, 'SRV', (err, addresses) => {
+            const srvRecords = await new Promise((resolve, reject) => {
+                dns.resolveSrv('_mongodb._tcp.' + host, (err, addresses) => {
                     if (err) reject(err);
                     else resolve(addresses);
                 });
             });
-            results.dns.srv = addresses;
+            results.dns.srv = srvRecords;
             results.dns.status = 'Success';
+
+            // 2. Test connectivity to each shard address found
+            for (const srv of srvRecords) {
+                const shardHost = srv.name;
+                const shardPort = srv.port;
+                const shardResult = { host: shardHost, port: shardPort };
+                
+                try {
+                    await new Promise((resolve, reject) => {
+                        const client = new net.Socket();
+                        client.setTimeout(3000);
+                        client.connect(shardPort, shardHost, () => {
+                           shardResult.status = 'Success';
+                           client.destroy();
+                           resolve();
+                        });
+                        client.on('error', (e) => {
+                           shardResult.status = 'Failed';
+                           shardResult.error = e.message;
+                           resolve(); // Continue to next shard
+                        });
+                        client.on('timeout', () => {
+                           shardResult.status = 'Timeout';
+                           client.destroy();
+                           resolve();
+                        });
+                    });
+                } catch (e) {
+                    shardResult.status = 'Error';
+                    shardResult.error = e.message;
+                }
+                results.shards.push(shardResult);
+            }
         } catch (e) {
-            results.dns.status = 'Failed';
+            results.dns.status = 'SRV Lookup Failed';
             results.dns.error = e.message;
         }
 
-        // 2. Test basic IP resolution
+        // 3. Simple IP resolution check
         try {
-            const lookups = await new Promise((resolve, reject) => {
+            results.dns.lookup = await new Promise((resolve, reject) => {
                 dns.lookup(host, (err, address) => {
                     if (err) reject(err);
                     else resolve(address);
                 });
             });
-            results.dns.lookup = lookups;
         } catch (e) {
              results.dns.lookupError = e.message;
-        }
-
-        // 3. Test Port Connectivity (Attempt to connect to port 27017)
-        results.socket.port = 27017;
-        try {
-            await new Promise((resolve, reject) => {
-                const client = new net.Socket();
-                client.setTimeout(5000);
-                client.connect(27017, host, () => {
-                   results.socket.status = 'Success';
-                   client.destroy();
-                   resolve();
-                });
-                client.on('error', (e) => {
-                   results.socket.status = 'Failed';
-                   results.socket.error = e.message;
-                   reject(e);
-                });
-                client.on('timeout', () => {
-                   results.socket.status = 'Timeout';
-                   client.destroy();
-                   reject(new Error('Connection timed out'));
-                });
-            });
-        } catch (e) {
-            // Already handled in rejection
         }
 
         res.json(results);
@@ -222,7 +228,8 @@ const connectDB = async () => {
         console.log('Attempting MongoDB connection...');
         connectionPromise = mongoose.connect(process.env.MONGO_URI, {
             serverSelectionTimeoutMS: 20000,
-            heartbeatFrequencyMS: 2000
+            heartbeatFrequencyMS: 2000,
+            family: 4 // Force IPv4 to resolve DNS issues on some Vercel regions
         });
 
         const conn = await connectionPromise;
