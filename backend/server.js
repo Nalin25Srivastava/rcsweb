@@ -274,6 +274,8 @@ const databaseMiddleware = async (req, res, next) => {
 
 app.use(databaseMiddleware);
 
+const CURRENT_COMMIT = "3bb9123-STABILIZE"; // Manual version tag for verification
+
 app.get('/api/health', (req, res) => {
     const dbState = mongoose.connection.readyState;
     const dbStatus = {
@@ -292,6 +294,7 @@ app.get('/api/health', (req, res) => {
         environment: process.env.NODE_ENV,
         dbState: dbStatus[dbState] || 'unknown',
         hasUri: !!process.env.MONGO_URI,
+        currentCommit: CURRENT_COMMIT,
         timestamp: new Date().toISOString()
     });
 });
