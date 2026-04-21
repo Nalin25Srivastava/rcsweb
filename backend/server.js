@@ -4,6 +4,8 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const dns = require('dns');
+const net = require('net');
 
 // Load environment variables
 dotenv.config();
@@ -41,6 +43,87 @@ app.get('/api/ping', (req, res) => res.json({
   env: process.env.NODE_ENV,
   isVercel: !!process.env.VERCEL
 }));
+
+app.get('/api/debug-dns', async (req, res) => {
+    const results = {
+        hasUri: !!process.env.MONGO_URI,
+        uriCensored: process.env.MONGO_URI ? process.env.MONGO_URI.replace(/:([^@]+)@/, ':****@') : null,
+        dns: {},
+        socket: {}
+    };
+
+    if (!process.env.MONGO_URI) return res.json(results);
+
+    try {
+        // Extract hostname from mongodb+srv://user:pass@hostname/db
+        const match = process.env.MONGO_URI.match(/@([^/]+)/);
+        if (!match) {
+            results.error = "Could not parse hostname from MONGO_URI";
+            return res.json(results);
+        }
+        
+        const host = match[1];
+        results.targetHost = host;
+
+        // 1. Test DNS Resolution
+        try {
+            const addresses = await new Promise((resolve, reject) => {
+                dns.resolve(host, 'SRV', (err, addresses) => {
+                    if (err) reject(err);
+                    else resolve(addresses);
+                });
+            });
+            results.dns.srv = addresses;
+            results.dns.status = 'Success';
+        } catch (e) {
+            results.dns.status = 'Failed';
+            results.dns.error = e.message;
+        }
+
+        // 2. Test basic IP resolution
+        try {
+            const lookups = await new Promise((resolve, reject) => {
+                dns.lookup(host, (err, address) => {
+                    if (err) reject(err);
+                    else resolve(address);
+                });
+            });
+            results.dns.lookup = lookups;
+        } catch (e) {
+             results.dns.lookupError = e.message;
+        }
+
+        // 3. Test Port Connectivity (Attempt to connect to port 27017)
+        results.socket.port = 27017;
+        try {
+            await new Promise((resolve, reject) => {
+                const client = new net.Socket();
+                client.setTimeout(5000);
+                client.connect(27017, host, () => {
+                   results.socket.status = 'Success';
+                   client.destroy();
+                   resolve();
+                });
+                client.on('error', (e) => {
+                   results.socket.status = 'Failed';
+                   results.socket.error = e.message;
+                   reject(e);
+                });
+                client.on('timeout', () => {
+                   results.socket.status = 'Timeout';
+                   client.destroy();
+                   reject(new Error('Connection timed out'));
+                });
+            });
+        } catch (e) {
+            // Already handled in rejection
+        }
+
+        res.json(results);
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message, stack: err.stack });
+    }
+});
 
 app.get('/api/debug-collections', async (req, res) => {
     try {
@@ -138,7 +221,7 @@ const connectDB = async () => {
         
         console.log('Attempting MongoDB connection...');
         connectionPromise = mongoose.connect(process.env.MONGO_URI, {
-            serverSelectionTimeoutMS: 8000,
+            serverSelectionTimeoutMS: 20000,
             heartbeatFrequencyMS: 2000
         });
 
@@ -166,7 +249,7 @@ const databaseMiddleware = async (req, res, next) => {
     if (!req.url.startsWith('/api')) return next();
     
     // Skip health check to avoid recursion or blockages if needed
-    if (req.url === '/api/health' || req.url === '/api/ping') return next();
+    if (req.url === '/api/health' || req.url === '/api/ping' || req.url === '/api/debug-dns') return next();
 
     if (mongoose.connection.readyState === 1) return next();
 
