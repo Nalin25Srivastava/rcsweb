@@ -150,53 +150,8 @@ app.get('/api/debug-collections', async (req, res) => {
     }
 });
 
-// Routes
-app.use('/api/registered-candidates', require('./routes/registeredCandidateRoutes'));
-app.use('/api/auth', require('./routes/authRoutes'));
-app.use('/api/jobs', require('./routes/jobRoutes'));
-app.use('/api/contacts', require('./routes/contactRoutes'));
-app.use('/api/resumes', require('./routes/resumeRoutes'));
-app.use('/api/placed-students', require('./routes/placedStudentRoutes'));
-app.use('/api/upload', require('./routes/uploadRoutes'));
-app.get('/api/upload/ping', (req, res) => res.json({ message: 'Upload service reachable' }));
-app.use('/api/payments', require('./routes/paymentRoutes'));
-app.use('/api/webhooks', require('./routes/webhookRoutes'));
-app.use('/api/carousel', require('./routes/carouselRoutes'));
-app.use('/api/stats', require('./routes/statRoutes'));
-
-
-
-// Serve uploads folder
-const path = require('path');
-const fs = require('fs');
-
-// Vercel read-only filesystem workaround: use /tmp in production
-const isVercel = process.env.VERCEL === '1' || !!process.env.VERCEL;
-const UPLOAD_BASE = isVercel ? '/tmp/uploads' : path.join(__dirname, 'uploads');
-
-const dirs = [
-    path.join(UPLOAD_BASE, 'images'),
-    path.join(UPLOAD_BASE, 'resumes')
-];
-
-dirs.forEach(dir => {
-    if (!fs.existsSync(dir)) {
-        try {
-            fs.mkdirSync(dir, { recursive: true });
-            console.log(`Created directory: ${dir}`);
-        } catch (err) {
-            console.error(`Error creating directory ${dir}:`, err);
-        }
-    }
-});
-
-// Serve static files from the standard uploads folder
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-// Additionally serve from /tmp on Vercel
-if (isVercel) {
-    app.use('/uploads', express.static('/tmp/uploads'));
-}
-
+// --- Database Connection Guards (Must be before routes) ---
+const CURRENT_COMMIT = "3bb9123-STABILIZE-V2"; // Updated version tag
 
 // MongoDB Connection with improved error handling for serverless
 let isConnected = false;
@@ -273,8 +228,21 @@ const databaseMiddleware = async (req, res, next) => {
 };
 
 app.use(databaseMiddleware);
+// ------------------------------------------------------------
 
-const CURRENT_COMMIT = "3bb9123-STABILIZE"; // Manual version tag for verification
+// Routes
+app.use('/api/registered-candidates', require('./routes/registeredCandidateRoutes'));
+app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/jobs', require('./routes/jobRoutes'));
+app.use('/api/contacts', require('./routes/contactRoutes'));
+app.use('/api/resumes', require('./routes/resumeRoutes'));
+app.use('/api/placed-students', require('./routes/placedStudentRoutes'));
+app.use('/api/upload', require('./routes/uploadRoutes'));
+app.get('/api/upload/ping', (req, res) => res.json({ message: 'Upload service reachable' }));
+app.use('/api/payments', require('./routes/paymentRoutes'));
+app.use('/api/webhooks', require('./routes/webhookRoutes'));
+app.use('/api/carousel', require('./routes/carouselRoutes'));
+app.use('/api/stats', require('./routes/statRoutes'));
 
 app.get('/api/health', (req, res) => {
     const dbState = mongoose.connection.readyState;
