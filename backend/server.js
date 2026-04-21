@@ -93,6 +93,77 @@ if (isVercel) {
 // MongoDB Connection with improved error handling for serverless
 let isConnected = false;
 let lastDbError = null;
+let connectionPromise = null;
+
+const connectDB = async () => {
+    if (isConnected) return;
+    if (connectionPromise) return connectionPromise;
+
+    try {
+        if (!process.env.MONGO_URI) {
+            const err = new Error('MONGO_URI is not defined in environment variables');
+            console.error(err.message);
+            lastDbError = err;
+            return;
+        }
+
+        // Safety check for Vercel
+        if (process.env.VERCEL && process.env.MONGO_URI.includes('localhost')) {
+            const err = new Error('CRITICAL: MONGO_URI is set to localhost on Vercel.');
+            console.error(err.message);
+            lastDbError = err;
+            return;
+        }
+
+        mongoose.set('bufferCommands', false);
+        
+        console.log('Attempting MongoDB connection...');
+        connectionPromise = mongoose.connect(process.env.MONGO_URI, {
+            serverSelectionTimeoutMS: 8000,
+            heartbeatFrequencyMS: 2000
+        });
+
+        const conn = await connectionPromise;
+        
+        isConnected = true;
+        lastDbError = null;
+        console.log(`MongoDB Connected: ${conn.connection.host}`);
+        return conn;
+    } catch (err) {
+        lastDbError = err;
+        connectionPromise = null; // Allow retry on next request
+        console.error('MongoDB connection error details:', {
+            name: err.name,
+            message: err.message,
+            code: err.code
+        });
+        throw err;
+    }
+};
+
+// Database connectivity middleware
+const databaseMiddleware = async (req, res, next) => {
+    // Only apply to /api routes
+    if (!req.url.startsWith('/api')) return next();
+    
+    // Skip health check to avoid recursion or blockages if needed
+    if (req.url === '/api/health' || req.url === '/api/ping') return next();
+
+    if (mongoose.connection.readyState === 1) return next();
+
+    try {
+        await connectDB();
+        next();
+    } catch (err) {
+        res.status(503).json({
+            success: false,
+            message: 'Database connection is currently unavailable. Please try again.',
+            error: err.message
+        });
+    }
+};
+
+app.use(databaseMiddleware);
 
 app.get('/api/health', (req, res) => {
     const dbState = mongoose.connection.readyState;
@@ -154,45 +225,8 @@ app.use((err, req, res, next) => {
 // Port configuration
 const PORT = process.env.PORT || 5000;
 
-// MongoDB Connection with improved error handling for serverless
-const connectDB = async () => {
-    if (isConnected) return;
-
-    try {
-        if (!process.env.MONGO_URI) {
-            console.error('MONGO_URI is not defined in environment variables');
-            return;
-        }
-
-        // Safety check for Vercel
-        if (process.env.VERCEL && process.env.MONGO_URI.includes('localhost')) {
-            console.error('CRITICAL: MONGO_URI is set to localhost on Vercel. Please set a remote MongoDB URI in the Vercel Dashboard.');
-            return;
-        }
-
-        mongoose.set('bufferCommands', false);
-        
-        console.log('Attempting MongoDB connection...');
-        const conn = await mongoose.connect(process.env.MONGO_URI, {
-            serverSelectionTimeoutMS: 8000, // Timeout after 8 seconds
-            heartbeatFrequencyMS: 2000
-        });
-        
-        isConnected = true;
-        lastDbError = null;
-        console.log(`MongoDB Connected: ${conn.connection.host}`);
-    } catch (err) {
-        lastDbError = err;
-        console.error('MongoDB connection error details:', {
-            name: err.name,
-            message: err.message,
-            code: err.code
-        });
-    }
-};
-
-// Initial connection
-connectDB();
+// Initial connection attempt (background)
+connectDB().catch(() => {});
 
 // Handle server listener - skip if on Vercel
 if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
