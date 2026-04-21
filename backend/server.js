@@ -261,6 +261,7 @@ app.get('/api/health', (req, res) => {
         dbError: lastDbError ? lastDbError.message : (dbState === 1 ? null : 'Still attempting connection...'),
         environment: process.env.NODE_ENV,
         dbState: dbStatus[dbState] || 'unknown',
+        dbName: mongoose.connection.name || 'pending',
         hasUri: !!process.env.MONGO_URI,
         currentCommit: CURRENT_COMMIT,
         timestamp: new Date().toISOString()
