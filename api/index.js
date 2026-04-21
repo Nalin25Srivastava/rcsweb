@@ -1,3 +1,4 @@
+console.log("Vercel Invocation: api/index.js is being called");
 try {
   module.exports = require('../backend/server');
 } catch (e) {
