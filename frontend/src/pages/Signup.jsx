@@ -42,6 +42,8 @@ const Signup = () => {
             alert('Google Signup failed. Please check if popups are blocked in your browser.');
         },
         scope: 'openid email profile',
+        ux_mode: 'redirect',
+        flow: 'implicit',
     });
 
     const handleGoogleLogin = () => {
@@ -57,8 +59,31 @@ const Signup = () => {
     const VIP_EMAILS = ['hitkarikusum.ngo@gmail.com', 'khmbvs26@gmail.com'];
     const isVIPEmail = (email) => VIP_EMAILS.includes(email);
 
-    // Removed old event listener as we use direct callback now
+    // Handle Google Redirect Response
     useEffect(() => {
+        const params = new URLSearchParams(window.location.hash.substring(1));
+        const accessToken = params.get('access_token');
+        
+        if (accessToken) {
+            console.log('Google Access Token found in URL hash (Redirect), authenticating...');
+            // Clear the hash to avoid multiple login attempts
+            window.history.replaceState(null, null, window.location.pathname);
+            
+            const handleRedirectLogin = async () => {
+                const action = await dispatch(googleLogin({ 
+                    token: accessToken, 
+                    isAccessToken: true,
+                    role,
+                    adminSecret
+                }));
+                if (googleLogin.fulfilled.match(action)) {
+                    navigate('/');
+                    setTimeout(() => dispatch(reset()), 100);
+                }
+            };
+            handleRedirectLogin();
+        }
+
         if (isSuccess && user) {
             navigate('/');
             // Small delay to ensure state isn't cleared too early if navigate is async
