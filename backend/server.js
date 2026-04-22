@@ -30,7 +30,26 @@ app.use((req, res, next) => {
 
 app.use(helmet());
 // app.use(limiter);
-app.use(cors());
+const corsOptions = {
+    origin: (origin, callback) => {
+        const allowedOrigins = [
+            'https://rcsweb-one.vercel.app',
+            'https://rcs-web-one.vercel.app',
+            'http://localhost:5173',
+            'http://127.0.0.1:5173'
+        ];
+        if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+};
+
+app.use(cors(corsOptions));
 app.use(express.json({
     limit: '50mb',
     verify: (req, res, buf) => {
