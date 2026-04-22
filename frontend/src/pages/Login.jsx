@@ -47,21 +47,33 @@ const Login = () => {
     const isVIPEmail = (e) => e && VIP_EMAILS.includes(e.trim().toLowerCase());
 
     useEffect(() => {
-        const handleGoogleSuccess = async (event) => {
-            const credentialResponse = event.detail;
-            const action = await dispatch(googleLogin({ 
-                token: credentialResponse.credential, 
-                role,
-                adminSecret
-            }));
-            if (googleLogin.fulfilled.match(action)) {
-                navigate('/');
+        const initGoogle = () => {
+            if (window.google) {
+                google.accounts.id.initialize({
+                    client_id: "356758659495-kpjkl2irajdr94o0i3pg2f7k1r44ge89.apps.googleusercontent.com",
+                    callback: (response) => {
+                        dispatch(googleLogin({ 
+                            token: response.credential, 
+                            role,
+                            adminSecret
+                        })).then((action) => {
+                            if (googleLogin.fulfilled.match(action)) {
+                                navigate('/');
+                            }
+                        });
+                    },
+                    ux_mode: "popup"
+                });
+                google.accounts.id.renderButton(
+                    document.getElementById("googleLoginButton"),
+                    { theme: "filled_black", size: "large", shape: "pill", width: 280 }
+                );
+            } else {
+                setTimeout(initGoogle, 100);
             }
         };
-
-        window.addEventListener('google-login-success', handleGoogleSuccess);
-        return () => window.removeEventListener('google-login-success', handleGoogleSuccess);
-    }, [dispatch, navigate, role, adminSecret]);
+        initGoogle();
+    }, [role, adminSecret, dispatch, navigate]);
 
     useEffect(() => {
         if (isSuccess && user) {
@@ -342,30 +354,6 @@ const Login = () => {
 
                         <div className="flex flex-col items-center gap-4 mt-4">
                             <div id="googleLoginButton" className="min-h-[40px]"></div>
-                            
-                            {/* Fallback initialized via useEffect */}
-                            <script dangerouslySetInnerHTML={{
-                                __html: `
-                                    function renderGoogleButton() {
-                                        if (window.google) {
-                                            google.accounts.id.initialize({
-                                                client_id: "356758659495-kpjkl2irajdr94o0i3pg2f7k1r44ge89.apps.googleusercontent.com",
-                                                callback: (response) => {
-                                                    window.dispatchEvent(new CustomEvent('google-login-success', { detail: response }));
-                                                },
-                                                ux_mode: "popup"
-                                            });
-                                            google.accounts.id.renderButton(
-                                                document.getElementById("googleLoginButton"),
-                                                { theme: "filled_black", size: "large", shape: "pill", width: 280 }
-                                            );
-                                        } else {
-                                            setTimeout(renderGoogleButton, 500);
-                                        }
-                                    }
-                                    renderGoogleButton();
-                                `
-                            }} />
                         </div>
 
                         <div className="text-center pt-6">
