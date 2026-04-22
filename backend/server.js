@@ -10,6 +10,9 @@ const net = require('net');
 // Load environment variables
 dotenv.config();
 
+// Fix for MongoDB SRV lookup issues in some environments
+dns.setServers(['8.8.8.8', '8.8.4.4']);
+
 const app = express();
 
 // Rate limiting

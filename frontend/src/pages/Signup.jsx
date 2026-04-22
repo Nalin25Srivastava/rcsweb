@@ -260,30 +260,35 @@ const Signup = () => {
                             <div className="flex-grow border-t border-slate-100"></div>
                         </div>
 
-                        <div className="flex justify-center transition-all">
-                            <GoogleLogin
-                                onSuccess={async (credentialResponse) => {
-                                    // Admin verification guard
-                                    if (role === 'admin' && verificationStatus !== 'success' && !isVIPEmail(email)) {
-                                        alert('Verify First');
-                                        return;
-                                    }
+                        <div className="flex flex-col items-center gap-4 transition-all">
+                            <div className="w-full max-w-[300px] min-h-[44px] flex justify-center items-center overflow-hidden rounded-full">
+                                <GoogleLogin
+                                    onSuccess={async (credentialResponse) => {
+                                        // Admin verification guard
+                                        if (role === 'admin' && verificationStatus !== 'success' && !isVIPEmail(email)) {
+                                            alert('Verify First');
+                                            return;
+                                        }
 
-                                    const resultAction = await dispatch(googleLogin({ 
-                                        token: credentialResponse.credential, 
-                                        role, 
-                                        adminSecret 
-                                    }));
+                                        const resultAction = await dispatch(googleLogin({ 
+                                            token: credentialResponse.credential, 
+                                            role, 
+                                            adminSecret 
+                                        }));
 
-                                    if (googleLogin.fulfilled.match(resultAction)) {
-                                        navigate('/');
-                                    }
-                                }}
-                                onError={(error) => console.error('Google Sign Up Failed:', error)}
-                                theme="filled_black"
-                                shape="pill"
-                            />
-
+                                        if (googleLogin.fulfilled.match(resultAction)) {
+                                            navigate('/');
+                                        }
+                                    }}
+                                    onError={(error) => {
+                                        console.error('Google Sign Up Failed:', error);
+                                        alert('Google Sign Up failed to initialize. Please check if popups are blocked or if your browser is in Private/Incognito mode.');
+                                    }}
+                                    theme="filled_black"
+                                    shape="pill"
+                                    width="300"
+                                />
+                            </div>
                         </div>
 
                         <div className="text-center pt-6">
