@@ -326,8 +326,6 @@ const Login = () => {
                         <div className="flex flex-col items-center gap-4 mt-4">
                             <div className="min-h-[50px]">
                                 <GoogleLogin
-                                    ux_mode="redirect"
-                                    clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
                                     onSuccess={async (credentialResponse) => {
                                         const action = await dispatch(googleLogin({ 
                                             token: credentialResponse.credential, 
@@ -340,6 +338,7 @@ const Login = () => {
                                     }}
                                     onError={(error) => {
                                         console.error('Google Login Failed:', error);
+                                        alert('Google Login failed. Please ensure popups are allowed and this domain is added to "Authorized JavaScript origins" in your Google Cloud Console.');
                                     }}
                                     theme="filled_black"
                                     shape="pill"
