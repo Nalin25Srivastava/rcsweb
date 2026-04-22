@@ -47,6 +47,23 @@ const Login = () => {
     const isVIPEmail = (e) => e && VIP_EMAILS.includes(e.trim().toLowerCase());
 
     useEffect(() => {
+        const handleGoogleSuccess = async (event) => {
+            const credentialResponse = event.detail;
+            const action = await dispatch(googleLogin({ 
+                token: credentialResponse.credential, 
+                role,
+                adminSecret
+            }));
+            if (googleLogin.fulfilled.match(action)) {
+                navigate('/');
+            }
+        };
+
+        window.addEventListener('google-login-success', handleGoogleSuccess);
+        return () => window.removeEventListener('google-login-success', handleGoogleSuccess);
+    }, [dispatch, navigate, role, adminSecret]);
+
+    useEffect(() => {
         if (isSuccess && user) {
             navigate('/');
         }
@@ -323,25 +340,32 @@ const Login = () => {
                             <div className="flex-grow border-t border-slate-100"></div>
                         </div>
 
-                        <div className="flex justify-center mt-4">
-                            <GoogleLogin
-                                onSuccess={async (credentialResponse) => {
-                                    const action = await dispatch(googleLogin({ 
-                                        token: credentialResponse.credential, 
-                                        role,
-                                        adminSecret
-                                    }));
-                                    if (googleLogin.fulfilled.match(action)) {
-                                        navigate('/');
+                        <div className="flex flex-col items-center gap-4 mt-4">
+                            <div id="googleLoginButton" className="min-h-[40px]"></div>
+                            
+                            {/* Fallback initialized via useEffect */}
+                            <script dangerouslySetInnerHTML={{
+                                __html: `
+                                    function renderGoogleButton() {
+                                        if (window.google) {
+                                            google.accounts.id.initialize({
+                                                client_id: "356758659495-kpjkl2irajdr94o0i3pg2f7k1r44ge89.apps.googleusercontent.com",
+                                                callback: (response) => {
+                                                    window.dispatchEvent(new CustomEvent('google-login-success', { detail: response }));
+                                                },
+                                                ux_mode: "popup"
+                                            });
+                                            google.accounts.id.renderButton(
+                                                document.getElementById("googleLoginButton"),
+                                                { theme: "filled_black", size: "large", shape: "pill", width: 280 }
+                                            );
+                                        } else {
+                                            setTimeout(renderGoogleButton, 500);
+                                        }
                                     }
-                                }}
-                                onError={(error) => {
-                                    console.error('Google Login Failed:', error);
-                                    alert('Google Login failed. If popups are blocked, please allow them for this site.');
-                                }}
-                                theme="filled_black"
-                                shape="pill"
-                            />
+                                    renderGoogleButton();
+                                `
+                            }} />
                         </div>
 
                         <div className="text-center pt-6">
