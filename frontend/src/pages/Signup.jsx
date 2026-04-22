@@ -260,7 +260,7 @@ const Signup = () => {
                             <div className="flex-grow border-t border-slate-100"></div>
                         </div>
 
-                        <div className={`flex justify-center transition-all ${(role === 'admin' && verificationStatus !== 'success' && !isVIPEmail(email)) ? 'opacity-50 pointer-events-none grayscale' : ''}`}>
+                        <div className="flex justify-center transition-all">
                             <GoogleLogin
                                 onSuccess={async (credentialResponse) => {
                                     // Admin verification guard
