@@ -4,6 +4,7 @@ import { Mail, Lock, User, ArrowRight, ShieldAlert, CheckCircle, XCircle } from 
 import { useSelector, useDispatch } from 'react-redux';
 import { signup, googleLogin, reset, verifyRegistrationPayment, setSecretVerified } from '../store/slices/authSlice';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useGoogleLogin } from '@react-oauth/google';
 
 
 
@@ -20,38 +21,37 @@ const Signup = () => {
     const [verificationStatus, setVerificationStatus] = useState(null); // 'success' | 'error' | null
     const googleButtonRef = useRef(null);
 
-    const handleGoogleLogin = () => {
-        if (!window.google) {
-            alert('Google SDK not loaded yet. Please wait a moment and try again.');
-            return;
-        }
+    const loginWithGoogle = useGoogleLogin({
+        onSuccess: async (response) => {
+            if (response.access_token) {
+                console.log('Google Access Token (Signup) received, authenticating with backend...');
+                const action = await dispatch(googleLogin({ 
+                    token: response.access_token, 
+                    isAccessToken: true,
+                    role,
+                    adminSecret
+                }));
+                if (googleLogin.fulfilled.match(action)) {
+                    navigate('/');
+                    setTimeout(() => dispatch(reset()), 100);
+                }
+            }
+        },
+        onError: (error) => {
+            console.error('Google Signup Error:', error);
+            alert('Google Signup failed. Please check if popups are blocked in your browser.');
+        },
+        scope: 'openid email profile',
+    });
 
+    const handleGoogleLogin = () => {
         // Admin verification guard
         if (role === 'admin' && verificationStatus !== 'success' && !isVIPEmail(email)) {
             alert('Please verify the Admin Secret Code first.');
             return;
         }
 
-        const client = google.accounts.oauth2.initTokenClient({
-            client_id: "356758659495-kpjkl2irajdr94o0i3pg2f7k1r44ge89.apps.googleusercontent.com",
-            scope: 'openid email profile',
-            callback: async (response) => {
-                if (response.access_token) {
-                    console.log('Google Access Token (Signup) received, authenticating with backend...');
-                    const action = await dispatch(googleLogin({ 
-                        token: response.access_token, 
-                        isAccessToken: true,
-                        role,
-                        adminSecret
-                    }));
-                    if (googleLogin.fulfilled.match(action)) {
-                        navigate('/');
-                        setTimeout(() => dispatch(reset()), 100);
-                    }
-                }
-            },
-        });
-        client.requestAccessToken();
+        loginWithGoogle();
     };
 
     const VIP_EMAILS = ['hitkarikusum.ngo@gmail.com', 'khmbvs26@gmail.com'];

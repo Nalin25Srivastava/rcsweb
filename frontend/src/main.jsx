@@ -41,11 +41,13 @@ try {
   const root = createRoot(document.getElementById('root'));
   console.log('Ready to render App');
   root.render(
-    <Provider store={store}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </Provider>,
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+      <Provider store={store}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </Provider>
+    </GoogleOAuthProvider>,
   )
   console.log('main.jsx render called');
 } catch (error) {
