@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, ArrowRight, ShieldAlert, CheckCircle, XCircle } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { login, googleLogin, reset, setSecretVerified } from '../store/slices/authSlice';
-import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Login = () => {
@@ -18,8 +17,24 @@ const Login = () => {
     const [unpaidEmail, setUnpaidEmail] = useState(null);
     const [verificationStatus, setVerificationStatus] = useState(null); // 'success' | 'error' | null
 
-    const VIP_EMAILS = ['hitkarikusum.ngo@gmail.com', 'khmbvs26@gmail.com'];
-    const isVIPEmail = (e) => e && VIP_EMAILS.includes(e.trim().toLowerCase());
+    useEffect(() => {
+        const initGoogle = () => {
+            if (window.google) {
+                google.accounts.id.initialize({
+                    client_id: "356758659495-kpjkl2irajdr94o0i3pg2f7k1r44ge89.apps.googleusercontent.com",
+                    callback: window.googleLoginCallback,
+                    ux_mode: "popup"
+                });
+                google.accounts.id.renderButton(
+                    document.getElementById("googleLoginButton"),
+                    { theme: "filled_black", size: "large", shape: "pill", width: 280 }
+                );
+            } else {
+                setTimeout(initGoogle, 100);
+            }
+        };
+        initGoogle();
+    }, []);
 
     useEffect(() => {
         const handleGoogleSuccess = async (event) => {
@@ -317,22 +332,13 @@ const Login = () => {
                         </div>
 
                         <div className="flex flex-col items-center gap-4 mt-4">
-                            {/* NATIVE GOOGLE HTML API - INDESTRUCTIBLE METHOD */}
+                            <div id="googleLoginButton" style={{ minHeight: '45px' }}></div>
                             <div id="g_id_onload"
                                  data-client_id="356758659495-kpjkl2irajdr94o0i3pg2f7k1r44ge89.apps.googleusercontent.com"
                                  data-context="signin"
                                  data-ux_mode="popup"
                                  data-callback="googleLoginCallback"
                                  data-auto_prompt="false">
-                            </div>
-                            <div className="g_id_signin"
-                                 data-type="standard"
-                                 data-shape="pill"
-                                 data-theme="filled_black"
-                                 data-text="continue_with"
-                                 data-size="large"
-                                 data-logo_alignment="left"
-                                 data-width="280">
                             </div>
                         </div>
 

@@ -24,9 +24,7 @@ try {
   root.render(
     <Provider store={store}>
       <BrowserRouter>
-        <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-          <App />
-        </GoogleOAuthProvider>
+        <App />
       </BrowserRouter>
     </Provider>,
   )
