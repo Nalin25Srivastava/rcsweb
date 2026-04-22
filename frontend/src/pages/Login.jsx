@@ -16,25 +16,36 @@ const Login = () => {
     const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
     const [unpaidEmail, setUnpaidEmail] = useState(null);
     const [verificationStatus, setVerificationStatus] = useState(null); // 'success' | 'error' | null
+    const googleButtonRef = useRef(null);
 
     useEffect(() => {
+        let timer;
         const initGoogle = () => {
-            if (window.google) {
+            if (window.google && googleButtonRef.current) {
+                console.log('Google SDK found, rendering button...');
                 google.accounts.id.initialize({
                     client_id: "356758659495-kpjkl2irajdr94o0i3pg2f7k1r44ge89.apps.googleusercontent.com",
-                    callback: window.googleLoginCallback,
+                    callback: (response) => {
+                        if (window.googleLoginCallback) {
+                            window.googleLoginCallback(response);
+                        }
+                    },
                     ux_mode: "popup"
                 });
                 google.accounts.id.renderButton(
-                    document.getElementById("googleLoginButton"),
+                    googleButtonRef.current,
                     { theme: "filled_black", size: "large", shape: "pill", width: 280 }
                 );
             } else {
-                setTimeout(initGoogle, 100);
+                timer = setTimeout(initGoogle, 200);
             }
         };
         initGoogle();
+        return () => clearTimeout(timer);
     }, []);
+
+    const VIP_EMAILS = ['hitkarikusum.ngo@gmail.com', 'khmbvs26@gmail.com'];
+    const isVIPEmail = (email) => VIP_EMAILS.includes(email);
 
     useEffect(() => {
         const handleGoogleSuccess = async (event) => {
@@ -332,14 +343,7 @@ const Login = () => {
                         </div>
 
                         <div className="flex flex-col items-center gap-4 mt-4">
-                            <div id="googleLoginButton" style={{ minHeight: '45px' }}></div>
-                            <div id="g_id_onload"
-                                 data-client_id="356758659495-kpjkl2irajdr94o0i3pg2f7k1r44ge89.apps.googleusercontent.com"
-                                 data-context="signin"
-                                 data-ux_mode="popup"
-                                 data-callback="googleLoginCallback"
-                                 data-auto_prompt="false">
-                            </div>
+                            <div ref={googleButtonRef} style={{ minHeight: '45px' }}></div>
                         </div>
 
                         <div className="text-center pt-6">
