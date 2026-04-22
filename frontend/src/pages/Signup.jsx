@@ -110,7 +110,8 @@ const Signup = () => {
         }
     }, []);
 
-    if (isSuccess && user) {
+    useEffect(() => {
+        if (isSuccess && user) {
             navigate('/');
             // Small delay to ensure state isn't cleared too early if navigate is async
             setTimeout(() => dispatch(reset()), 100);
