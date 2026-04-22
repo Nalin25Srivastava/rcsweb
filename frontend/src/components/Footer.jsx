@@ -98,7 +98,7 @@ const Footer = () => {
                             </li>
                             <li className="flex items-center space-x-3 group">
                                 <Mail className="h-5 w-5 text-[#00c57d] flex-shrink-0 group-hover:scale-110 transition-transform" />
-                                <span className=" text-sm text-gray-400 font-medium font-bold">hello@rcsweb.com</span>
+                                <span className=" text-sm text-gray-400 font-medium font-bold">r.c.sindiaconcept@gmail.com</span>
                             </li>
                         </ul>
                     </motion.div>
