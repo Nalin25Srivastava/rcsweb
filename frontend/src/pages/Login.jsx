@@ -298,34 +298,31 @@ const Login = () => {
                             <div className="flex-grow border-t border-slate-100"></div>
                         </div>
 
-                        <div className="flex flex-col items-center gap-4">
-                            <div className="w-full flex justify-center py-2">
-                                <GoogleLogin
-                                    onSuccess={async (credentialResponse) => {
-                                        // Admin verification guard
-                                        if (role === 'admin' && verificationStatus !== 'success' && !isVIPEmail(email)) {
-                                            alert('Verify First');
-                                            return;
-                                        }
+                        <div className="flex justify-center mt-4">
+                            <GoogleLogin
+                                onSuccess={async (credentialResponse) => {
+                                    // Admin verification guard
+                                    if (role === 'admin' && verificationStatus !== 'success' && !isVIPEmail(email)) {
+                                        alert('Verify First');
+                                        return;
+                                    }
 
-                                        const action = await dispatch(googleLogin({ 
-                                            token: credentialResponse.credential, 
-                                            role,
-                                            adminSecret
-                                        }));
-                                        if (googleLogin.fulfilled.match(action)) {
-                                            navigate('/');
-                                        }
-                                    }}
-                                    onError={(error) => {
-                                        console.error('Google Login Failed:', error);
-                                        alert('Google Login failed. Please ensure this domain (' + window.location.origin + ') is added to "Authorized JavaScript origins" in your Google Cloud Console.');
-                                    }}
-                                    theme="filled_black"
-                                    shape="pill"
-                                    useOneTap
-                                />
-                            </div>
+                                    const action = await dispatch(googleLogin({ 
+                                        token: credentialResponse.credential, 
+                                        role,
+                                        adminSecret
+                                    }));
+                                    if (googleLogin.fulfilled.match(action)) {
+                                        navigate('/');
+                                    }
+                                }}
+                                onError={(error) => {
+                                    console.error('Google Login Failed:', error);
+                                    alert('Google Login failed. If you are using Incognito mode or have third-party cookies blocked, please enable them or use a regular window.');
+                                }}
+                                theme="filled_black"
+                                shape="pill"
+                            />
                         </div>
 
                         <div className="text-center pt-6">
