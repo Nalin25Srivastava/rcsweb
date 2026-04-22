@@ -260,8 +260,8 @@ const Signup = () => {
                             <div className="flex-grow border-t border-slate-100"></div>
                         </div>
 
-                        <div className="flex flex-col items-center gap-4 transition-all">
-                            <div className="w-full max-w-[300px] min-h-[44px] flex justify-center items-center overflow-hidden rounded-full">
+                        <div className="flex flex-col items-center gap-4">
+                            <div className="w-full flex justify-center py-2">
                                 <GoogleLogin
                                     onSuccess={async (credentialResponse) => {
                                         // Admin verification guard
@@ -282,12 +282,11 @@ const Signup = () => {
                                     }}
                                     onError={(error) => {
                                         console.error('Google Sign Up Failed:', error);
-                                        alert('Google Sign Up failed. If you are in Incognito/Private mode, please try a normal window or allow third-party cookies.');
+                                        alert('Google Sign Up failed. Please ensure this domain (' + window.location.origin + ') is added to "Authorized JavaScript origins" in your Google Cloud Console.');
                                     }}
                                     theme="filled_black"
                                     shape="pill"
-                                    width="300"
-                                    ux_mode="redirect"
+                                    useOneTap
                                 />
                             </div>
                         </div>

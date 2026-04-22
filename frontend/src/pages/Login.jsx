@@ -298,8 +298,8 @@ const Login = () => {
                             <div className="flex-grow border-t border-slate-100"></div>
                         </div>
 
-                        <div className="flex flex-col items-center gap-4 transition-all">
-                            <div className="w-full max-w-[300px] min-h-[44px] flex justify-center items-center overflow-hidden rounded-full">
+                        <div className="flex flex-col items-center gap-4">
+                            <div className="w-full flex justify-center py-2">
                                 <GoogleLogin
                                     onSuccess={async (credentialResponse) => {
                                         // Admin verification guard
@@ -319,12 +319,11 @@ const Login = () => {
                                     }}
                                     onError={(error) => {
                                         console.error('Google Login Failed:', error);
-                                        alert('Google Login failed. If you are in Incognito/Private mode, please try a normal window or allow third-party cookies.');
+                                        alert('Google Login failed. Please ensure this domain (' + window.location.origin + ') is added to "Authorized JavaScript origins" in your Google Cloud Console.');
                                     }}
                                     theme="filled_black"
                                     shape="pill"
-                                    width="300"
-                                    ux_mode="redirect"
+                                    useOneTap
                                 />
                             </div>
                         </div>
