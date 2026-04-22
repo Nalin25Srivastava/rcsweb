@@ -35,8 +35,10 @@ const corsOptions = {
         const allowedOrigins = [
             'https://rcsweb-one.vercel.app',
             'https://rcs-web-one.vercel.app',
+            'https://rcsweb-3cl5.vercel.app',
             'http://localhost:5173',
-            'http://127.0.0.1:5173'
+            'http://127.0.0.1:5173',
+            'https://accounts.google.com'
         ];
         if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
             callback(null, true);
