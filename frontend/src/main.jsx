@@ -18,11 +18,11 @@ try {
   root.render(
     <StrictMode>
       <Provider store={store}>
-        <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-          <BrowserRouter>
+        <BrowserRouter>
+          <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
             <App />
-          </BrowserRouter>
-        </GoogleOAuthProvider>
+          </GoogleOAuthProvider>
+        </BrowserRouter>
       </Provider>
     </StrictMode>,
   )
