@@ -316,8 +316,10 @@ const Login = () => {
                                         navigate('/');
                                     }
                                 }}
-                                onError={(error) => console.error('Google Login Failed:', error)}
-                                useOneTap
+                                onError={(error) => {
+                                    console.error('Google Login Failed:', error);
+                                    alert('Google Login encountered an error. Please ensure popups are allowed and this domain is authorized in your Google Cloud Console.');
+                                }}
                                 theme="filled_black"
                                 shape="pill"
                             />

@@ -179,7 +179,27 @@ const googleLogin = async (req, res) => {
 // @access  Private/Admin
 const getUsers = async (req, res) => {
     try {
-        const users = await User.find({ role: 'user' }).select('-password');
+        const users = await User.aggregate([
+            { $match: { role: 'user' } },
+            {
+                $lookup: {
+                    from: 'resumes',
+                    localField: '_id',
+                    foreignField: 'user',
+                    as: 'resume'
+                }
+            },
+            {
+                $addFields: {
+                    resume: { $arrayElemAt: ['$resume', 0] }
+                }
+            },
+            {
+                $project: {
+                    password: 0
+                }
+            }
+        ]);
         res.json(users);
     } catch (error) {
         res.status(500).json({ message: error.message });

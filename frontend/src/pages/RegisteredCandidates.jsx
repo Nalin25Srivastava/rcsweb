@@ -57,6 +57,11 @@ const RegisteredCandidates = () => {
         setIsModalOpen(true);
     };
 
+    const handleRegister = (user) => {
+        setModalMode({ isEditing: false, candidate: user });
+        setIsModalOpen(true);
+    };
+
     const handleDelete = (id) => {
         if (window.confirm('Are you sure you want to remove this registered candidate?')) {
             dispatch(deleteRegisteredCandidate(id));
@@ -263,7 +268,7 @@ const RegisteredCandidates = () => {
                                                 <Users className="w-8 h-8 text-emerald-500" />
                                             </div>
                                             <button 
-                                                onClick={() => handleEdit(u)}
+                                                onClick={() => handleRegister(u)}
                                                 className="bg-slate-900 text-white px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-emerald-500 transition-colors shadow-lg shadow-slate-900/10"
                                             >
                                                 Select & Register

@@ -30,11 +30,11 @@ const RegisteredCandidateModal = ({ isOpen, onClose, candidate = null, isEditing
                 userId: isUserObject ? candidate._id : (candidate.user || ''),
                 name: candidate.name || '',
                 email: candidate.email || '',
-                phone: candidate.phone || '',
-                course: candidate.course || '',
+                phone: candidate.phone || (candidate.resume?.phone || ''),
+                course: candidate.course || (candidate.resume?.functionalArea || ''),
                 batch: candidate.batch || '',
                 status: candidate.status || 'Active',
-                image: candidate.image || ''
+                image: candidate.image || (candidate.resume?.image || '')
             });
         } else {
             setFormData({
@@ -61,7 +61,9 @@ const RegisteredCandidateModal = ({ isOpen, onClose, candidate = null, isEditing
             userId: u._id,
             name: u.name,
             email: u.email,
-            image: u.image || ''
+            phone: u.resume?.phone || '',
+            course: u.resume?.functionalArea || '',
+            image: u.image || u.resume?.image || ''
         });
         setIsUserListOpen(false);
     };
