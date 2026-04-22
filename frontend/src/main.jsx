@@ -33,6 +33,19 @@ initGoogleSDK();
 console.log('main.jsx is executing with Forced Client ID');
 console.log('Root element:', document.getElementById('root'));
 
+window.addEventListener('error', (event) => {
+  console.error('GLOBAL ERROR CAUGHT:', event.error);
+  // Optional: show a visible error on the page if it's blank
+  const rootEl = document.getElementById('root');
+  if (rootEl && rootEl.innerHTML.includes('Loading Application')) {
+    rootEl.innerHTML = `<div style="padding: 20px; color: red; font-family: sans-serif;">
+      <h2>Application Error</h2>
+      <p>${event.error?.message || 'Unknown error occurred during startup'}</p>
+      <button onclick="window.location.reload()">Reload Page</button>
+    </div>`;
+  }
+});
+
 try {
   const root = createRoot(document.getElementById('root'));
   console.log('Ready to render App');
