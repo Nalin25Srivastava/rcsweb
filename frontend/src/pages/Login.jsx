@@ -61,6 +61,7 @@ const Login = () => {
     useEffect(() => {
         const params = new URLSearchParams(window.location.hash.substring(1));
         const authData = params.get('auth_data');
+        const accessToken = params.get('access_token');
         
         if (authData) {
             try {
@@ -95,8 +96,9 @@ const Login = () => {
             };
             handleRedirectLogin();
         }
+    }, [dispatch, navigate, role, adminSecret]);
 
-        // Render Native Google Button
+    // Render Native Google Button
     useEffect(() => {
         if (window.google) {
             google.accounts.id.renderButton(
