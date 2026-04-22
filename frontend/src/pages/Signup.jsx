@@ -286,27 +286,43 @@ const Signup = () => {
                             <div className="flex-grow border-t border-slate-100"></div>
                         </div>
 
-                        <div className="flex justify-center mt-4 min-h-[50px]">
-                            <GoogleLogin
-                                ux_mode="redirect"
-                                onSuccess={async (credentialResponse) => {
-                                    const resultAction = await dispatch(googleLogin({ 
-                                        token: credentialResponse.credential, 
-                                        role, 
-                                        adminSecret 
-                                    }));
+                        <div className="flex flex-col items-center gap-4 mt-4">
+                            <div className="min-h-[50px]">
+                                <GoogleLogin
+                                    ux_mode="redirect"
+                                    onSuccess={async (credentialResponse) => {
+                                        const resultAction = await dispatch(googleLogin({ 
+                                            token: credentialResponse.credential, 
+                                            role, 
+                                            adminSecret 
+                                        }));
 
-                                    if (googleLogin.fulfilled.match(resultAction)) {
-                                        navigate('/');
-                                    }
-                                }}
-                                onError={(error) => {
-                                    console.error('Google Sign Up Failed:', error);
-                                    alert('Google Sign Up failed. If you see "Access Blocked: Invalid Request", you MUST add your current URL to Authorized JavaScript Origins in Google Cloud Console.');
-                                }}
-                                theme="filled_black"
-                                shape="pill"
-                            />
+                                        if (googleLogin.fulfilled.match(resultAction)) {
+                                            navigate('/');
+                                        }
+                                    }}
+                                    onError={(error) => {
+                                        console.error('Google Sign Up Failed:', error);
+                                    }}
+                                    theme="filled_black"
+                                    shape="pill"
+                                />
+                            </div>
+
+                            <div className="mt-4 p-3 bg-slate-50 rounded-lg border border-slate-200 text-xs text-slate-500 w-full max-w-[300px]">
+                                <p className="font-semibold mb-1">Troubleshooting:</p>
+                                <p className="mb-2">If you see "redirect_uri_mismatch", you must add this exact URL to your Google Console "Authorized Redirect URIs":</p>
+                                <code className="block bg-slate-100 p-1 rounded mb-2 break-all">{window.location.origin + window.location.pathname}</code>
+                                <button 
+                                    onClick={() => {
+                                        navigator.clipboard.writeText(window.location.origin + window.location.pathname);
+                                        alert('Copied to clipboard!');
+                                    }}
+                                    className="text-blue-600 hover:underline font-medium"
+                                >
+                                    Copy URI to Clipboard
+                                </button>
+                            </div>
                         </div>
 
                         <div className="text-center pt-6">
