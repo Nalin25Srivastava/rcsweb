@@ -15,6 +15,25 @@ window.googleLoginCallback = (response) => {
   window.dispatchEvent(new CustomEvent('google-auth-success', { detail: response }));
 };
 
+// INITIALIZE GOOGLE SDK GLOBALLY
+const initGoogleSDK = () => {
+  if (window.google) {
+    console.log('Initializing Google SDK Globally...');
+    google.accounts.id.initialize({
+      client_id: GOOGLE_CLIENT_ID,
+      callback: (response) => {
+        if (window.googleLoginCallback) {
+          window.googleLoginCallback(response);
+        }
+      },
+      ux_mode: "popup"
+    });
+  } else {
+    setTimeout(initGoogleSDK, 100);
+  }
+};
+initGoogleSDK();
+
 console.log('main.jsx is executing with Forced Client ID');
 console.log('Root element:', document.getElementById('root'));
 

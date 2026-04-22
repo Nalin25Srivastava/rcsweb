@@ -24,16 +24,7 @@ const Signup = () => {
         let timer;
         const initGoogle = () => {
             if (window.google && googleButtonRef.current) {
-                console.log('Google SDK found (Signup), rendering button...');
-                google.accounts.id.initialize({
-                    client_id: "356758659495-kpjkl2irajdr94o0i3pg2f7k1r44ge89.apps.googleusercontent.com",
-                    callback: (response) => {
-                        if (window.googleLoginCallback) {
-                            window.googleLoginCallback(response);
-                        }
-                    },
-                    ux_mode: "popup"
-                });
+                console.log('Google SDK ready (Signup), rendering button...');
                 google.accounts.id.renderButton(
                     googleButtonRef.current,
                     { theme: "filled_black", size: "large", shape: "pill", width: 280 }

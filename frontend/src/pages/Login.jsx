@@ -22,16 +22,7 @@ const Login = () => {
         let timer;
         const initGoogle = () => {
             if (window.google && googleButtonRef.current) {
-                console.log('Google SDK found, rendering button...');
-                google.accounts.id.initialize({
-                    client_id: "356758659495-kpjkl2irajdr94o0i3pg2f7k1r44ge89.apps.googleusercontent.com",
-                    callback: (response) => {
-                        if (window.googleLoginCallback) {
-                            window.googleLoginCallback(response);
-                        }
-                    },
-                    ux_mode: "popup"
-                });
+                console.log('Google SDK ready, rendering button...');
                 google.accounts.id.renderButton(
                     googleButtonRef.current,
                     { theme: "filled_black", size: "large", shape: "pill", width: 280 }
@@ -68,6 +59,8 @@ const Login = () => {
     useEffect(() => {
         if (isSuccess && user) {
             navigate('/');
+            // Reset state after navigation to prevent "stuck" success state
+            setTimeout(() => dispatch(reset()), 100);
         }
         
         // Auto-detect admin if VIP email is detected

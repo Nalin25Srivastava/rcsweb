@@ -137,6 +137,9 @@ export const authSlice = createSlice({
             localStorage.removeItem('rcs_admin_verified');
             state.user = null;
             state.isSecretVerified = false;
+            state.isSuccess = false;
+            state.isError = false;
+            state.message = '';
         },
         setSecretVerified: (state, action) => {
             state.isSecretVerified = action.payload;
