@@ -290,6 +290,7 @@ const Signup = () => {
                             <div className="min-h-[50px]">
                                 <GoogleLogin
                                     ux_mode="redirect"
+                                    clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
                                     onSuccess={async (credentialResponse) => {
                                         const resultAction = await dispatch(googleLogin({ 
                                             token: credentialResponse.credential, 
