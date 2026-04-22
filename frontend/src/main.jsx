@@ -1,4 +1,3 @@
-import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
@@ -16,15 +15,13 @@ try {
   const root = createRoot(document.getElementById('root'));
   console.log('Ready to render App');
   root.render(
-    <StrictMode>
-      <Provider store={store}>
-        <BrowserRouter>
-          <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-            <App />
-          </GoogleOAuthProvider>
-        </BrowserRouter>
-      </Provider>
-    </StrictMode>,
+    <Provider store={store}>
+      <BrowserRouter>
+        <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+          <App />
+        </GoogleOAuthProvider>
+      </BrowserRouter>
+    </Provider>,
   )
   console.log('main.jsx render called');
 } catch (error) {
