@@ -254,10 +254,30 @@ const JobModal = ({ isOpen, onClose, job = null, isEditing = false }) => {
                                         onChange={(e) => setFormData({...formData, contactNumbers: e.target.value})}
                                     />
                                 </div>
-                            </div>
+                        {/* Section 5: Job Profile Tags */}
+                        <div className="space-y-2">
+                            <label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Job Profile Tags</label>
+                            <input 
+                                className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-emerald-500 focus:bg-white transition-all outline-none font-bold text-slate-700"
+                                placeholder="e.g. Mechanical, Kota, Urgent (Comma separated)"
+                                value={formData.profiles}
+                                onChange={(e) => setFormData({...formData, profiles: e.target.value})}
+                            />
                         </div>
 
+                        {/* Section 6: Description */}
+                        <div className="space-y-2">
+                            <label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Job Description</label>
+                            <textarea 
+                                className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-emerald-500 focus:bg-white transition-all outline-none font-bold text-slate-700 min-h-[150px]"
+                                placeholder="Describe the job role and responsibilities..."
+                                value={formData.description}
+                                onChange={(e) => setFormData({...formData, description: e.target.value})}
+                                required
+                            />
                         </div>
+
+                        <div className="h-px bg-slate-100 my-8"></div>
                         
                         {/* Section 6: Custom Fields */}
                         <div className="space-y-6">

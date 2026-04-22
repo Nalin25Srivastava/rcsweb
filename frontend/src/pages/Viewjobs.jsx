@@ -628,8 +628,6 @@ const Viewjobs = () => {
                                     ></textarea>
                                 </div>
 
-                                    </div>
-                                </div>
                                 
                                 {/* Dynamic Custom Fields Section */}
                                 <div className="space-y-4">
