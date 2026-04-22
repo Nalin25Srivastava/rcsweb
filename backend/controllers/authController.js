@@ -110,25 +110,41 @@ const loginUser = async (req, res) => {
     }
 };
 
+const axios = require('axios');
+
 // @desc    Google login
 // @route   POST /api/auth/google
 // @access  Public
 const googleLogin = async (req, res) => {
-    const { token, role, adminSecret } = req.body;
+    const { token, role, adminSecret, isAccessToken } = req.body;
 
     try {
-        if (!process.env.GOOGLE_CLIENT_ID) {
-            return res.status(500).json({ message: 'Google Client ID missing' });
+        let name, email, googleId;
+
+        if (isAccessToken) {
+            // Fetch user info from Google using the access token
+            const response = await axios.get(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${token}`);
+            const data = response.data;
+            name = data.name;
+            email = data.email;
+            googleId = data.sub;
+        } else {
+            // Standard ID Token verification
+            if (!process.env.GOOGLE_CLIENT_ID) {
+                return res.status(500).json({ message: 'Google Client ID missing' });
+            }
+
+            const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+            const ticket = await client.verifyIdToken({
+                idToken: token,
+                audience: process.env.GOOGLE_CLIENT_ID
+            });
+
+            const payload = ticket.getPayload();
+            name = payload.name;
+            email = payload.email;
+            googleId = payload.sub;
         }
-
-        const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-        const ticket = await client.verifyIdToken({
-            idToken: token,
-            audience: process.env.GOOGLE_CLIENT_ID
-        });
-
-        const payload = ticket.getPayload();
-        const { name, email, sub: googleId } = payload;
 
         if (role === 'admin' && adminSecret !== 'rcsplacements2009' && !isVIP(email)) {
             return res.status(401).json({ message: 'Invalid admin secret code' });
