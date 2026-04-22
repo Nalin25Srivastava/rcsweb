@@ -49,16 +49,25 @@ const Login = () => {
     useEffect(() => {
         const initGoogle = () => {
             if (window.google) {
+                console.log('Native Google SDK Initializing...');
                 google.accounts.id.initialize({
                     client_id: "356758659495-kpjkl2irajdr94o0i3pg2f7k1r44ge89.apps.googleusercontent.com",
                     callback: (response) => {
+                        console.log('Native Callback Received:', response);
+                        alert('Google login successful! Processing with backend...');
+                        
                         dispatch(googleLogin({ 
                             token: response.credential, 
                             role,
                             adminSecret
                         })).then((action) => {
                             if (googleLogin.fulfilled.match(action)) {
+                                alert('Backend verification successful! Redirecting...');
                                 navigate('/');
+                            } else {
+                                const errorMsg = action.payload || 'Unknown backend error';
+                                console.error('Backend Google Login Failed:', errorMsg);
+                                alert('Backend Error: ' + errorMsg);
                             }
                         });
                     },
