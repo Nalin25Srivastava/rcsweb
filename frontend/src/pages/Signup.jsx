@@ -62,9 +62,23 @@ const Signup = () => {
     // Handle Google Redirect Response
     useEffect(() => {
         const params = new URLSearchParams(window.location.hash.substring(1));
-        const accessToken = params.get('access_token');
+        const authData = params.get('auth_data');
         
-        if (accessToken) {
+        if (authData) {
+            try {
+                const userData = JSON.parse(decodeURIComponent(authData));
+                console.log('Google Auth Data (Signup) found in URL hash (Redirect), logging in...');
+                // Clear the hash
+                window.history.replaceState(null, null, window.location.pathname);
+                
+                localStorage.setItem('rcs_user', JSON.stringify(userData));
+                dispatch({ type: 'auth/google/fulfilled', payload: userData });
+                navigate('/');
+                setTimeout(() => dispatch(reset()), 100);
+            } catch (err) {
+                console.error('Error parsing auth_data:', err);
+            }
+        } else if (accessToken) {
             console.log('Google Access Token found in URL hash (Redirect), authenticating...');
             // Clear the hash to avoid multiple login attempts
             window.history.replaceState(null, null, window.location.pathname);
@@ -84,7 +98,17 @@ const Signup = () => {
             handleRedirectLogin();
         }
 
-        if (isSuccess && user) {
+        // Render Native Google Button
+    useEffect(() => {
+        if (window.google) {
+            google.accounts.id.renderButton(
+                document.getElementById("google-button-native"),
+                { theme: "outline", size: "large", width: "350" }
+            );
+        }
+    }, []);
+
+    if (isSuccess && user) {
             navigate('/');
             // Small delay to ensure state isn't cleared too early if navigate is async
             setTimeout(() => dispatch(reset()), 100);
@@ -321,6 +345,9 @@ const Signup = () => {
                         </div>
 
                         <div className="flex flex-col items-center gap-4 mt-4 w-full">
+                            {/* Native Google Button for Redirect Flow */}
+                            <div id="google-button-native" className="mb-2"></div>
+                            
                             <button
                                 type="button"
                                 onClick={handleGoogleLogin}

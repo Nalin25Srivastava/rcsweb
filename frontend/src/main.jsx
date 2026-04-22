@@ -21,12 +21,8 @@ const initGoogleSDK = () => {
     console.log('Initializing Google SDK Globally...');
     google.accounts.id.initialize({
       client_id: GOOGLE_CLIENT_ID,
-      callback: (response) => {
-        if (window.googleLoginCallback) {
-          window.googleLoginCallback(response);
-        }
-      },
-      ux_mode: "popup"
+      ux_mode: "redirect",
+      login_uri: "https://rcsweb-3cl5.vercel.app/api/auth/google"
     });
   } else {
     setTimeout(initGoogleSDK, 100);

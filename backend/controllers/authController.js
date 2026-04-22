@@ -116,7 +116,11 @@ const axios = require('axios');
 // @route   POST /api/auth/google
 // @access  Public
 const googleLogin = async (req, res) => {
-    const { token, role, adminSecret, isAccessToken } = req.body;
+    // Google's login_uri POSTs 'credential' instead of 'token'
+    const token = req.body.token || req.body.credential;
+    const { role, adminSecret, isAccessToken } = req.body;
+    
+    const isRedirectFlow = !!req.body.credential;
 
     try {
         let name, email, googleId;
@@ -176,7 +180,7 @@ const googleLogin = async (req, res) => {
             });
         }
 
-        return res.status(200).json({
+        const userData = {
             _id: user._id,
             name: user.name,
             email: user.email,
@@ -184,7 +188,15 @@ const googleLogin = async (req, res) => {
             isPaid: (user.role === 'admin' || isVIP(email)) ? true : user.isPaid,
             message: 'Login successful',
             token: generateToken(user._id)
-        });
+        };
+
+        if (isRedirectFlow) {
+            // Redirect back with encoded user data in hash
+            const encodedData = encodeURIComponent(JSON.stringify(userData));
+            return res.redirect(`https://rcsweb-3cl5.vercel.app/login#auth_data=${encodedData}`);
+        }
+
+        return res.status(200).json(userData);
     } catch (error) {
         return res.status(400).json({ message: 'Google authentication failed' });
     }
