@@ -20,72 +20,26 @@ const Signup = () => {
     const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
     const [verificationStatus, setVerificationStatus] = useState(null); // 'success' | 'error' | null
 
-    const handleGoogleLogin = useGoogleLogin({
-        onSuccess: async (tokenResponse) => {
-            console.log('Google Token Response:', tokenResponse);
-            // Admin verification guard
-            if (role === 'admin' && verificationStatus !== 'success' && !isVIPEmail(email)) {
-                alert('Verify First');
-                return;
-            }
-
-            const action = await dispatch(googleLogin({ 
-                token: tokenResponse.access_token, 
-                role, 
-                adminSecret,
-                isAccessToken: true
-            }));
-
-            if (googleLogin.fulfilled.match(action)) {
-                navigate('/');
-            }
-        },
-        onError: (error) => {
-            console.error('Google Sign Up Failed:', error);
-            alert('Google Sign Up failed. If you are using Incognito mode or have third-party cookies blocked, please enable them or use a regular window.');
-        }
-    });
-
     const VIP_EMAILS = ['hitkarikusum.ngo@gmail.com', 'khmbvs26@gmail.com'];
     const isVIPEmail = (e) => e && VIP_EMAILS.includes(e.trim().toLowerCase());
 
     useEffect(() => {
-        const initGoogle = () => {
-            if (window.google) {
-                console.log('Native Google SDK Initializing (Signup)...');
-                google.accounts.id.initialize({
-                    client_id: "356758659495-kpjkl2irajdr94o0i3pg2f7k1r44ge89.apps.googleusercontent.com",
-                    callback: (response) => {
-                        console.log('Native Signup Callback Received:', response);
-                        alert('Google login successful! Processing signup with backend...');
-
-                        dispatch(googleLogin({ 
-                            token: response.credential, 
-                            role,
-                            adminSecret
-                        })).then((action) => {
-                            if (googleLogin.fulfilled.match(action)) {
-                                alert('Backend signup successful! Redirecting...');
-                                navigate('/');
-                            } else {
-                                const errorMsg = action.payload || 'Unknown backend error';
-                                console.error('Backend Google Signup Failed:', errorMsg);
-                                alert('Backend Error: ' + errorMsg);
-                            }
-                        });
-                    },
-                    ux_mode: "popup"
-                });
-                google.accounts.id.renderButton(
-                    document.getElementById("googleSignupButton"),
-                    { theme: "filled_black", size: "large", shape: "pill", width: 280 }
-                );
-            } else {
-                setTimeout(initGoogle, 100);
+        const handleGoogleSuccess = async (event) => {
+            console.log('Signup Component: Google Event Caught!', event.detail);
+            const credentialResponse = event.detail;
+            const action = await dispatch(googleLogin({ 
+                token: credentialResponse.credential, 
+                role,
+                adminSecret
+            }));
+            if (googleLogin.fulfilled.match(action)) {
+                navigate('/');
             }
         };
-        initGoogle();
-    }, [role, adminSecret, dispatch, navigate]);
+
+        window.addEventListener('google-auth-success', handleGoogleSuccess);
+        return () => window.removeEventListener('google-auth-success', handleGoogleSuccess);
+    }, [dispatch, navigate, role, adminSecret]);
 
     useEffect(() => {
         if (isSuccess && user) {

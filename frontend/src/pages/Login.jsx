@@ -18,71 +18,26 @@ const Login = () => {
     const [unpaidEmail, setUnpaidEmail] = useState(null);
     const [verificationStatus, setVerificationStatus] = useState(null); // 'success' | 'error' | null
 
-    const handleGoogleLogin = useGoogleLogin({
-        onSuccess: async (tokenResponse) => {
-            console.log('Google Token Response:', tokenResponse);
-            // Admin verification guard
-            if (role === 'admin' && verificationStatus !== 'success' && !isVIPEmail(email)) {
-                alert('Verify First');
-                return;
-            }
-
-            const action = await dispatch(googleLogin({ 
-                token: tokenResponse.access_token, 
-                role,
-                adminSecret,
-                isAccessToken: true // Tell backend this is an access token, not ID token
-            }));
-            if (googleLogin.fulfilled.match(action)) {
-                navigate('/');
-            }
-        },
-        onError: (error) => {
-            console.error('Google Login Failed:', error);
-            alert('Google Login failed. If you are using Incognito mode or have third-party cookies blocked, please enable them or use a regular window.');
-        }
-    });
-
     const VIP_EMAILS = ['hitkarikusum.ngo@gmail.com', 'khmbvs26@gmail.com'];
     const isVIPEmail = (e) => e && VIP_EMAILS.includes(e.trim().toLowerCase());
 
     useEffect(() => {
-        const initGoogle = () => {
-            if (window.google) {
-                console.log('Native Google SDK Initializing...');
-                google.accounts.id.initialize({
-                    client_id: "356758659495-kpjkl2irajdr94o0i3pg2f7k1r44ge89.apps.googleusercontent.com",
-                    callback: (response) => {
-                        console.log('Native Callback Received:', response);
-                        alert('Google login successful! Processing with backend...');
-                        
-                        dispatch(googleLogin({ 
-                            token: response.credential, 
-                            role,
-                            adminSecret
-                        })).then((action) => {
-                            if (googleLogin.fulfilled.match(action)) {
-                                alert('Backend verification successful! Redirecting...');
-                                navigate('/');
-                            } else {
-                                const errorMsg = action.payload || 'Unknown backend error';
-                                console.error('Backend Google Login Failed:', errorMsg);
-                                alert('Backend Error: ' + errorMsg);
-                            }
-                        });
-                    },
-                    ux_mode: "popup"
-                });
-                google.accounts.id.renderButton(
-                    document.getElementById("googleLoginButton"),
-                    { theme: "filled_black", size: "large", shape: "pill", width: 280 }
-                );
-            } else {
-                setTimeout(initGoogle, 100);
+        const handleGoogleSuccess = async (event) => {
+            console.log('Login Component: Google Event Caught!', event.detail);
+            const credentialResponse = event.detail;
+            const action = await dispatch(googleLogin({ 
+                token: credentialResponse.credential, 
+                role,
+                adminSecret
+            }));
+            if (googleLogin.fulfilled.match(action)) {
+                navigate('/');
             }
         };
-        initGoogle();
-    }, [role, adminSecret, dispatch, navigate]);
+
+        window.addEventListener('google-auth-success', handleGoogleSuccess);
+        return () => window.removeEventListener('google-auth-success', handleGoogleSuccess);
+    }, [dispatch, navigate, role, adminSecret]);
 
     useEffect(() => {
         if (isSuccess && user) {
@@ -362,7 +317,23 @@ const Login = () => {
                         </div>
 
                         <div className="flex flex-col items-center gap-4 mt-4">
-                            <div id="googleLoginButton" className="min-h-[40px]"></div>
+                            {/* NATIVE GOOGLE HTML API - INDESTRUCTIBLE METHOD */}
+                            <div id="g_id_onload"
+                                 data-client_id="356758659495-kpjkl2irajdr94o0i3pg2f7k1r44ge89.apps.googleusercontent.com"
+                                 data-context="signin"
+                                 data-ux_mode="popup"
+                                 data-callback="googleLoginCallback"
+                                 data-auto_prompt="false">
+                            </div>
+                            <div className="g_id_signin"
+                                 data-type="standard"
+                                 data-shape="pill"
+                                 data-theme="filled_black"
+                                 data-text="continue_with"
+                                 data-size="large"
+                                 data-logo_alignment="left"
+                                 data-width="280">
+                            </div>
                         </div>
 
                         <div className="text-center pt-6">
