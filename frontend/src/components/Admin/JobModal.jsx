@@ -254,6 +254,9 @@ const JobModal = ({ isOpen, onClose, job = null, isEditing = false }) => {
                                         onChange={(e) => setFormData({...formData, contactNumbers: e.target.value})}
                                     />
                                 </div>
+                            </div>
+                        </div>
+
                         {/* Section 5: Job Profile Tags */}
                         <div className="space-y-2">
                             <label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Job Profile Tags</label>
@@ -279,7 +282,7 @@ const JobModal = ({ isOpen, onClose, job = null, isEditing = false }) => {
 
                         <div className="h-px bg-slate-100 my-8"></div>
                         
-                        {/* Section 6: Custom Fields */}
+                        {/* Section 7: Custom Fields */}
                         <div className="space-y-6">
                             <div className="flex justify-between items-center">
                                 <h3 className="text-sm font-black text-emerald-600 uppercase tracking-[0.2em] flex items-center gap-2">
@@ -350,3 +353,4 @@ const JobModal = ({ isOpen, onClose, job = null, isEditing = false }) => {
 };
 
 export default JobModal;
+
