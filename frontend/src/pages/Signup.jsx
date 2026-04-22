@@ -282,11 +282,12 @@ const Signup = () => {
                                     }}
                                     onError={(error) => {
                                         console.error('Google Sign Up Failed:', error);
-                                        alert('Google Sign Up failed to initialize. Please check if popups are blocked or if your browser is in Private/Incognito mode.');
+                                        alert('Google Sign Up failed. If you are in Incognito/Private mode, please try a normal window or allow third-party cookies.');
                                     }}
                                     theme="filled_black"
                                     shape="pill"
                                     width="300"
+                                    ux_mode="redirect"
                                 />
                             </div>
                         </div>

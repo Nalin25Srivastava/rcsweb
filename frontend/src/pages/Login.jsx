@@ -319,11 +319,12 @@ const Login = () => {
                                     }}
                                     onError={(error) => {
                                         console.error('Google Login Failed:', error);
-                                        alert('Google Login failed to initialize. Please check if popups are blocked or if your browser is in Private/Incognito mode.');
+                                        alert('Google Login failed. If you are in Incognito/Private mode, please try a normal window or allow third-party cookies.');
                                     }}
                                     theme="filled_black"
                                     shape="pill"
                                     width="300"
+                                    ux_mode="redirect"
                                 />
                             </div>
                         </div>
