@@ -41,7 +41,8 @@ const Viewjobs = () => {
         contactNumbers: ['8104083002', '9783945080', '8209635081'],
         callingTime: '10:00am to 5:00pm',
         website: 'www.rcsconsultant.com',
-        companyName: 'RCS PLACEMENT KOTA'
+        companyName: 'RCS PLACEMENT KOTA',
+        customFields: [] // Array of { label: '', value: '' }
     });
     const itemsPerPage = 8;
 
@@ -142,6 +143,16 @@ const Viewjobs = () => {
                 }
             }
         };
+        
+        // Add dynamic custom fields
+        jobFormData.customFields.forEach(field => {
+            if (field.label.trim() && field.value.trim()) {
+                if (!jobData.job_posting.custom_fields) {
+                    jobData.job_posting.custom_fields = {};
+                }
+                jobData.job_posting.custom_fields[field.label.trim()] = field.value.trim();
+            }
+        });
 
         if (isEditing) {
             await dispatch(updateJob({ id: editingId, jobData }));
@@ -166,7 +177,8 @@ const Viewjobs = () => {
             contactNumbers: ['8104083002', '9783945080', '8209635081'],
             callingTime: '10:00am to 5:00pm',
             website: 'www.rcsconsultant.com',
-            companyName: 'RCS PLACEMENT KOTA'
+            companyName: 'RCS PLACEMENT KOTA',
+            customFields: []
         });
         setIsEditing(false);
         setEditingId(null);
@@ -196,7 +208,8 @@ const Viewjobs = () => {
             contactNumbers: job.contactNumbers || ad.contact_numbers || ['8104083002', '9783945080', '8209635081'],
             callingTime: ad.calling_window || '10:00am to 5:00pm',
             website: ad.website || 'www.rcsconsultant.com',
-            companyName: job.companyName || ad.agency_name || 'RCS PLACEMENT KOTA'
+            companyName: job.companyName || ad.agency_name || 'RCS PLACEMENT KOTA',
+            customFields: job.job_posting?.custom_fields ? Object.entries(job.job_posting.custom_fields).map(([label, value]) => ({ label, value })) : []
         });
         setIsJobFormOpen(true);
     };
@@ -219,6 +232,24 @@ const Viewjobs = () => {
     const removePhoneField = (index) => {
         const newPhones = jobFormData.contactNumbers.filter((_, i) => i !== index);
         setJobFormData(prev => ({ ...prev, contactNumbers: newPhones }));
+    };
+
+    const addCustomField = () => {
+        setJobFormData(prev => ({ 
+            ...prev, 
+            customFields: [...prev.customFields, { label: '', value: '' }] 
+        }));
+    };
+
+    const removeCustomField = (index) => {
+        const newFields = jobFormData.customFields.filter((_, i) => i !== index);
+        setJobFormData(prev => ({ ...prev, customFields: newFields }));
+    };
+
+    const handleCustomFieldChange = (index, field, value) => {
+        const newFields = [...jobFormData.customFields];
+        newFields[index][field] = value;
+        setJobFormData(prev => ({ ...prev, customFields: newFields }));
     };
 
     // Close modal on ESC key press
@@ -597,58 +628,46 @@ const Viewjobs = () => {
                                     ></textarea>
                                 </div>
 
-                                {/* Technical Fields */}
-                                <div className="bg-slate-50 p-6 rounded-3xl space-y-4">
-                                    <h3 className="text-xs font-black text-slate-800 uppercase tracking-widest">Agency / Contact Branding</h3>
-                                    
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div className="relative">
-                                            < Globe className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                                            <input 
-                                                name="website" 
-                                                value={jobFormData.website} 
-                                                onChange={handleInputChange} 
-                                                placeholder="Website"
-                                                className="w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-xl font-bold text-sm outline-none"
-                                            />
-                                        </div>
-                                        <div className="relative">
-                                            <Clock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                                            <input 
-                                                name="callingTime" 
-                                                value={jobFormData.callingTime} 
-                                                onChange={handleInputChange} 
-                                                placeholder="Calling Time"
-                                                className="w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-xl font-bold text-sm outline-none"
-                                            />
-                                        </div>
                                     </div>
-
-                                    <div>
-                                        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Contact Numbers</label>
-                                        <div className="space-y-2">
-                                            {jobFormData.contactNumbers.map((phone, idx) => (
-                                                <div key={idx} className="flex gap-2">
-                                                    <div className="relative flex-grow">
-                                                        <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                                                        <input 
-                                                            value={phone} 
-                                                            onChange={(e) => handlePhoneChange(idx, e.target.value)}
-                                                            placeholder="10 digit number"
-                                                            className="w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-xl font-bold text-sm outline-none"
-                                                        />
-                                                    </div>
-                                                    {jobFormData.contactNumbers.length > 1 && (
-                                                        <button type="button" onClick={() => removePhoneField(idx)} className="p-3 text-red-500 hover:bg-red-50 rounded-xl transition-colors">
-                                                            <Trash2 className="w-4 h-4" />
-                                                        </button>
-                                                    )}
+                                </div>
+                                
+                                {/* Dynamic Custom Fields Section */}
+                                <div className="space-y-4">
+                                    <div className="flex justify-between items-center px-1">
+                                        <h3 className="text-xs font-black text-slate-800 uppercase tracking-widest">Custom Job Details</h3>
+                                        <button 
+                                            type="button" 
+                                            onClick={addCustomField}
+                                            className="text-[10px] font-black text-emerald-600 uppercase tracking-widest flex items-center gap-1 hover:text-emerald-700 transition-colors"
+                                        >
+                                            <Plus className="w-3 h-3" /> Add Field
+                                        </button>
+                                    </div>
+                                    
+                                    <div className="space-y-3">
+                                        {jobFormData.customFields.map((field, idx) => (
+                                            <div key={idx} className="flex gap-2 bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                                                <div className="flex-1 space-y-1">
+                                                    <input 
+                                                        value={field.label} 
+                                                        onChange={(e) => handleCustomFieldChange(idx, 'label', e.target.value)}
+                                                        placeholder="Field Name (e.g. Experience)"
+                                                        className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl font-bold text-[10px] outline-none"
+                                                    />
                                                 </div>
-                                            ))}
-                                            <button type="button" onClick={addPhoneField} className="text-[10px] font-black text-emerald-600 uppercase tracking-widest flex items-center gap-1 hover:text-emerald-700 transition-colors ml-1 mt-2">
-                                                <Plus className="w-3 h-3" /> Add Number
-                                            </button>
-                                        </div>
+                                                <div className="flex-1 space-y-1">
+                                                    <input 
+                                                        value={field.value} 
+                                                        onChange={(e) => handleCustomFieldChange(idx, 'value', e.target.value)}
+                                                        placeholder="Value (e.g. 3 years)"
+                                                        className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl font-bold text-[10px] outline-none"
+                                                    />
+                                                </div>
+                                                <button type="button" onClick={() => removeCustomField(idx)} className="p-2 text-red-500 hover:bg-red-50 rounded-lg">
+                                                    <X className="w-4 h-4" />
+                                                </button>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
 
@@ -727,7 +746,8 @@ const Viewjobs = () => {
                                     callingTime: ad.calling_window || details.callingTime,
                                     techSkills: req.technical_skills || [],
                                     softSkills: req.soft_skills || [],
-                                    status: jp.status || (details.candidate ? 'Limited seats' : 'Active')
+                                    status: jp.status || (details.candidate ? 'Limited seats' : 'Active'),
+                                    customFields: jp.custom_fields ? Object.entries(jp.custom_fields) : []
                                 };
 
                                 return (
@@ -858,6 +878,21 @@ const Viewjobs = () => {
                                                         </div>
                                                     )}
                                                 </div>
+                                                
+                                                {/* Custom Fields Display */}
+                                                {jobData.customFields.length > 0 && (
+                                                    <div className="bg-emerald-50 p-6 rounded-3xl border border-emerald-100 shadow-sm">
+                                                        <h4 className="text-[10px] font-black uppercase tracking-[0.2em] mb-4 text-emerald-800 opacity-70">Additional Specifications</h4>
+                                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                            {jobData.customFields.map(([label, value], ci) => (
+                                                                <div key={ci} className="flex flex-col gap-1">
+                                                                    <span className="text-[10px] font-black text-emerald-600 uppercase tracking-widest">{label}</span>
+                                                                    <span className="text-base font-black text-gray-900 uppercase">{value}</span>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                )}
                                             </div>
 
                                             {/* Sidebar (Right) */}
