@@ -4,6 +4,7 @@ import { Mail, Lock, User, ArrowRight, ShieldAlert, CheckCircle, XCircle } from 
 import { useSelector, useDispatch } from 'react-redux';
 import { signup, googleLogin, reset, verifyRegistrationPayment, setSecretVerified } from '../store/slices/authSlice';
 import { motion, AnimatePresence } from 'framer-motion';
+import { GoogleLogin } from '@react-oauth/google';
 
 
 
@@ -18,61 +19,10 @@ const Signup = () => {
 
     const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
     const [verificationStatus, setVerificationStatus] = useState(null); // 'success' | 'error' | null
-    const googleButtonRef = useRef(null);
+    // All manual Google Redirect and SDK logic removed for simplicity
 
     const VIP_EMAILS = ['hitkarikusum.ngo@gmail.com', 'khmbvs26@gmail.com'];
     const isVIPEmail = (email) => VIP_EMAILS.includes(email);
-
-    // Handle Google Redirect Response
-    useEffect(() => {
-        const params = new URLSearchParams(window.location.hash.substring(1));
-        const authData = params.get('auth_data');
-        const accessToken = params.get('access_token');
-        
-        if (authData) {
-            try {
-                const userData = JSON.parse(decodeURIComponent(authData));
-                console.log('Google Auth Data (Signup) found in URL hash (Redirect), logging in...');
-                // Clear the hash
-                window.history.replaceState(null, null, window.location.pathname);
-                
-                localStorage.setItem('rcs_user', JSON.stringify(userData));
-                dispatch({ type: 'auth/google/fulfilled', payload: userData });
-                navigate('/');
-                setTimeout(() => dispatch(reset()), 100);
-            } catch (err) {
-                console.error('Error parsing auth_data:', err);
-            }
-        } else if (accessToken) {
-            console.log('Google Access Token found in URL hash (Redirect), authenticating...');
-            // Clear the hash to avoid multiple login attempts
-            window.history.replaceState(null, null, window.location.pathname);
-            
-            const handleRedirectLogin = async () => {
-                const action = await dispatch(googleLogin({ 
-                    token: accessToken, 
-                    isAccessToken: true,
-                    role,
-                    adminSecret
-                }));
-                if (googleLogin.fulfilled.match(action)) {
-                    navigate('/');
-                    setTimeout(() => dispatch(reset()), 100);
-                }
-            };
-            handleRedirectLogin();
-        }
-    }, [dispatch, navigate, role, adminSecret]);
-
-    // Render Native Google Button
-    useEffect(() => {
-        if (window.google) {
-            google.accounts.id.renderButton(
-                document.getElementById("google-button-native"),
-                { theme: "outline", size: "large", width: "350" }
-            );
-        }
-    }, []);
 
     useEffect(() => {
         if (isSuccess && user) {
@@ -312,13 +262,27 @@ const Signup = () => {
                         </div>
 
                         <div className="flex flex-col items-center gap-4 mt-6 w-full">
-                            {/* Official Native Google Button for Redirect Flow */}
-                            <div className="bg-white p-1 rounded-lg border border-slate-200 shadow-sm transition-all hover:shadow-md">
-                                <div id="google-button-native"></div>
-                            </div>
-                            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">
-                                Secure signup via Google
-                            </p>
+                            <GoogleLogin
+                                onSuccess={credentialResponse => {
+                                    console.log('Google Signup Success (Simple):', credentialResponse);
+                                    if (credentialResponse.credential) {
+                                        dispatch(googleLogin({ 
+                                            token: credentialResponse.credential, 
+                                            isAccessToken: false,
+                                            role,
+                                            adminSecret
+                                        }));
+                                    }
+                                }}
+                                onError={() => {
+                                    console.log('Google Signup Failed');
+                                    alert('Google Signup Failed. If you are in Incognito, try a normal window.');
+                                }}
+                                theme="outline"
+                                shape="pill"
+                                size="large"
+                                width="350"
+                            />
                         </div>
 
                         <div className="text-center pt-6">

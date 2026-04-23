@@ -8,57 +8,13 @@ import { GoogleOAuthProvider } from '@react-oauth/google'
 
 const GOOGLE_CLIENT_ID = '356758659495-kpjkl2irajdr94o0i3pg2f7k1r44ge89.apps.googleusercontent.com';
 
-// GLOBAL CALLBACK FOR NATIVE GOOGLE SDK
-window.googleLoginCallback = (response) => {
-  console.log('Global Google Callback Hit!', response);
-  // We'll use a custom event to pass this to the components
-  window.dispatchEvent(new CustomEvent('google-auth-success', { detail: response }));
-};
-
-// INITIALIZE GOOGLE SDK GLOBALLY
-const initGoogleSDK = () => {
-  if (window.google) {
-    console.log('Initializing Google SDK Globally...');
-    google.accounts.id.initialize({
-      client_id: GOOGLE_CLIENT_ID,
-      ux_mode: "redirect",
-      login_uri: "https://rcsweb-3cl5.vercel.app/api/auth/google"
-    });
-  } else {
-    setTimeout(initGoogleSDK, 100);
-  }
-};
-initGoogleSDK();
-
-console.log('main.jsx is executing with Forced Client ID');
-console.log('Root element:', document.getElementById('root'));
-
-window.addEventListener('error', (event) => {
-  console.error('GLOBAL ERROR CAUGHT:', event.error);
-  // Optional: show a visible error on the page if it's blank
-  const rootEl = document.getElementById('root');
-  if (rootEl && rootEl.innerHTML.includes('Loading Application')) {
-    rootEl.innerHTML = `<div style="padding: 20px; color: red; font-family: sans-serif;">
-      <h2>Application Error</h2>
-      <p>${event.error?.message || 'Unknown error occurred during startup'}</p>
-      <button onclick="window.location.reload()">Reload Page</button>
-    </div>`;
-  }
-});
-
-try {
-  const root = createRoot(document.getElementById('root'));
-  console.log('Ready to render App');
-  root.render(
-    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-      <Provider store={store}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </Provider>
-    </GoogleOAuthProvider>,
-  )
-  console.log('main.jsx render called');
-} catch (error) {
-  console.error('CRITICAL RENDER ERROR:', error);
-}
+const root = createRoot(document.getElementById('root'));
+root.render(
+  <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+    <Provider store={store}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Provider>
+  </GoogleOAuthProvider>,
+)
