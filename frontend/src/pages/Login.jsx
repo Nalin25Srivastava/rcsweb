@@ -46,16 +46,12 @@ const Login = () => {
                     // Retry login automatically for VIP
                     handleSubmit({ preventDefault: () => {} });
                 } else if (role === 'user') {
-                    // They are admin trying to login as user
-                    alert(message);
-                    const code = window.prompt("ADMIN ACCESS: Please enter the Admin Secret Code to login correctly:");
-                    if (code === "rcsplacements2009") {
-                        setRole('admin');
-                        setAdminSecret(code);
-                    }
+                    // Admin trying to login as user
+                    alert("You are an Admin! Please select 'Admin' account type to login.");
+                    setRole('admin');
                 } else {
-                    // They are user trying to login as admin
-                    alert(message);
+                    // User trying to login as admin
+                    alert("You are a standard User! Please select 'User' account type to login.");
                     setRole('user');
                 }
             }

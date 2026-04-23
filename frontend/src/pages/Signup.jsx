@@ -38,7 +38,25 @@ const Signup = () => {
         }
 
         if (isError) {
-            dispatch(reset());
+            // Check if it's a role mismatch error
+            if (message === 'You are a standard user and cannot access the admin panel.' || 
+                message === 'Admins must login using the Admin account type.') {
+                
+                if (role === 'user') {
+                    // Admin trying to signup as user
+                    alert("You are an Admin! Please select 'Admin' account type to register.");
+                    setRole('admin');
+                } else {
+                    // User trying to signup as admin
+                    alert("You are a standard User! Please select 'User' account type to register.");
+                    setRole('user');
+                }
+            }
+
+            const timer = setTimeout(() => {
+                dispatch(reset());
+            }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [user, isError, isSuccess, message, navigate, dispatch, email, role]);
 
