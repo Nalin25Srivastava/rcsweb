@@ -46,10 +46,12 @@ const Signup = () => {
                     // Admin trying to signup as user
                     alert("You are an Admin! Please select 'Admin' account type to register.");
                     setRole('admin');
+                    dispatch(reset());
                 } else {
                     // User trying to signup as admin
-                    alert("You are a standard User! Please select 'User' account type to register.");
+                    alert("you are user login or signup as user only");
                     setRole('user');
+                    dispatch(reset());
                 }
             }
 
