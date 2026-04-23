@@ -8,6 +8,22 @@ import { GoogleOAuthProvider } from '@react-oauth/google'
 
 const GOOGLE_CLIENT_ID = '356758659495-kpjkl2irajdr94o0i3pg2f7k1r44ge89.apps.googleusercontent.com';
 
+// Simple Global Initialization for Native GSI
+window.initGoogleGSI = () => {
+  if (window.google) {
+    google.accounts.id.initialize({
+      client_id: GOOGLE_CLIENT_ID,
+      callback: (response) => {
+        // This will be caught by components listening for this event
+        window.dispatchEvent(new CustomEvent('google-auth-success', { detail: response }));
+      }
+    });
+  } else {
+    setTimeout(window.initGoogleGSI, 100);
+  }
+};
+window.initGoogleGSI();
+
 const root = createRoot(document.getElementById('root'));
 root.render(
   <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>

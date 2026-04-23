@@ -4,9 +4,7 @@ import { Mail, Lock, User, ArrowRight, ShieldAlert, CheckCircle, XCircle } from 
 import { useSelector, useDispatch } from 'react-redux';
 import { signup, googleLogin, reset, verifyRegistrationPayment, setSecretVerified } from '../store/slices/authSlice';
 import { motion, AnimatePresence } from 'framer-motion';
-import { GoogleLogin } from '@react-oauth/google';
-
-
+// Reverting to pure native button as per recommendation
 
 const Signup = () => {
     const [name, setName] = useState('');
@@ -19,10 +17,37 @@ const Signup = () => {
 
     const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
     const [verificationStatus, setVerificationStatus] = useState(null); // 'success' | 'error' | null
-    // All manual Google Redirect and SDK logic removed for simplicity
-
+    
     const VIP_EMAILS = ['hitkarikusum.ngo@gmail.com', 'khmbvs26@gmail.com'];
     const isVIPEmail = (email) => VIP_EMAILS.includes(email);
+
+    // Native Google SDK Handler
+    useEffect(() => {
+        const handleGoogleAuth = (event) => {
+            const credentialResponse = event.detail;
+            console.log('Google Signup Success (Pure Native):', credentialResponse);
+            if (credentialResponse.credential) {
+                dispatch(googleLogin({ 
+                    token: credentialResponse.credential, 
+                    isAccessToken: false,
+                    role,
+                    adminSecret
+                }));
+            }
+        };
+
+        window.addEventListener('google-auth-success', handleGoogleAuth);
+        
+        // Render the button
+        if (window.google) {
+            google.accounts.id.renderButton(
+                document.getElementById("google-button-native"),
+                { theme: "outline", size: "large", width: "350", shape: "pill" }
+            );
+        }
+
+        return () => window.removeEventListener('google-auth-success', handleGoogleAuth);
+    }, [dispatch, role, adminSecret]);
 
     useEffect(() => {
         if (isSuccess && user) {
@@ -282,27 +307,8 @@ const Signup = () => {
                         </div>
 
                         <div className="flex flex-col items-center gap-4 mt-6 w-full">
-                            <GoogleLogin
-                                onSuccess={credentialResponse => {
-                                    console.log('Google Signup Success (Simple):', credentialResponse);
-                                    if (credentialResponse.credential) {
-                                        dispatch(googleLogin({ 
-                                            token: credentialResponse.credential, 
-                                            isAccessToken: false,
-                                            role,
-                                            adminSecret
-                                        }));
-                                    }
-                                }}
-                                onError={() => {
-                                    console.log('Google Signup Failed');
-                                    alert('Google Signup Failed. If you are in Incognito, try a normal window.');
-                                }}
-                                theme="outline"
-                                shape="pill"
-                                size="large"
-                                width="350"
-                            />
+                            {/* Official Native Google Button - Pre-optimized for gestures */}
+                            <div id="google-button-native"></div>
                         </div>
 
                         <div className="text-center pt-6">
