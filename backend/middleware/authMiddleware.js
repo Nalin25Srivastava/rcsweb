@@ -11,7 +11,6 @@ const protect = async (req, res, next) => {
         try {
             // Get token from header
             token = req.headers.authorization.split(' ')[1];
-            console.log('Protecting route. Token detected:', token ? 'Yes' : 'No');
 
             // Verify token
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -32,7 +31,6 @@ const protect = async (req, res, next) => {
 };
 const admin = (req, res, next) => {
     if (req.user && req.user.role === 'admin') {
-        console.log('Admin check passed for:', req.user.email);
         next();
     } else {
         res.status(401).json({ message: 'Not authorized as an admin' });

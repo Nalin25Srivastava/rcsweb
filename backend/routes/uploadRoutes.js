@@ -41,23 +41,18 @@ const upload = multer({
 // @route   POST /api/upload/image
 // @access  Private (Admin)
 router.post('/image', protect, admin, (req, res) => {
-    console.log('Incoming upload request from:', req.user.email);
     
     upload.single('image')(req, res, (err) => {
         if (err instanceof multer.MulterError) {
-            console.error('Multer error:', err);
             return res.status(400).json({ message: `Multer upload error: ${err.message}` });
         } else if (err) {
-            console.error('General upload error:', err);
             return res.status(500).json({ message: `Upload error: ${err.message}` });
         }
 
         if (!req.file) {
-            console.warn('No file received in request');
             return res.status(400).json({ message: 'Please upload an image file' });
         }
 
-        console.log('File successfully received:', req.file.filename);
 
         // Normalize path to use a web-relative path that matches our static serving route
         const imageUrl = `/uploads/images/${req.file.filename}`;

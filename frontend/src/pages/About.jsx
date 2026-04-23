@@ -15,7 +15,7 @@ const About = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 1, ease: "easeOut" }}
                 >
-                    <h1 className="text-4xl md:text-6xl font-black text-white mt-4 tracking-tighter">
+                    <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white mt-4 tracking-tighter">
                         About <span className="text-emerald-500">RCS</span>
                     </h1>
                     <div className="w-24 h-2 bg-emerald-500 mx-auto mt-6 rounded-full self-center"></div>
@@ -33,7 +33,7 @@ const About = () => {
                         transition={{ duration: 0.8 }}
                     >
                         <h2 className="text-sm font-black text-emerald-500 uppercase tracking-widest mb-3">Our Core Philosophy</h2>
-                        <h3 className="text-4xl sm:text-5xl font-extrabold text-slate-800 leading-tight mb-6">
+                        <h3 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-800 leading-tight mb-6">
                             Redefining the <br />Recruitment Process.
                         </h3>
                         <p className="text-lg text-slate-600 leading-relaxed font-medium mb-6">

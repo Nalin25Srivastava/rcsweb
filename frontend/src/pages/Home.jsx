@@ -78,7 +78,7 @@ const Home = () => {
                     initial={{ opacity: 0, y: 50 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl p-8 grid grid-cols-2 md:grid-cols-4 gap-8 border border-white/50"
+                    className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl p-6 md:p-8 grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 border border-white/50"
                 >
                     {statsLoading ? (
                         <div className="col-span-full flex justify-center py-4">
@@ -123,7 +123,7 @@ const Home = () => {
                         <div className="inline-block px-4 py-2 bg-emerald-100 text-emerald-700 rounded-full font-bold uppercase tracking-widest text-sm">
                             Why RCS Placement?
                         </div>
-                        <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight">
+                        <h2 className="text-3xl md:text-5xl lg:text-6xl font-black text-slate-900 leading-tight">
                             Accelerating Careers, <span className="text-emerald-500">Bridging the Gap.</span>
                         </h2>
                         <p className="text-lg text-slate-600 leading-relaxed font-medium">
@@ -169,10 +169,10 @@ const Home = () => {
                         viewport={{ once: true }}
                         transition={{ duration: 0.6 }}
                     >
-                        <h2 className="text-4xl font-extrabold tracking-tight sm:text-5xl text-white">
+                        <h2 className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-white">
                             Wall of <span className="text-emerald-400">Success</span>
                         </h2>
-                        <p className="mt-4 text-xl text-slate-400 font-medium">The brilliant minds who trusted our process.</p>
+                        <p className="mt-4 text-lg md:text-xl text-slate-400 font-medium">The brilliant minds who trusted our process.</p>
                     </motion.div>
 
                     {user?.role === 'admin' && (
@@ -188,7 +188,7 @@ const Home = () => {
                 </div>
 
                 <motion.div 
-                    className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10"
+                    className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 relative z-10"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}

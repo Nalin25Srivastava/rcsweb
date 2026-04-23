@@ -40,12 +40,12 @@ const Navbar = () => {
                     {/* Logo */}
                     <div className="flex-shrink-0 flex items-center">
                         <Link to="/" className="text-xl font-bold text-indigo-600">
-                            <img className="w-24 h-12 md:w-32 md:h-16 object-contain" src="/images/rcs_logo.jpg" alt="RCS Logo" />
+                            <img className="w-24 h-12 lg:w-32 lg:h-16 object-contain" src="/images/rcs_logo.jpg" alt="RCS Logo" />
                         </Link>
                     </div>
 
                     {/* Desktop Links & Auth */}
-                    <div className="hidden md:flex items-center space-x-8">
+                    <div className="hidden lg:flex items-center space-x-8">
                         <div className="flex space-x-6">
                             {navLinks
                                 .filter(link => {
@@ -128,7 +128,7 @@ const Navbar = () => {
                     </div>
 
                     {/* Mobile Button & Auth */}
-                    <div className="md:hidden flex items-center gap-2">
+                    <div className="lg:hidden flex items-center gap-2">
                         {!user && (
                             <div className="flex items-center gap-2 mr-1">
                                 <Link to="/login" className="text-xs font-black text-gray-700 hover:text-[#00c57d] uppercase tracking-wider">Login</Link>
@@ -149,7 +149,7 @@ const Navbar = () => {
             <AnimatePresence>
                 {isOpen && (
                     <motion.div 
-                        className="md:hidden bg-white border-t border-gray-100 overflow-hidden"
+                        className="lg:hidden bg-white border-t border-gray-100 overflow-hidden"
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}

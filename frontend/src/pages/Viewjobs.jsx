@@ -363,10 +363,10 @@ const Viewjobs = () => {
                     animate={{ opacity: 1, y: 0 }}
                     className="relative z-10 text-center max-w-3xl mx-auto"
                 >
-                    <h1 className="text-5xl md:text-7xl font-black text-white tracking-tighter mb-6 drop-shadow-2xl">
+                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white tracking-tighter mb-6 drop-shadow-2xl">
                         Explore <span className="text-emerald-400">Opportunities</span>
                     </h1>
-                    <p className="text-slate-100 text-lg md:text-xl font-bold leading-relaxed drop-shadow-lg">
+                    <p className="text-slate-100 text-base md:text-lg lg:text-xl font-bold leading-relaxed drop-shadow-lg">
                         Find unparalleled career paths across our enterprise network.
                     </p>
                     
@@ -386,7 +386,7 @@ const Viewjobs = () => {
             {/* Jobs Grid */}
             <motion.div 
                 key={currentPage} 
-                className="max-w-9xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-2 px-4"
+                className="max-w-9xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-2 px-4"
                 variants={containerVariants}
                 initial="visible"
                 animate="visible"

@@ -23,16 +23,11 @@ const limiter = rateLimit({
 });
 
 // Middleware
-app.use((req, res, next) => {
-    console.log(`${req.method} ${req.url}`);
-    next();
-});
 
 app.use(helmet());
 // app.use(limiter);
 const corsOptions = {
     origin: (origin, callback) => {
-        console.log('Request coming from:', origin);
         // More permissive check for deployment debugging
         if (!origin || 
             origin.endsWith('.vercel.app') || 
@@ -66,111 +61,6 @@ app.get('/api/ping', (req, res) => res.json({
   isVercel: !!process.env.VERCEL
 }));
 
-app.get('/api/debug-dns', async (req, res) => {
-    const results = {
-        hasUri: !!process.env.MONGO_URI,
-        uriCensored: process.env.MONGO_URI ? process.env.MONGO_URI.replace(/:([^@]+)@/, ':****@') : null,
-        dns: {},
-        socket: {},
-        shards: []
-    };
-
-    if (!process.env.MONGO_URI) return res.json(results);
-
-    try {
-        const match = process.env.MONGO_URI.match(/@([^/]+)/);
-        if (!match) {
-            results.error = "Could not parse hostname from MONGO_URI";
-            return res.json(results);
-        }
-        
-        const host = match[1];
-        results.targetHost = host;
-
-        // 1. Test SRV Resolution (Essential for mongodb+srv)
-        try {
-            const srvRecords = await new Promise((resolve, reject) => {
-                dns.resolveSrv('_mongodb._tcp.' + host, (err, addresses) => {
-                    if (err) reject(err);
-                    else resolve(addresses);
-                });
-            });
-            results.dns.srv = srvRecords;
-            results.dns.status = 'Success';
-
-            // 2. Test connectivity to each shard address found
-            for (const srv of srvRecords) {
-                const shardHost = srv.name;
-                const shardPort = srv.port;
-                const shardResult = { host: shardHost, port: shardPort };
-                
-                try {
-                    await new Promise((resolve, reject) => {
-                        const client = new net.Socket();
-                        client.setTimeout(3000);
-                        client.connect(shardPort, shardHost, () => {
-                           shardResult.status = 'Success';
-                           client.destroy();
-                           resolve();
-                        });
-                        client.on('error', (e) => {
-                           shardResult.status = 'Failed';
-                           shardResult.error = e.message;
-                           resolve(); // Continue to next shard
-                        });
-                        client.on('timeout', () => {
-                           shardResult.status = 'Timeout';
-                           client.destroy();
-                           resolve();
-                        });
-                    });
-                } catch (e) {
-                    shardResult.status = 'Error';
-                    shardResult.error = e.message;
-                }
-                results.shards.push(shardResult);
-            }
-        } catch (e) {
-            results.dns.status = 'SRV Lookup Failed';
-            results.dns.error = e.message;
-        }
-
-        // 3. Simple IP resolution check
-        try {
-            results.dns.lookup = await new Promise((resolve, reject) => {
-                dns.lookup(host, (err, address) => {
-                    if (err) reject(err);
-                    else resolve(address);
-                });
-            });
-        } catch (e) {
-             results.dns.lookupError = e.message;
-        }
-
-        res.json(results);
-    } catch (err) {
-        res.status(500).json({ success: false, error: err.message, stack: err.stack });
-    }
-});
-
-app.get('/api/debug-collections', async (req, res) => {
-    try {
-        const User = require('./models/User');
-        const RegisteredCandidate = require('./models/RegisteredCandidate');
-        const Job = require('./models/Job');
-        const PlacedStudent = require('./models/PlacedStudent');
-
-        const counts = {
-            users: await User.countDocuments(),
-            candidates: await RegisteredCandidate.countDocuments(),
-            jobs: await Job.countDocuments(),
-            placedStudents: await PlacedStudent.countDocuments()
-        };
-        res.json({ success: true, counts, dbState: mongoose.connection.readyState });
-    } catch (err) {
-        res.status(500).json({ success: false, error: err.message });
-    }
-});
 
 // --- Database Connection Guards (Must be before routes) ---
 const CURRENT_COMMIT = "3bb9123-STABILIZE-V2"; // Updated version tag
@@ -300,12 +190,6 @@ app.get('/', (req, res) => {
     });
 });
 
-app.get('/api/test', (req, res) => {
-    res.json({ 
-        message: 'Hello from Backend!',
-        dbStatus: mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected'
-    });
-});
 
 // 404 Handler for undefined routes
 app.use((req, res, next) => {
@@ -335,7 +219,6 @@ connectDB().catch(() => {});
 if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
     app.listen(PORT, () => {
         console.log(`Server running on port ${PORT}`);
-        console.log('Build Trigger: Deployment config synchronization complete.');
     });
 }
 

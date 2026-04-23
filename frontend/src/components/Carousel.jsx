@@ -45,7 +45,7 @@ const Carousel = () => {
     if (!slides || slides.length === 0) return null;
 
     return (
-        <div className="relative h-screen w-full group overflow-hidden">
+        <div className="relative h-[60vh] md:h-[75vh] lg:h-screen w-full group overflow-hidden">
             {/* Slides */}
             <div
                 style={{ backgroundImage: `url(${slides[currentIndex].url})` }}
@@ -56,10 +56,10 @@ const Carousel = () => {
 
                 {/* Content */}
                 <div className="relative z-10 text-center px-4 max-w-4xl animate-fade-in-up">
-                    <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-6 drop-shadow-lg">
+                    <h1 className="text-3xl md:text-5xl lg:text-7xl font-black text-white mb-6 drop-shadow-2xl leading-tight">
                         {slides[currentIndex].title}
                     </h1>
-                    <p className="text-xl md:text-2xl text-gray-200 mb-8 drop-shadow-md">
+                    <p className="text-lg md:text-xl lg:text-2xl text-gray-200 mb-8 drop-shadow-md font-medium">
                         {slides[currentIndex].subtitle}
                     </p>
                     <Link to="/services">
