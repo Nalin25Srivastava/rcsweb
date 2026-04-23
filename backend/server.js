@@ -32,6 +32,7 @@ app.use(helmet());
 // app.use(limiter);
 const corsOptions = {
     origin: (origin, callback) => {
+        console.log('Request coming from:', origin);
         const allowedOrigins = [
             'https://rcsweb-one.vercel.app',
             'https://rcs-web-one.vercel.app',
