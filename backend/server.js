@@ -33,15 +33,12 @@ app.use(helmet());
 const corsOptions = {
     origin: (origin, callback) => {
         console.log('Request coming from:', origin);
-        const allowedOrigins = [
-            'https://rcsweb-one.vercel.app',
-            'https://rcs-web-one.vercel.app',
-            'https://rcsweb-3cl5.vercel.app',
-            'http://localhost:5173',
-            'http://127.0.0.1:5173',
-            'https://accounts.google.com'
-        ];
-        if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
+        // More permissive check for deployment debugging
+        if (!origin || 
+            origin.endsWith('.vercel.app') || 
+            origin.includes('google.com') ||
+            origin.includes('localhost') ||
+            origin.includes('127.0.0.1')) {
             callback(null, true);
         } else {
             callback(new Error('Not allowed by CORS'));
