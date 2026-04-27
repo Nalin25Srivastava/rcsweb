@@ -73,11 +73,18 @@ const Footer = () => {
                     <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}>
                         <h4 className=" font-black mb-6 uppercase tracking-widest text-[#00c57d]">Services</h4>
                         <ul className="space-y-4">
-                            {['Career Development', 'Permanent Recruitment', 'Campus Recruitment', 'IT Services', 'Marketing', 'Temporary Recruitment'].map((service) => (
-                                <li key={service}>
-                                    <a href="#" className=" text-gray-400 hover:text-[#00c57d] transition-colors text-sm font-bold uppercase tracking-wider">
-                                        {service}
-                                    </a>
+                            {[
+                                { name: 'Career Development', id: 'career-development' },
+                                { name: 'Permanent Recruitment', id: 'permanent-recruitment' },
+                                { name: 'Campus Recruitment', id: 'campus-recruitment' },
+                                { name: 'IT Services', id: 'it-services' },
+                                { name: 'Marketing', id: 'marketing' },
+                                { name: 'Temporary Recruitment', id: 'temporary-recruitment' }
+                            ].map((service) => (
+                                <li key={service.id}>
+                                    <Link to={`/services#${service.id}`} className=" text-gray-400 hover:text-[#00c57d] transition-colors text-sm font-bold uppercase tracking-wider">
+                                        {service.name}
+                                    </Link>
                                 </li>
                             ))}
                         </ul>
