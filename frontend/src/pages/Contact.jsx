@@ -13,7 +13,19 @@ const Contact = () => {
     const { isLoading, isSuccess, isError, message } = useSelector((state) => state.contacts);
 
     useEffect(() => {
-        if (isSuccess) setFormData({ fullName: '', phone: '', email: '', subject: '', message: '' });
+        if (isSuccess) {
+            // Trigger WhatsApp redirect
+            const waMessage = `*New Contact Enquiry - RCS*\n\n*Name:* ${formData.fullName}\n*Phone:* ${formData.phone}\n*Email:* ${formData.email}\n*Subject:* ${formData.subject}\n\n*Message:* ${formData.message}`;
+            const encodedMsg = encodeURIComponent(waMessage);
+            const waUrl = `https://wa.me/918104083002?text=${encodedMsg}`;
+            
+            // Small delay to let user see success message before redirect
+            setTimeout(() => {
+                window.open(waUrl, '_blank');
+            }, 1000);
+
+            setFormData({ fullName: '', phone: '', email: '', subject: '', message: '' });
+        }
         const timer = setTimeout(() => {
             if (isSuccess || isError) dispatch(reset());
         }, 5000);
@@ -95,17 +107,17 @@ const Contact = () => {
                                     </div>
                                     <div>
                                         <h3 className="font-bold text-slate-900 dark:text-white text-lg mb-1">Headquarters</h3>
-                                        <p className="text-slate-500 dark:text-slate-400 font-medium whitespace-pre-line">Building No. 645, Behind Allahabad Bank,<br/>In front of Gumanpura Thana, Aerodrome Circle,<br/>Kota, Rajasthan - 324001</p>
+                                        <p className="text-slate-500 dark:text-slate-400 font-medium whitespace-pre-line text-sm">Building No. 645, Behind Allahabad Bank,<br/>In front of Gumanpura Thana, Aerodrome Circle,<br/>Kota, Rajasthan - 324001</p>
                                     </div>
                                 </motion.div>
 
                                 <motion.div whileHover={{ x: 10 }} className="flex gap-6 group">
-                                    <div className="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-colors flex-shrink-0">
+                                    <div className="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-colors flex-shrink-0">
                                         <Phone className="w-6 h-6" />
                                     </div>
                                     <div>
-                                        <h3 className="font-bold text-slate-900 text-lg mb-1">Call Center</h3>
-                                        <p className="text-slate-500 font-medium">
+                                        <h3 className="font-bold text-slate-900 dark:text-white text-lg mb-1">Call Center</h3>
+                                        <p className="text-slate-500 dark:text-slate-400 font-medium text-sm">
                                             +91 8104083002, +91 9783945080,<br/>
                                             +91 8209635081<br/>
                                             Mon-Sat, 10am to 5pm IST
@@ -114,12 +126,12 @@ const Contact = () => {
                                 </motion.div>
 
                                 <motion.div whileHover={{ x: 10 }} className="flex gap-6 group">
-                                    <div className="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center text-indigo-500 group-hover:bg-indigo-500 group-hover:text-white transition-colors flex-shrink-0">
+                                    <div className="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-indigo-500 group-hover:bg-indigo-500 group-hover:text-white transition-colors flex-shrink-0">
                                         <Mail className="w-6 h-6" />
                                     </div>
                                     <div>
-                                        <h3 className="font-bold text-slate-900 text-lg mb-1">Email Connect</h3>
-                                        <p className="text-slate-500 font-medium">
+                                        <h3 className="font-bold text-slate-900 dark:text-white text-lg mb-1">Email Connect</h3>
+                                        <p className="text-slate-500 dark:text-slate-400 font-medium text-sm">
                                             r.c.sindiaconcept@gmail.com
                                         </p>
                                     </div>
@@ -141,9 +153,9 @@ const Contact = () => {
 
                     {/* Contact Form */}
                     <div className="lg:col-span-2">
-                        <form onSubmit={handleSubmit} className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-2xl shadow-slate-200/50 border border-slate-100">
+                        <form onSubmit={handleSubmit} className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-8 md:p-12 shadow-2xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-800">
                             
-                            <h2 className="text-3xl font-black text-slate-900 mb-8 tracking-tight">Send a <span className="text-emerald-500">Message</span></h2>
+                            <h2 className="text-3xl font-black text-slate-900 dark:text-white mb-8 tracking-tight">Send a <span className="text-emerald-500">Message</span></h2>
 
                             <AnimatePresence>
                                 {(isSuccess || isError || formError) && (
@@ -153,44 +165,71 @@ const Contact = () => {
                                         exit={{ opacity: 0, height: 0, marginBottom: 0 }}
                                         className={`px-6 py-4 rounded-xl flex items-center gap-4 ${isSuccess && !formError ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700'}`}
                                     >
+                                        <div className={`p-2 rounded-lg ${isSuccess && !formError ? 'bg-emerald-100' : 'bg-red-100'}`}>
+                                            {isSuccess && !formError ? <CheckCircle2 className="w-5 h-5" /> : <AlertCircle className="w-5 h-5" />}
+                                        </div>
+                                        <div className="flex flex-col">
+                                            <span className="font-bold text-sm">{formError || message}</span>
+                                            {isSuccess && <span className="text-[10px] font-black uppercase tracking-widest opacity-70">Redirecting to WhatsApp...</span>}
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                                <div className="space-y-2">
+                                    <label className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">Full Name</label>
+                                    <input
+                                        type="text"
+                                        name="fullName"
+                                        value={formData.fullName}
+                                        onChange={(e) => handleInputChange(e, 'fullName')}
+                                        required
+                                        className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-700 rounded-xl py-4 px-5 outline-none transition-all text-slate-900 dark:text-white font-bold shadow-sm"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">Phone Number</label>
+                                    <input
+                                        type="tel"
                                         name="phone"
                                         value={formData.phone}
                                         onChange={(e) => handleInputChange(e, 'phone')}
                                         required
-                                        className="w-full bg-slate-50 border border-slate-200 focus:border-emerald-500 focus:bg-white rounded-xl py-4 px-5 outline-none transition-all text-slate-900 font-bold shadow-sm"
+                                        className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-700 rounded-xl py-4 px-5 outline-none transition-all text-slate-900 dark:text-white font-bold shadow-sm"
                                     />
                                 </div>
                                 <div className="space-y-2 md:col-span-2">
-                                    <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Email Address</label>
+                                    <label className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">Email Address</label>
                                     <input
                                         type="email"
                                         name="email"
                                         value={formData.email}
                                         onChange={(e) => handleInputChange(e, 'email')}
                                         required
-                                        className="w-full bg-slate-50 border border-slate-200 focus:border-emerald-500 focus:bg-white rounded-xl py-4 px-5 outline-none transition-all text-slate-900 font-bold shadow-sm"
+                                        className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-700 rounded-xl py-4 px-5 outline-none transition-all text-slate-900 dark:text-white font-bold shadow-sm"
                                     />
                                 </div>
                                 <div className="space-y-2 md:col-span-2">
-                                    <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Subject</label>
+                                    <label className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">Subject</label>
                                     <input
                                         type="text"
                                         name="subject"
                                         value={formData.subject}
                                         onChange={(e) => handleInputChange(e, 'subject')}
                                         required
-                                        className="w-full bg-slate-50 border border-slate-200 focus:border-emerald-500 focus:bg-white rounded-xl py-4 px-5 outline-none transition-all text-slate-900 font-bold shadow-sm"
+                                        className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-700 rounded-xl py-4 px-5 outline-none transition-all text-slate-900 dark:text-white font-bold shadow-sm"
                                     />
                                 </div>
                                 <div className="space-y-2 md:col-span-2">
-                                    <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Your Message</label>
+                                    <label className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">Your Message</label>
                                     <textarea
                                         name="message"
                                         value={formData.message}
                                         onChange={(e) => handleInputChange(e, 'message')}
                                         required
                                         rows="4"
-                                        className="w-full bg-slate-50 border border-slate-200 focus:border-emerald-500 focus:bg-white rounded-xl py-4 px-5 outline-none transition-all text-slate-900 font-bold shadow-sm resize-none"
+                                        className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-700 rounded-xl py-4 px-5 outline-none transition-all text-slate-900 dark:text-white font-bold shadow-sm resize-none"
                                     ></textarea>
                                 </div>
                             </div>
@@ -202,7 +241,7 @@ const Contact = () => {
                                 disabledReason={getDisabledReason()}
                                 howToCorrect={getCorrectionStep()}
                                 onClick={handleSubmit}
-                                className={`w-full bg-slate-900 hover:bg-gradient-to-r hover:from-slate-900 hover:to-emerald-600 text-white font-black py-5 rounded-2xl text-lg shadow-2xl shadow-slate-200/50 transition-all duration-500 cursor-pointer uppercase flex items-center justify-center gap-4 tracking-[0.2em] group overflow-hidden ${isLoading || isSuccess ? 'pointer-events-none' : ''}`}
+                                className={`w-full bg-slate-900 dark:bg-emerald-600 hover:bg-emerald-500 text-white font-black py-5 rounded-2xl text-lg shadow-2xl shadow-slate-200/50 dark:shadow-none transition-all duration-500 cursor-pointer uppercase flex items-center justify-center gap-4 tracking-[0.2em] group overflow-hidden ${isLoading || isSuccess ? 'pointer-events-none' : ''}`}
                             >
                                 <AnimatePresence mode="wait">
                                     {isSuccess ? (
