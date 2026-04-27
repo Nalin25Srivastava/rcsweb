@@ -1,14 +1,15 @@
-import { Menu, X, LogOut, User } from 'lucide-react'
+import { Menu, X, LogOut, User, Sun, Moon } from 'lucide-react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { logout } from '../store/slices/authSlice'
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-
+import { useTheme } from '../context/ThemeContext'
 
 const Navbar = () => {
     const dispatch = useDispatch()
     const location = useLocation()
+    const { theme, toggleTheme } = useTheme()
     const [isOpen, setIsOpen] = useState(false)
     const { user: reduxUser, isSecretVerified } = useSelector((state) => state.auth)
     
@@ -34,7 +35,7 @@ const Navbar = () => {
     ]
 
     return (
-        <nav className="fixed top-0 left-0 w-full z-50 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm">
+        <nav className="fixed top-0 left-0 w-full z-50 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-gray-200 dark:border-slate-800 shadow-sm transition-colors duration-300">
             <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-10">
                 <div className="mt-3 flex justify-between h-14 items-center">
 
@@ -64,7 +65,7 @@ const Navbar = () => {
                                             className="relative group py-2"
                                         >
                                             <span className={`px-2 text-lg font-bold transition-colors duration-300 ${
-                                                isActive ? 'text-[#00c57d]' : 'text-gray-600 group-hover:text-[#00c57d]'
+                                                isActive ? 'text-[#00c57d]' : 'text-gray-600 dark:text-slate-400 group-hover:text-[#00c57d]'
                                             }`}>
                                                 {link.name}
                                             </span>
@@ -82,6 +83,17 @@ const Navbar = () => {
                         </div>
                     </div>
 
+                    {/* Theme Toggle */}
+                    <button
+                        onClick={toggleTheme}
+                        className="p-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-[#00c57d] transition-all border border-slate-100 dark:border-slate-700 shadow-sm active:scale-95"
+                        aria-label="Toggle Theme"
+                    >
+                        {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
+                    </button>
+
+                    <div className="h-8 w-px bg-slate-100 dark:bg-slate-800 mx-2"></div>
+
                     {/* Desktop Auth (Right Aligned) */}
                     <div className="hidden lg:flex items-center space-x-4 border-l pl-8 border-gray-100">
                         {user && (user.name || user.email) ? (
@@ -91,7 +103,7 @@ const Navbar = () => {
                                         <User className="w-5 h-5" />
                                     </div>
                                     <div className="flex flex-col justify-center">
-                                        <span className="capitalize text-slate-900 leading-none mb-1">
+                                        <span className="capitalize text-slate-900 dark:text-white leading-none mb-1">
                                             {user.name || user.email.split('@')[0]}
                                         </span>
                                         <span className={`text-[10px] uppercase tracking-tighter font-black px-1.5 rounded shadow-sm w-fit ${
@@ -129,7 +141,14 @@ const Navbar = () => {
                     </div>
 
                     {/* Mobile Button & Auth */}
-                    <div className="lg:hidden flex items-center gap-2">
+                    <div className="lg:hidden flex items-center gap-3">
+                        <button
+                            onClick={toggleTheme}
+                            className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-100 dark:border-slate-700"
+                        >
+                            {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
+                        </button>
+
                         {!user && (
                             <div className="flex items-center gap-2 mr-1">
                                 <Link to="/login" className="text-xs font-black text-gray-700 hover:text-[#00c57d] uppercase tracking-wider">Login</Link>
@@ -150,7 +169,7 @@ const Navbar = () => {
             <AnimatePresence>
                 {isOpen && (
                     <motion.div 
-                        className="lg:hidden bg-white border-t border-gray-100 overflow-hidden"
+                        className="lg:hidden bg-white dark:bg-slate-900 border-t border-gray-100 dark:border-slate-800 overflow-hidden"
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}

@@ -66,7 +66,7 @@ const Home = () => {
     };
 
     return (
-        <div className="w-full bg-slate-50 min-h-screen">
+        <div className="w-full bg-slate-50 dark:bg-slate-950 min-h-screen transition-colors duration-300">
             {/* Hero Section */}
             <Carousel />
 
@@ -84,7 +84,7 @@ const Home = () => {
                     initial={{ opacity: 0, y: 50 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl p-6 md:p-8 grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 border border-white/50"
+                    className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-3xl shadow-2xl p-6 md:p-8 grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 border border-white/50 dark:border-slate-800/50"
                 >
                     {statsLoading ? (
                         <div className="col-span-full flex justify-center py-4">
@@ -92,11 +92,11 @@ const Home = () => {
                         </div>
                     ) : stats.map((stat, i) => (
                         <div key={i} className="text-center group">
-                            <div className="mx-auto w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-600 mb-4 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
+                            <div className="mx-auto w-16 h-16 bg-emerald-100 dark:bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-4 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
                                 {getIcon(stat.iconName)}
                             </div>
-                            <h3 className="text-3xl font-black text-slate-800">{stat.value}</h3>
-                            <p className="text-slate-500 font-bold uppercase tracking-wider text-sm mt-1">{stat.label}</p>
+                            <h3 className="text-3xl font-black text-slate-800 dark:text-white">{stat.value}</h3>
+                            <p className="text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider text-sm mt-1">{stat.label}</p>
                         </div>
                     ))}
                 </motion.div>
@@ -163,28 +163,10 @@ const Home = () => {
             </div>
 
             {/* Placed Students Section */}
-            <div className="bg-slate-900 py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+            <div className="bg-slate-50 dark:bg-slate-900 py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-emerald-500 rounded-full blur-[150px] opacity-10"></div>
                 <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-blue-500 rounded-full blur-[150px] opacity-10"></div>
                 
-                <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center mb-16 relative z-10 gap-8">
-                    <motion.div 
-                        className="text-center md:text-left"
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6 }}
-                    >
-                        <h2 className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-white">
-                            Wall of <span className="text-emerald-400">Success</span>
-                        </h2>
-                        <p className="mt-4 text-lg md:text-xl text-slate-400 font-medium">The brilliant minds who trusted our process.</p>
-                    </motion.div>
-
-                    {user?.role === 'admin' && (
-                        <motion.button 
-                            onClick={handleAdd}
-                            whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(16, 185, 129, 0.4)' }}
                             whileTap={{ scale: 0.95 }}
                             className="bg-emerald-500 hover:bg-emerald-400 text-slate-900 px-8 py-4 rounded-2xl font-black uppercase tracking-widest flex items-center gap-2 shadow-2xl transition-all border-b-4 border-emerald-700 active:border-b-0 active:translate-y-1"
                         >

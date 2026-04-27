@@ -53,7 +53,7 @@ const Services = () => {
 
     if (isLoading && services.length === 0) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-slate-900 text-white">
+            <div className="min-h-screen flex items-center justify-center bg-slate-900 dark:bg-slate-950 text-white transition-colors duration-300">
                 <div className="flex flex-col items-center gap-6">
                     <div className="w-16 h-16 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin"></div>
                     <p className="font-black uppercase tracking-[0.4em] text-sm animate-pulse">Initializing Excellence</p>
@@ -64,14 +64,14 @@ const Services = () => {
 
     if (isError && services.length === 0) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
-                <div className="bg-white p-12 rounded-[3rem] shadow-2xl border border-red-100 text-center max-w-lg">
-                    <div className="w-20 h-20 bg-red-50 text-red-500 rounded-3xl flex items-center justify-center mx-auto mb-6">
+            <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 p-4 transition-colors duration-300">
+                <div className="bg-white dark:bg-slate-900 p-12 rounded-[3rem] shadow-2xl border border-red-100 dark:border-red-900/20 text-center max-w-lg">
+                    <div className="w-20 h-20 bg-red-50 dark:bg-red-500/10 text-red-500 rounded-3xl flex items-center justify-center mx-auto mb-6">
                         <Monitor className="w-10 h-10" />
                     </div>
-                    <h2 className="text-3xl font-black text-slate-900 mb-4">Connection Failed</h2>
-                    <p className="text-slate-500 font-medium mb-8">{message}</p>
-                    <button onClick={() => dispatch(fetchServices())} className="px-8 py-4 bg-slate-900 text-white font-black uppercase tracking-widest rounded-2xl">Retry Connection</button>
+                    <h2 className="text-3xl font-black text-slate-900 dark:text-white mb-4">Connection Failed</h2>
+                    <p className="text-slate-500 dark:text-slate-400 font-medium mb-8">{message}</p>
+                    <button onClick={() => dispatch(fetchServices())} className="px-8 py-4 bg-slate-900 dark:bg-emerald-600 text-white font-black uppercase tracking-widest rounded-2xl">Retry Connection</button>
                 </div>
             </div>
         );
@@ -80,7 +80,7 @@ const Services = () => {
     if (!activeService) return null;
 
     return (
-        <div className="bg-slate-50 min-h-screen pb-20">
+        <div className="bg-slate-50 dark:bg-slate-950 min-h-screen pb-20 transition-colors duration-300">
             {/* Header Banner */}
             <div className="relative flex flex-col items-center justify-center min-h-[40vh] bg-slate-900 overflow-hidden">
                 <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1454165833767-027ff8d99d8d?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center opacity-20"></div>
@@ -104,32 +104,35 @@ const Services = () => {
             {/* Tabs Section */}
             <div id="services-tabs-container" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-12">
-                    {services.map((service) => (
-                        <button
-                            key={service.id}
-                            onClick={() => setActiveTabId(service.id)}
-                            className={`group relative p-6 rounded-3xl transition-all duration-500 text-left overflow-hidden border-2 flex flex-col items-center justify-center text-center ${
-                                activeTabId === service.id 
-                                ? `${service.borderColor} bg-white shadow-2xl shadow-slate-200 ring-4 ring-emerald-500/5` 
-                                : 'border-transparent bg-slate-100/50 hover:bg-white hover:border-slate-200'
-                            }`}
-                        >
-                            <div className={`w-12 h-12 ${service.color} rounded-2xl flex items-center justify-center mb-4 transition-transform duration-500 ${activeTabId === service.id ? 'scale-110 rotate-3' : 'group-hover:scale-110'}`}>
-                                {getIcon(service.iconName)}
-                            </div>
-                            <h3 className={`text-[10px] md:text-xs font-black uppercase tracking-widest leading-tight ${activeTabId === service.id ? 'text-slate-900' : 'text-slate-400'}`}>
-                                {service.title}
-                            </h3>
-                            
-                            {/* Active Indicator Line */}
-                            {activeTabId === service.id && (
-                                <motion.div 
-                                    layoutId="activeTab"
-                                    className="absolute bottom-0 left-0 right-0 h-1.5 bg-emerald-500"
-                                />
-                            )}
-                        </button>
-                    ))}
+                    {services.map((service) => {
+                        const isActive = activeTabId === service.id;
+                        return (
+                            <button
+                                key={service.id}
+                                onClick={() => setActiveTabId(service.id)}
+                                className={`group relative p-6 rounded-3xl transition-all duration-500 text-left overflow-hidden border-2 flex flex-col items-center justify-center text-center ${
+                                    isActive 
+                                    ? `${service.borderColor} bg-white dark:bg-slate-800 shadow-2xl shadow-slate-200 dark:shadow-none ring-4 ring-emerald-500/5` 
+                                    : 'border-transparent bg-slate-100/50 dark:bg-slate-900/50 hover:bg-white dark:hover:bg-slate-800 hover:border-slate-200 dark:hover:border-slate-700'
+                                }`}
+                            >
+                                <div className={`w-12 h-12 ${service.color} rounded-2xl flex items-center justify-center mb-4 transition-transform duration-500 ${isActive ? 'scale-110 rotate-3' : 'group-hover:scale-110'}`}>
+                                    {getIcon(service.iconName)}
+                                </div>
+                                <h3 className={`text-[10px] md:text-xs font-black uppercase tracking-widest leading-tight ${isActive ? 'text-slate-900 dark:text-white' : 'text-slate-400 dark:text-slate-500'}`}>
+                                    {service.title}
+                                </h3>
+                                
+                                {/* Active Indicator Line */}
+                                {isActive && (
+                                    <motion.div 
+                                        layoutId="activeTab"
+                                        className="absolute bottom-0 left-0 right-0 h-1.5 bg-emerald-500"
+                                    />
+                                )}
+                            </button>
+                        );
+                    })}
                 </div>
 
                 {/* Content Area - Expanded Card */}
@@ -140,10 +143,10 @@ const Services = () => {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -20, scale: 0.98 }}
                         transition={{ duration: 0.4, ease: "easeOut" }}
-                        className="bg-white rounded-[3rem] shadow-2xl shadow-slate-200 border border-slate-100 overflow-hidden min-h-[500px] flex flex-col lg:flex-row"
+                        className="bg-white dark:bg-slate-900 rounded-[3rem] shadow-2xl shadow-slate-200 dark:shadow-none border border-slate-100 dark:border-slate-800 overflow-hidden min-h-[500px] flex flex-col lg:flex-row"
                     >
                         {/* Visual Section */}
-                        <div className="lg:w-2/5 relative min-h-[300px] lg:min-h-auto">
+                        <div className="lg:w-2/5 relative min-h-[300px] lg:min-h-auto bg-slate-50 dark:bg-slate-950/50">
                             <div className={`absolute inset-0 ${activeService.color} opacity-10`}></div>
                             <div className="absolute inset-0 flex items-center justify-center p-12">
                                 <motion.div 
@@ -155,10 +158,6 @@ const Services = () => {
                                     {getIcon(activeService.iconName)}
                                 </motion.div>
                             </div>
-                            {/* Decorative Elements */}
-                            <div className="absolute top-8 left-8">
-                                <div className={`w-3 h-3 rounded-full ${activeService.accentColor} animate-pulse`}></div>
-                            </div>
                         </div>
 
                         {/* Text Section */}
@@ -167,14 +166,14 @@ const Services = () => {
                                 <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] ${activeService.color}`}>
                                     Core Expertise
                                 </span>
-                                <div className="h-px flex-grow bg-slate-100"></div>
+                                <div className="h-px flex-grow bg-slate-100 dark:bg-slate-800"></div>
                             </div>
 
-                            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 mb-6 tracking-tight leading-none">
+                            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white mb-6 tracking-tight leading-none">
                                 {activeService.title}
                             </h2>
 
-                            <p className="text-xl text-slate-600 font-medium leading-relaxed mb-10">
+                            <p className="text-xl text-slate-600 dark:text-slate-400 font-medium leading-relaxed mb-10">
                                 {activeService.description}
                             </p>
 
@@ -185,10 +184,10 @@ const Services = () => {
                                         initial={{ opacity: 0, x: -10 }}
                                         animate={{ opacity: 1, x: 0 }}
                                         transition={{ delay: 0.4 + (i * 0.1) }}
-                                        className="flex items-center gap-3 p-4 bg-slate-50 rounded-2xl border border-slate-100 group hover:bg-white hover:border-emerald-200 transition-colors"
+                                        className="flex items-center gap-3 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-700 group hover:bg-white dark:hover:bg-slate-800 transition-colors"
                                     >
                                         <CheckCircle2 className={`w-5 h-5 ${activeService.accentColor} flex-shrink-0`} />
-                                        <span className="text-slate-800 font-bold text-sm">{feature}</span>
+                                        <span className="text-slate-800 dark:text-slate-200 font-bold text-sm">{feature}</span>
                                     </motion.div>
                                 ))}
                             </div>
@@ -197,10 +196,10 @@ const Services = () => {
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
                                 onClick={() => window.location.href = '/contact'}
-                                className={`inline-flex items-center justify-between px-8 py-5 rounded-2xl bg-slate-900 text-white font-black uppercase tracking-widest group shadow-xl hover:shadow-2xl transition-all`}
+                                className={`inline-flex items-center justify-between px-8 py-5 rounded-2xl bg-slate-900 dark:bg-emerald-600 text-white font-black uppercase tracking-widest group shadow-xl hover:shadow-2xl transition-all`}
                             >
                                 <span>Get Started with {activeService.title}</span>
-                                <ChevronRight className="w-6 h-6 text-emerald-400 group-hover:translate-x-1 transition-transform" />
+                                <ChevronRight className="w-6 h-6 text-emerald-400 dark:text-white group-hover:translate-x-1 transition-transform" />
                             </motion.button>
                         </div>
                     </motion.div>
@@ -209,7 +208,7 @@ const Services = () => {
 
             {/* Bottom CTA */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="p-12 bg-slate-900 rounded-[4rem] border border-slate-800 shadow-2xl relative overflow-hidden text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-8">
+                <div className="p-12 bg-slate-900 dark:bg-slate-800 rounded-[4rem] border border-slate-800 dark:border-slate-700 shadow-2xl relative overflow-hidden text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-8">
                     <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-emerald-500 opacity-10 rounded-full blur-[100px]"></div>
                     <div className="relative z-10 max-w-2xl">
                         <h2 className="text-3xl font-black text-white mb-4 tracking-tight">Not sure which service fits?</h2>

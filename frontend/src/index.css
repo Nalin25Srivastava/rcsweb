@@ -11,6 +11,14 @@ html, body, #root {
   width: 100%;
 }
 
+body {
+  @apply bg-white text-slate-900 transition-colors duration-300;
+}
+
+.dark body {
+  @apply bg-slate-900 text-white;
+}
+
 @keyframes fadeInUp {
     from {
         opacity: 0;
