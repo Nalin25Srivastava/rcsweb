@@ -19,6 +19,12 @@ const submitContact = async (req, res) => {
             subject,
             message
         });
+
+        // Send SMS Notification to Admin
+        const { sendSMSNotification } = require('../utils/smsUtil');
+        const smsMessage = `New Enquiry from RCS Web:\nName: ${fullName}\nPhone: ${phone}\nSubject: ${subject}\nMsg: ${message.substring(0, 50)}...`;
+        await sendSMSNotification(smsMessage);
+
         res.status(201).json({
             message: 'Message sent successfully',
             contact
