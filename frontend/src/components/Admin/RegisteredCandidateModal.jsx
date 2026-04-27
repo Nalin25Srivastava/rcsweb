@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, UserPlus, Info, Search, List } from 'lucide-react';
+import { X, UserPlus, Info, Search, List, Image as ImageIcon, Upload, Loader2 } from 'lucide-react';
 import { createRegisteredCandidate, updateRegisteredCandidate } from '../../store/slices/registeredCandidatesSlice';
 
 const RegisteredCandidateModal = ({ isOpen, onClose, candidate = null, isEditing = false, users = [] }) => {
@@ -19,6 +19,46 @@ const RegisteredCandidateModal = ({ isOpen, onClose, candidate = null, isEditing
 
     const [searchTerm, setSearchTerm] = useState('');
     const [isUserListOpen, setIsUserListOpen] = useState(false);
+    const [isUploading, setIsUploading] = useState(false);
+    const fileInputRef = useRef(null);
+
+    const getImageUrl = (image) => {
+        if (!image) return 'https://images.unsplash.com/photo-1594673752579-40993cf394c5?fit=crop&q=80&w=400';
+        if (image.startsWith('http') || image.startsWith('/uploads') || image.startsWith('data:')) return image;
+        return `/images/${image}`;
+    };
+
+    const handleFileUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        // Limit file size to 2MB for Base64 storage in MongoDB
+        if (file.size > 2 * 1024 * 1024) {
+            alert('File is too large. Please select an image under 2MB.');
+            return;
+        }
+
+        setIsUploading(true);
+        
+        try {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+                const base64String = reader.result;
+                setFormData({ ...formData, image: base64String });
+                setIsUploading(false);
+            };
+            reader.onerror = (error) => {
+                console.error('Base64 conversion error:', error);
+                alert('Failed to process image file.');
+                setIsUploading(false);
+            };
+        } catch (error) {
+            console.error('Upload process failed:', error);
+            alert('Error: ' + error.message);
+            setIsUploading(false);
+        }
+    };
 
     useEffect(() => {
         if (candidate) {
@@ -199,6 +239,55 @@ const RegisteredCandidateModal = ({ isOpen, onClose, candidate = null, isEditing
                                     required
                                     className="w-full px-4 py-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl font-bold text-slate-900 outline-none"
                                 />
+                            </div>
+                        </div>
+
+                        <div className="space-y-4">
+                            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Candidate Photo</label>
+                            
+                            <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                                <div className="w-24 h-24 rounded-3xl bg-slate-50 border-2 border-slate-100 overflow-hidden flex-shrink-0 shadow-inner group relative">
+                                    <img 
+                                        src={getImageUrl(formData.image)} 
+                                        alt="Preview" 
+                                        className="w-full h-full object-cover"
+                                    />
+                                    {isUploading && (
+                                        <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center">
+                                            <Loader2 className="w-6 h-6 text-emerald-500 animate-spin" />
+                                        </div>
+                                    )}
+                                </div>
+                                
+                                <div className="flex-1 space-y-3 w-full">
+                                    <div className="flex gap-2">
+                                        <input 
+                                            type="file"
+                                            ref={fileInputRef}
+                                            onChange={handleFileUpload}
+                                            className="hidden"
+                                            accept="image/*"
+                                        />
+                                        <button 
+                                            type="button" 
+                                            onClick={() => fileInputRef.current?.click()}
+                                            disabled={isUploading}
+                                            className="flex-1 px-4 py-3 bg-white border-2 border-slate-100 hover:border-emerald-500 rounded-xl text-[10px] font-bold text-slate-700 transition-all flex items-center justify-center gap-2 shadow-sm"
+                                        >
+                                            <Upload className="w-4 h-4 text-emerald-500" />
+                                            {isUploading ? 'Processing...' : 'Upload Photo'}
+                                        </button>
+                                    </div>
+                                    <div className="relative">
+                                        <input 
+                                            className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:border-emerald-500 focus:bg-white transition-all outline-none text-[10px] font-medium text-slate-600 placeholder:text-slate-300"
+                                            placeholder="Or enter image URL / local path"
+                                            value={formData.image}
+                                            onChange={(e) => setFormData({...formData, image: e.target.value})}
+                                        />
+                                        <ImageIcon className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-300" />
+                                    </div>
+                                </div>
                             </div>
                         </div>
 

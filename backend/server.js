@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const dns = require('dns');
 const net = require('net');
+const path = require('path');
 
 // Load environment variables
 dotenv.config();
@@ -52,6 +53,9 @@ app.use(express.json({
     }
 }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
+
+// Static Files
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Diagnostic Routes
 app.get('/api/ping', (req, res) => res.json({ 
