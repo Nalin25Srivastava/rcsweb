@@ -130,14 +130,14 @@ const Signup = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-slate-50 relative overflow-hidden py-12 px-4">
+        <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 relative overflow-hidden py-12 px-4 transition-colors duration-300">
             
             {/* Background elements */}
             <div className="absolute top-[-10%] right-[-10%] w-96 h-96 bg-blue-500 rounded-full blur-[120px] opacity-20"></div>
             <div className="absolute bottom-[-10%] left-[-10%] w-96 h-96 bg-emerald-500 rounded-full blur-[120px] opacity-20"></div>
 
             <motion.div 
-                className="max-w-5xl w-full bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-100 flex flex-col md:flex-row relative z-10"
+                className="max-w-5xl w-full bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-100 dark:border-slate-800 flex flex-col md:flex-row relative z-10"
                 initial={{ opacity: 0, scale: 0.95, y: -20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
@@ -145,8 +145,8 @@ const Signup = () => {
                 {/* Left Side: Form */}
                 <div className="md:w-7/12 p-8 md:p-14 lg:p-16 flex flex-col justify-center">
                     <div className="mb-10 text-center md:text-left">
-                        <h2 className="text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">Create Account</h2>
-                        <p className="text-slate-500 font-bold mt-2">Join the RCS consulting ecosystem</p>
+                        <h2 className="text-3xl lg:text-4xl font-black text-slate-900 dark:text-white tracking-tight">Create Account</h2>
+                        <p className="text-slate-500 dark:text-slate-400 font-bold mt-2">Join the RCS consulting ecosystem</p>
                     </div>
                     
                     <form onSubmit={handleSubmit} className="space-y-6">
@@ -173,7 +173,7 @@ const Signup = () => {
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
                                         placeholder="John Doe"
-                                        className="w-full bg-slate-50 border-2 border-slate-50 focus:border-blue-500 focus:bg-white rounded-xl py-4 pl-12 pr-4 outline-none transition-all text-slate-900 shadow-sm font-bold"
+                                        className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-slate-50 dark:border-slate-700 focus:border-blue-500 focus:bg-white dark:focus:bg-slate-700 rounded-xl py-4 pl-12 pr-4 outline-none transition-all text-slate-900 dark:text-white shadow-sm font-bold"
                                         required
                                     />
                                 </div>
@@ -188,7 +188,7 @@ const Signup = () => {
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                         placeholder="john@example.com"
-                                        className="w-full bg-slate-50 border-2 border-slate-50 focus:border-blue-500 focus:bg-white rounded-xl py-4 pl-12 pr-4 outline-none transition-all text-slate-900 shadow-sm font-bold"
+                                        className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-slate-50 dark:border-slate-700 focus:border-blue-500 focus:bg-white dark:focus:bg-slate-700 rounded-xl py-4 pl-12 pr-4 outline-none transition-all text-slate-900 dark:text-white shadow-sm font-bold"
                                         required
                                     />
                                 </div>
@@ -203,7 +203,7 @@ const Signup = () => {
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                         placeholder="Choose a strong password"
-                                        className="w-full bg-slate-50 border-2 border-slate-50 focus:border-blue-500 focus:bg-white rounded-xl py-4 pl-12 pr-4 outline-none transition-all text-slate-900 shadow-sm font-bold"
+                                        className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-slate-50 dark:border-slate-700 focus:border-blue-500 focus:bg-white dark:focus:bg-slate-700 rounded-xl py-4 pl-12 pr-4 outline-none transition-all text-slate-900 dark:text-white shadow-sm font-bold"
                                         required
                                     />
                                 </div>
@@ -223,7 +223,7 @@ const Signup = () => {
                                             }}
                                             className="w-4 h-4 text-blue-600 border-slate-300 focus:ring-blue-500"
                                         />
-                                        <span className="text-slate-700 font-bold">User</span>
+                                        <span className="text-slate-700 dark:text-slate-300 font-bold">User</span>
                                     </label>
                                     <label className="flex items-center space-x-2 cursor-pointer">
                                         <input
@@ -241,7 +241,7 @@ const Signup = () => {
                                             }}
                                             className="w-4 h-4 text-blue-600 border-slate-300 focus:ring-blue-500"
                                         />
-                                        <span className="text-slate-700 font-bold">Admin</span>
+                                        <span className="text-slate-700 dark:text-slate-300 font-bold">Admin</span>
                                     </label>
                                 </div>
                             </div>
