@@ -224,10 +224,44 @@ const Contact = () => {
                                 disabledReason={getDisabledReason()}
                                 howToCorrect={getCorrectionStep()}
                                 onClick={handleSubmit}
-                                className={`w-full bg-slate-900 hover:bg-emerald-500 text-white font-black py-5 rounded-xl text-lg shadow-xl shadow-slate-200 transition-all cursor-pointer uppercase flex items-center justify-center gap-3 tracking-widest ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                                className={`w-full bg-slate-900 hover:bg-gradient-to-r hover:from-slate-900 hover:to-emerald-600 text-white font-black py-5 rounded-2xl text-lg shadow-2xl shadow-slate-200/50 transition-all duration-500 cursor-pointer uppercase flex items-center justify-center gap-4 tracking-[0.2em] group overflow-hidden ${isLoading || isSuccess ? 'pointer-events-none' : ''}`}
                             >
-                                {isLoading ? 'Transmitting...' : 'Submit Message'} 
-                                <Send className={`w-6 h-6 ${isLoading ? 'animate-bounce' : ''}`} />
+                                <AnimatePresence mode="wait">
+                                    {isSuccess ? (
+                                        <motion.div 
+                                            key="success"
+                                            initial={{ y: 20, opacity: 0 }}
+                                            animate={{ y: 0, opacity: 1 }}
+                                            className="flex items-center gap-3 text-emerald-400"
+                                        >
+                                            <CheckCircle2 className="w-7 h-7" />
+                                            <span>Message Sent</span>
+                                        </motion.div>
+                                    ) : isLoading ? (
+                                        <motion.div 
+                                            key="loading"
+                                            initial={{ y: 20, opacity: 0 }}
+                                            animate={{ y: 0, opacity: 1 }}
+                                            className="flex items-center gap-3"
+                                        >
+                                            <div className="w-6 h-6 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
+                                            <span>Transmitting</span>
+                                        </motion.div>
+                                    ) : (
+                                        <motion.div 
+                                            key="default"
+                                            initial={{ y: -20, opacity: 0 }}
+                                            animate={{ y: 0, opacity: 1 }}
+                                            className="flex items-center gap-3"
+                                        >
+                                            <Send className="w-6 h-6 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                                            <span>Submit Message</span>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+                                
+                                {/* Hover Shine Effect */}
+                                <div className="absolute inset-0 w-1/2 h-full bg-white/10 skew-x-[-25deg] -translate-x-[200%] group-hover:translate-x-[300%] transition-transform duration-1000"></div>
                             </SmartButton>
                         </form>
                     </div>
