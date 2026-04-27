@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Upload, CheckCircle, AlertCircle, LoaderCircle, ShieldCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { submitResume, resetResumeState } from '../store/slices/resumesSlice';
-import { setPaid } from '../store/slices/authSlice';
+import { setPaid, verifyRegistrationPayment } from '../store/slices/authSlice';
 import SmartButton from '../components/SmartButton';
 
 const Registration = () => {
@@ -22,6 +22,7 @@ const Registration = () => {
     });
     const [file, setFile] = useState(null);
     const [paymentStatus, setPaymentStatus] = useState(null); // 'processing' | 'success' | null
+    const [isVerifying, setIsVerifying] = useState(false);
 
     useEffect(() => {
         if (!user) {
@@ -110,25 +111,40 @@ const Registration = () => {
                 name: "RCS Placement",
                 description: "Agency Registration Fee",
                 order_id: orderData.id,
-                handler: function (response) {
-                    // 4. Secure Webhook Workflow (Backend receives payment async)
-                    // We only update the UI visually and unlock the account locally.
-                    dispatch(setPaid());
-                    setPaymentStatus('success');
+                handler: async function (response) {
+                    setIsVerifying(true);
                     
-                    // Clear form for future use
-                    setFormData({
-                        firstName: '', lastName: '', email: '', 
-                        phone: '', functionalArea: ''
-                    });
-                    setFile(null);
-                    
-                    // Reset redux state after a delay
-                    setTimeout(() => {
-                        dispatch(resetResumeState());
-                        setPaymentStatus(null);
-                        navigate('/');
-                    }, 3000);
+                    try {
+                        // 4. Client-side Verification (Instant fallback to Webhook)
+                        await dispatch(verifyRegistrationPayment({
+                            razorpay_order_id: response.razorpay_order_id,
+                            razorpay_payment_id: response.razorpay_payment_id,
+                            razorpay_signature: response.razorpay_signature
+                        })).unwrap();
+
+                        dispatch(setPaid());
+                        setPaymentStatus('success');
+                        
+                        // Clear form for future use
+                        setFormData({
+                            firstName: '', lastName: '', email: '', 
+                            phone: '', functionalArea: ''
+                        });
+                        setFile(null);
+                        
+                        // Reset redux state after a delay
+                        setTimeout(() => {
+                            dispatch(resetResumeState());
+                            setPaymentStatus(null);
+                            setIsVerifying(false);
+                            navigate('/');
+                        }, 3000);
+
+                    } catch (verifyErr) {
+                        console.error('Verification Error:', verifyErr);
+                        alert('Payment recorded but verification failed. Please contact support if your account is not activated within 10 minutes.');
+                        setIsVerifying(false);
+                    }
                 },
                 modal: {
                     ondismiss: function() {
@@ -208,7 +224,7 @@ const Registration = () => {
                         <div className="space-y-6">
                             {[
                                 { title: "Global Network", desc: "Access unlisted corporate requisitions." },
-                                { title: "Secure Webhooks", desc: "Enterprise-grade async payment verification integrations." },
+                                { title: "Secure Verification", desc: "Enterprise-grade real-time payment verification." },
                                 { title: "Dedicated Support", desc: "24/7 technical and placement assistance." }
                             ].map((item, i) => (
                                 <div key={i} className="flex gap-4 items-start">
@@ -242,23 +258,33 @@ const Registration = () => {
                                 </motion.div>
                             )}
                             
-                            {paymentStatus === 'success' && (
+                            {(paymentStatus === 'success' || isVerifying) && (
                                 <motion.div 
                                     initial={{ opacity: 0, height: 0 }}
                                     animate={{ opacity: 1, height: 'auto' }}
                                     exit={{ opacity: 0, height: 0 }}
-                                    className="p-6 rounded-2xl flex items-center gap-4 border bg-emerald-50 text-emerald-700 border-emerald-200 shadow-lg"
+                                    className={`p-6 rounded-2xl flex items-center gap-4 border shadow-lg ${paymentStatus === 'success' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-blue-50 text-blue-700 border-blue-200'}`}
                                 >
-                                    <CheckCircle className="w-8 h-8 text-emerald-500 flex-shrink-0" />
+                                    {paymentStatus === 'success' ? (
+                                        <CheckCircle className="w-8 h-8 text-emerald-500 flex-shrink-0" />
+                                    ) : (
+                                        <LoaderCircle className="w-8 h-8 text-blue-500 animate-spin flex-shrink-0" />
+                                    )}
                                     <div>
-                                        <h4 className="font-black text-emerald-900 text-lg">Registration Successful</h4>
-                                        <p className="font-medium text-emerald-700 mt-1">Your payment is being verified by the provider securely. We will contact you shortly.</p>
+                                        <h4 className={`font-black text-lg ${paymentStatus === 'success' ? 'text-emerald-900' : 'text-blue-900'}`}>
+                                            {paymentStatus === 'success' ? 'Registration Successful' : 'Verifying Payment...'}
+                                        </h4>
+                                        <p className={`font-medium mt-1 ${paymentStatus === 'success' ? 'text-emerald-700' : 'text-blue-700'}`}>
+                                            {paymentStatus === 'success' 
+                                                ? 'Your account has been activated. Redirecting you to home...' 
+                                                : 'Please do not close this window while we verify your transaction.'}
+                                        </p>
                                     </div>
                                 </motion.div>
                             )}
                         </AnimatePresence>
 
-                        <div className={`transition-opacity duration-500 ${paymentStatus === 'success' ? 'opacity-30 pointer-events-none' : 'opacity-100'}`}>
+                        <div className={`transition-opacity duration-500 ${paymentStatus === 'success' || isVerifying ? 'opacity-30 pointer-events-none' : 'opacity-100'}`}>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
                                     <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">First Name</label>
@@ -357,15 +383,15 @@ const Registration = () => {
                                 </div>
                                 <SmartButton
                                     type="submit"
-                                    disabled={isLoading || isFormIncomplete}
-                                    isLoading={isLoading}
+                                    disabled={isLoading || isFormIncomplete || isVerifying}
+                                    isLoading={isLoading || isVerifying}
                                     disabledReason={getDisabledReason()}
                                     howToCorrect={getCorrectionStep()}
                                     onClick={handleSubmit}
-                                    className={`w-full sm:w-auto bg-slate-900 hover:bg-emerald-500 text-white font-black py-4 px-10 rounded-xl transition-all shadow-xl shadow-emerald-500/10 cursor-pointer flex items-center justify-center gap-3 uppercase tracking-widest text-sm ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                                    className={`w-full sm:w-auto bg-slate-900 hover:bg-emerald-500 text-white font-black py-4 px-10 rounded-xl transition-all shadow-xl shadow-emerald-500/10 cursor-pointer flex items-center justify-center gap-3 uppercase tracking-widest text-sm ${(isLoading || isVerifying) ? 'opacity-70 cursor-not-allowed' : ''}`}
                                 >
-                                    {isLoading ? (
-                                        <><LoaderCircle className="w-5 h-5 animate-spin" /> Processing...</>
+                                    {isLoading || isVerifying ? (
+                                        <><LoaderCircle className="w-5 h-5 animate-spin" /> {isVerifying ? 'Verifying...' : 'Processing...'}</>
                                     ) : (
                                         'Pay & Register'
                                     )}

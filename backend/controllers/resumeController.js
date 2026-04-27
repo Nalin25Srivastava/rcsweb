@@ -74,12 +74,8 @@ exports.submitResume = (req, res) => {
                 fileMimetype: req.file.mimetype,
                 amount: registrationFee,
                 paymentStatus: 'Pending',
-                user: req.user._id // Link registration to logged-in user
+                user: req.user?._id // Link registration to logged-in user if available
             });
-
-            // Update user's registration status if they have an account
-            const User = require('../models/User'); // Local require to avoid circular dependencies if any
-            await User.findOneAndUpdate({ email }, { isPaid: true });
 
             // 2. Generate Razorpay Order
             const options = {
@@ -94,7 +90,16 @@ exports.submitResume = (req, res) => {
             resume.razorpayOrderId = order.id;
             await resume.save();
 
-            // 4. Return Order Details to Frontend
+            // 4. Update user's razorpayOrderId for verification later
+            if (req.user) {
+                const User = require('../models/User');
+                await User.findByIdAndUpdate(req.user._id, { razorpayOrderId: order.id });
+            } else if (email) {
+                const User = require('../models/User');
+                await User.findOneAndUpdate({ email }, { razorpayOrderId: order.id });
+            }
+
+            // 5. Return Order Details to Frontend
             res.status(201).json({
                 success: true,
                 message: 'Resume uploaded, pending payment.',
@@ -103,9 +108,14 @@ exports.submitResume = (req, res) => {
             });
 
         } catch (error) {
+            console.error('Submit Resume Error:', error);
             // Rollback uploaded file if DB/Razorpay fails
             if (req.file) {
-                fs.unlinkSync(req.file.path);
+                try {
+                    fs.unlinkSync(req.file.path);
+                } catch (unlinkErr) {
+                    console.error('Failed to delete temp file:', unlinkErr);
+                }
             }
             res.status(500).json({ 
                 message: error.description || error.message || 'Payment provider error',
