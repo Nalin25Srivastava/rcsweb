@@ -13,6 +13,18 @@ export const fetchServices = createAsyncThunk('services/fetchAll', async (_, thu
     }
 });
 
+export const updateService = createAsyncThunk('services/update', async ({ id, serviceData }, thunkAPI) => {
+    try {
+        const token = thunkAPI.getState().auth.user.token;
+        const config = { headers: { Authorization: `Bearer ${token}` } };
+        const response = await axios.put(`${API_URL}/${id}`, serviceData, config);
+        return response.data;
+    } catch (error) {
+        const message = error.response?.data?.message || error.message || error.toString();
+        return thunkAPI.rejectWithValue(message);
+    }
+});
+
 const servicesSlice = createSlice({
     name: 'services',
     initialState: {
@@ -41,6 +53,21 @@ const servicesSlice = createSlice({
                 state.services = action.payload;
             })
             .addCase(fetchServices.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.message = action.payload;
+            })
+            .addCase(updateService.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(updateService.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.services = state.services.map((service) => 
+                    service.id === action.payload.id ? action.payload : service
+                );
+            })
+            .addCase(updateService.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.message = action.payload;

@@ -17,7 +17,8 @@ import {
     ArrowRight,
     Trash2,
     Pencil,
-    ShieldCheck
+    ShieldCheck,
+    AlertCircle
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
@@ -26,11 +27,13 @@ import { fetchJobs, deleteJob } from '../store/slices/jobsSlice';
 import { fetchPlacedStudents, deletePlacedStudent } from '../store/slices/placedStudentsSlice';
 import { fetchStats, deleteStat } from '../store/slices/statsSlice';
 import { fetchSlides, deleteSlide } from '../store/slices/carouselSlice';
+import { fetchServices } from '../store/slices/servicesSlice';
 import { logout, fetchUsers } from '../store/slices/authSlice';
 import PlacementModal from '../components/Admin/PlacementModal';
 import JobModal from '../components/Admin/JobModal';
 import StatModal from '../components/Admin/StatModal';
 import CarouselModal from '../components/Admin/CarouselModal';
+import ServiceEditModal from '../components/Admin/ServiceEditModal';
 
 const AdminPanel = () => {
     const dispatch = useDispatch();
@@ -40,6 +43,7 @@ const AdminPanel = () => {
     const { placedStudents } = useSelector((state) => state.placedStudents);
     const { stats } = useSelector((state) => state.stats);
     const { users } = useSelector((state) => state.auth);
+    const { services } = useSelector((state) => state.services);
 
     const [activeTab, setActiveTab] = useState('dashboard');
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -57,6 +61,10 @@ const AdminPanel = () => {
     const [statModalMode, setStatModalMode] = useState({ isEditing: false, stat: null });
 
     const [isCarouselModalOpen, setIsCarouselModalOpen] = useState(false);
+
+    // Service Modal State
+    const [isServiceModalOpen, setIsServiceModalOpen] = useState(false);
+    const [selectedService, setSelectedService] = useState(null);
 
     const handleAddJob = () => {
         setJobModalMode({ isEditing: false, job: null });
@@ -96,6 +104,11 @@ const AdminPanel = () => {
         }
     };
 
+    const handleEditService = (service) => {
+        setSelectedService(service);
+        setIsServiceModalOpen(true);
+    };
+
     const handleAddStudent = () => {
         setStudentModalMode({ isEditing: false, student: null });
         setIsStudentModalOpen(true);
@@ -124,6 +137,7 @@ const AdminPanel = () => {
         dispatch(fetchStats());
         dispatch(fetchSlides());
         dispatch(fetchUsers());
+        dispatch(fetchServices());
     }, [dispatch]);
 
     const getImageUrl = (image) => {
@@ -147,6 +161,7 @@ const AdminPanel = () => {
         { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
         { id: 'jobs', label: 'Manage Jobs', icon: Briefcase },
         { id: 'students', label: 'Placed Students', icon: Users },
+        { id: 'services', label: 'Platform Services', icon: LayoutDashboard },
         { id: 'stats', label: 'Statistics', icon: BarChart3 },
         { id: 'carousel', label: 'Carousel Slider', icon: ImageIcon },
         { id: 'settings', label: 'Settings', icon: Settings },
@@ -182,6 +197,13 @@ const AdminPanel = () => {
                         onAdd={handleAddStat}
                         onEdit={handleEditStat}
                         onDelete={handleDeleteStat}
+                    />
+                );
+            case 'services':
+                return (
+                    <ServiceManagementView 
+                        services={services || []} 
+                        onEdit={handleEditService}
                     />
                 );
             case 'carousel':
@@ -346,6 +368,12 @@ const AdminPanel = () => {
                 <CarouselModal 
                     isOpen={isCarouselModalOpen}
                     onClose={() => setIsCarouselModalOpen(false)}
+                />
+
+                <ServiceEditModal 
+                    isOpen={isServiceModalOpen}
+                    onClose={() => setIsServiceModalOpen(false)}
+                    service={selectedService}
                 />
             </main>
         </div>
@@ -611,6 +639,49 @@ const CarouselManagementView = ({ slides = [], onAdd, onDelete, getImageUrl }) =
                         <div className="p-4 bg-slate-50 flex items-center justify-between">
                             <span className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Slide Order: {slide.order}</span>
                             <span className="text-[10px] font-black uppercase text-emerald-600 bg-emerald-50 px-2 py-1 rounded border border-emerald-100">Active</span>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
+
+const ServiceManagementView = ({ services = [], onEdit }) => {
+    return (
+        <div className="space-y-6">
+            <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-black text-slate-900">Platform Services Management</h2>
+                <div className="bg-amber-50 text-amber-600 px-4 py-2 rounded-xl border border-amber-100 flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4" />
+                    <span className="text-xs font-black uppercase tracking-widest">Read-Only Order</span>
+                </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {(services || []).map((service, i) => (
+                    <div key={i} className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm relative group transition-all hover:shadow-xl hover:shadow-slate-200">
+                        <div className="flex justify-between items-start mb-6">
+                            <div className={`p-4 ${service.color} rounded-2xl`}>
+                                <LayoutDashboard className="w-6 h-6" />
+                            </div>
+                            <button 
+                                onClick={() => onEdit(service)}
+                                className="p-3 bg-slate-900 text-white rounded-xl shadow-lg hover:bg-emerald-500 transition-all transform hover:scale-105"
+                            >
+                                <Pencil className="w-5 h-5" />
+                            </button>
+                        </div>
+                        
+                        <h4 className="text-xl font-black text-slate-900 mb-2">{service.title}</h4>
+                        <p className="text-slate-500 font-bold text-sm leading-relaxed mb-6 line-clamp-2">{service.shortDesc}</p>
+                        
+                        <div className="flex items-center justify-between pt-6 border-t border-slate-50">
+                            <div className="flex items-center gap-2">
+                                <div className={`w-2 h-2 rounded-full ${service.accentColor.replace('text-', 'bg-')}`}></div>
+                                <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Order: {service.order}</span>
+                            </div>
+                            <span className="text-[10px] font-black uppercase tracking-widest text-emerald-600 bg-emerald-50 px-2 py-1 rounded">Active</span>
                         </div>
                     </div>
                 ))}

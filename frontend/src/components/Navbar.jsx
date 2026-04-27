@@ -35,7 +35,7 @@ const Navbar = () => {
 
     return (
         <nav className="fixed top-0 left-0 w-full z-50 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-10">
                 <div className="mt-3 flex justify-between h-14 items-center">
 
                     {/* Logo */}
@@ -46,8 +46,8 @@ const Navbar = () => {
                     </div>
 
                     {/* Desktop Links & Auth */}
-                    <div className="hidden lg:flex items-center space-x-8">
-                        <div className="flex space-x-6">
+                    <div className="hidden lg:flex items-center space-x-6">
+                        <div className="flex space-x-4">
                             {navLinks
                                 .filter(link => {
                                     if (!user && (link.name === 'Registration' || link.name === 'Contact Us')) return false
