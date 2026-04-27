@@ -53,7 +53,7 @@ const Contact = () => {
     };
 
     return (
-        <div className="bg-slate-50 min-h-screen">
+        <div className="bg-slate-50 dark:bg-slate-950 min-h-screen transition-colors duration-300">
             {/* Header */}
             <div className="relative bg-slate-900 py-32 px-4 overflow-hidden flex flex-col items-center">
                 <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center opacity-20"></div>
@@ -87,15 +87,15 @@ const Contact = () => {
                     {/* Contact Info */}
                     <div className="lg:col-span-1 space-y-12">
                         <div>
-                            <h2 className="text-3xl font-black text-slate-900 mb-8 tracking-tight">Support Network</h2>
+                            <h2 className="text-3xl font-black text-slate-900 dark:text-white mb-8 tracking-tight">Support Network</h2>
                             <div className="space-y-8">
                                 <motion.div whileHover={{ x: 10 }} className="flex gap-6 group">
-                                    <div className="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-white transition-colors flex-shrink-0">
+                                    <div className="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-white transition-colors flex-shrink-0">
                                         <MapPin className="w-6 h-6" />
                                     </div>
                                     <div>
-                                        <h3 className="font-bold text-slate-900 text-lg mb-1">Headquarters</h3>
-                                        <p className="text-slate-500 font-medium whitespace-pre-line">Building No. 645, Behind Allahabad Bank,<br/>In front of Gumanpura Thana, Aerodrome Circle,<br/>Kota, Rajasthan - 324001</p>
+                                        <h3 className="font-bold text-slate-900 dark:text-white text-lg mb-1">Headquarters</h3>
+                                        <p className="text-slate-500 dark:text-slate-400 font-medium whitespace-pre-line">Building No. 645, Behind Allahabad Bank,<br/>In front of Gumanpura Thana, Aerodrome Circle,<br/>Kota, Rajasthan - 324001</p>
                                     </div>
                                 </motion.div>
 
@@ -153,28 +153,6 @@ const Contact = () => {
                                         exit={{ opacity: 0, height: 0, marginBottom: 0 }}
                                         className={`px-6 py-4 rounded-xl flex items-center gap-4 ${isSuccess && !formError ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700'}`}
                                     >
-                                        {isSuccess && !formError ? <CheckCircle2 className="w-6 h-6 flex-shrink-0" /> : <AlertCircle className="w-6 h-6 flex-shrink-0" />}
-                                        <p className="font-bold">{formError || message || (isSuccess ? 'Message sent successfully!' : 'Something went wrong.')}</p>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
-
-                            <div className="grid md:grid-cols-2 gap-6 mb-6">
-                                <div className="space-y-2">
-                                    <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Full Name</label>
-                                    <input
-                                        type="text"
-                                        name="fullName"
-                                        value={formData.fullName}
-                                        onChange={(e) => handleInputChange(e, 'fullName')}
-                                        required
-                                        className="w-full bg-slate-50 border border-slate-200 focus:border-emerald-500 focus:bg-white rounded-xl py-4 px-5 outline-none transition-all text-slate-900 font-bold shadow-sm"
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Phone Number</label>
-                                    <input
-                                        type="tel"
                                         name="phone"
                                         value={formData.phone}
                                         onChange={(e) => handleInputChange(e, 'phone')}
