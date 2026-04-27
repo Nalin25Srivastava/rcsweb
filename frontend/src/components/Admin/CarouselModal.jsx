@@ -13,10 +13,12 @@ const CarouselModal = ({ isOpen, onClose }) => {
         url: ''
     });
     const [preview, setPreview] = useState(null);
+    const [fileType, setFileType] = useState('image'); // 'image' or 'video'
 
-    const handleImageChange = (e) => {
+    const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
+            setFileType(file.type.startsWith('video') ? 'video' : 'image');
             const reader = new FileReader();
             reader.onloadend = () => {
                 setPreview(reader.result);
@@ -29,7 +31,7 @@ const CarouselModal = ({ isOpen, onClose }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!formData.url) {
-            alert('Please select an image');
+            alert('Please select a file');
             return;
         }
         await dispatch(createSlide(formData));
@@ -62,16 +64,20 @@ const CarouselModal = ({ isOpen, onClose }) => {
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-6">
-                        {/* Image Upload Area */}
+                        {/* File Upload Area */}
                         <div className="relative group">
                             <div className={`aspect-video rounded-3xl border-4 border-dashed transition-all overflow-hidden flex flex-col items-center justify-center gap-4 ${preview ? 'border-emerald-500' : 'border-slate-100 bg-slate-50 hover:border-emerald-300'}`}>
                                 {preview ? (
                                     <>
-                                        <img src={preview} alt="Preview" className="w-full h-full object-cover" />
+                                        {fileType === 'video' ? (
+                                            <video src={preview} className="w-full h-full object-cover" autoPlay muted loop />
+                                        ) : (
+                                            <img src={preview} alt="Preview" className="w-full h-full object-cover" />
+                                        )}
                                         <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                             <label className="bg-white text-slate-900 px-6 py-3 rounded-xl font-bold cursor-pointer hover:bg-emerald-50 transition-colors flex items-center gap-2">
-                                                <Upload className="w-5 h-5" /> Change Image
-                                                <input type="file" className="hidden" accept="image/*" onChange={handleImageChange} />
+                                                <Upload className="w-5 h-5" /> Change File
+                                                <input type="file" className="hidden" accept="image/*,video/*" onChange={handleFileChange} />
                                             </label>
                                         </div>
                                     </>
@@ -80,9 +86,9 @@ const CarouselModal = ({ isOpen, onClose }) => {
                                         <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-slate-400 group-hover:text-emerald-500 shadow-sm mb-2 transition-colors">
                                             <Upload className="w-8 h-8" />
                                         </div>
-                                        <span className="text-slate-500 font-bold">Click to upload slide image</span>
+                                        <span className="text-slate-500 font-bold">Click to upload image or video</span>
                                         <span className="text-slate-400 text-xs font-medium">1920x1080 recommended</span>
-                                        <input type="file" className="hidden" accept="image/*" onChange={handleImageChange} />
+                                        <input type="file" className="hidden" accept="image/*,video/*" onChange={handleFileChange} />
                                     </label>
                                 )}
                             </div>

@@ -29,14 +29,15 @@ const storage = multer.diskStorage({
 const upload = multer({
     storage: storage,
     fileFilter: (req, file, cb) => {
-        const filetypes = /pdf|doc|docx/;
+        // Allow images, videos, and common documents
+        const filetypes = /jpeg|jpg|png|webp|gif|svg|mp4|webm|ogg|pdf|doc|docx|txt|xls|xlsx|ppt|pptx|zip|rar/;
         const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
         const mimetype = filetypes.test(file.mimetype);
 
-        if (extname && mimetype) {
+        if (extname || mimetype) {
             return cb(null, true);
         } else {
-            cb(new Error('Only resumes (PDF, DOC, DOCX) are allowed!'));
+            cb(new Error('File format not supported! Please upload images, videos, or documents.'));
         }
     }
 }).single('resume');

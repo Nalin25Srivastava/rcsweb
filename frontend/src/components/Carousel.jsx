@@ -34,6 +34,11 @@ const Carousel = () => {
         }
     }, [currentIndex, slides]);
 
+    const isVideo = (url) => {
+        if (!url) return false;
+        return url.match(/\.(mp4|webm|ogg)$/i) || url.startsWith('data:video');
+    };
+
     if (isLoading) {
         return (
             <div className="h-screen w-full bg-slate-900 flex items-center justify-center">
@@ -47,10 +52,24 @@ const Carousel = () => {
     return (
         <div className="relative h-[60vh] md:h-[75vh] lg:h-screen w-full group overflow-hidden">
             {/* Slides */}
-            <div
-                style={{ backgroundImage: `url(${slides[currentIndex].url})` }}
-                className="w-full h-full bg-center bg-cover duration-700 ease-in-out relative flex items-center justify-center transition-all bg-no-repeat"
-            >
+            <div className="w-full h-full relative flex items-center justify-center transition-all">
+                {isVideo(slides[currentIndex].url) ? (
+                    <video 
+                        key={slides[currentIndex].url}
+                        src={slides[currentIndex].url} 
+                        autoPlay 
+                        loop 
+                        muted 
+                        playsInline
+                        className="absolute inset-0 w-full h-full object-cover"
+                    />
+                ) : (
+                    <div
+                        style={{ backgroundImage: `url(${slides[currentIndex].url})` }}
+                        className="absolute inset-0 w-full h-full bg-center bg-cover duration-700 ease-in-out bg-no-repeat"
+                    ></div>
+                )}
+                
                 {/* Overlay */}
                 <div className="absolute inset-0 bg-black/40"></div>
 

@@ -49,13 +49,18 @@ const PlacementModal = ({ isOpen, onClose, student = null, isEditing = false }) 
         return `/images/${url}`;
     };
 
+    const isVideo = (url) => {
+        if (!url) return false;
+        return url.match(/\.(mp4|webm|ogg)$/i) || url.startsWith('data:video');
+    };
+
     const handleFileUpload = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
 
-        // Limit file size to 2MB for Base64 storage in MongoDB
-        if (file.size > 2 * 1024 * 1024) {
-            alert('File is too large. Please select an image under 2MB.');
+        // Limit file size to 50MB for media
+        if (file.size > 50 * 1024 * 1024) {
+            alert('File is too large. Please select a file under 50MB.');
             return;
         }
 
@@ -67,12 +72,11 @@ const PlacementModal = ({ isOpen, onClose, student = null, isEditing = false }) 
             reader.onload = () => {
                 const base64String = reader.result;
                 setFormData({ ...formData, image: base64String });
-                console.log('Image converted to Base64 successfully');
                 setIsUploading(false);
             };
             reader.onerror = (error) => {
                 console.error('Base64 conversion error:', error);
-                alert('Failed to process image file.');
+                alert('Failed to process file.');
                 setIsUploading(false);
             };
         } catch (error) {
@@ -160,15 +164,19 @@ const PlacementModal = ({ isOpen, onClose, student = null, isEditing = false }) 
                             </div>
 
                             <div className="space-y-4">
-                                <label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Candidate Photo</label>
+                                <label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Candidate Media (Photo/Video)</label>
                                 
                                 <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
                                     <div className="w-24 h-24 rounded-2xl bg-slate-100 border-2 border-slate-100 overflow-hidden flex-shrink-0 shadow-inner group relative">
-                                        <img 
-                                            src={getImageUrl(formData.image)} 
-                                            alt="Preview" 
-                                            className="w-full h-full object-cover"
-                                        />
+                                        {isVideo(formData.image) ? (
+                                            <video src={getImageUrl(formData.image)} className="w-full h-full object-cover" autoPlay muted loop />
+                                        ) : (
+                                            <img 
+                                                src={getImageUrl(formData.image)} 
+                                                alt="Preview" 
+                                                className="w-full h-full object-cover"
+                                            />
+                                        )}
                                         {isUploading && (
                                             <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center">
                                                 <Loader2 className="w-6 h-6 text-emerald-500 animate-spin" />
@@ -183,7 +191,7 @@ const PlacementModal = ({ isOpen, onClose, student = null, isEditing = false }) 
                                                 ref={fileInputRef}
                                                 onChange={handleFileUpload}
                                                 className="hidden"
-                                                accept="image/*"
+                                                accept="image/*,video/*"
                                             />
                                             <button 
                                                 type="button"
@@ -192,13 +200,13 @@ const PlacementModal = ({ isOpen, onClose, student = null, isEditing = false }) 
                                                 className="flex-1 px-4 py-3 bg-white border-2 border-slate-200 hover:border-emerald-500 rounded-xl text-sm font-bold text-slate-700 transition-all flex items-center justify-center gap-2 shadow-sm"
                                             >
                                                 <Upload className="w-4 h-4" />
-                                                {isUploading ? 'Processing...' : 'Process Image'}
+                                                {isUploading ? 'Processing...' : 'Process Media'}
                                             </button>
                                         </div>
                                         <div className="relative">
                                             <input 
                                                 className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:border-emerald-500 focus:bg-white transition-all outline-none text-xs font-medium text-slate-600 placeholder:text-slate-300"
-                                                placeholder="Or type local filename (e.g. photo1.jpg)"
+                                                placeholder="Or type local filename"
                                                 value={formData.image}
                                                 onChange={(e) => setFormData({...formData, image: e.target.value})}
                                             />

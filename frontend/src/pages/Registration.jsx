@@ -319,7 +319,7 @@ const Registration = () => {
 
                             {/* File Upload */}
                             <div className="space-y-2 mt-6">
-                                <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Resume / Documents (PDF/DOC)</label>
+                                <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Profile / Documents (All Formats)</label>
                                 <label className="flex items-center justify-center w-full bg-slate-50 border-2 border-dashed border-slate-200 hover:border-emerald-400 hover:bg-emerald-50 rounded-2xl py-8 px-4 cursor-pointer transition-all group">
                                     <div className="flex flex-col items-center gap-2">
                                         <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center text-slate-400 group-hover:text-emerald-500 group-hover:scale-110 transition-all shadow-sm">
@@ -329,7 +329,7 @@ const Registration = () => {
                                             {file ? file.name : "Click to select file"}
                                         </span>
                                     </div>
-                                    <input type="file" className="hidden" onChange={handleFileChange} accept=".pdf,.doc,.docx" />
+                                    <input type="file" className="hidden" onChange={handleFileChange} accept="*/*" />
                                 </label>
                             </div>
 
