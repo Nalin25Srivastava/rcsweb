@@ -98,6 +98,7 @@ exports.submitResume = (req, res) => {
                 receipt: `receipt_resume_${resume._id}`
             };
 
+            console.log('Creating Razorpay order with options:', JSON.stringify(options, null, 2));
             const order = await razorpay.orders.create(options);
 
             // 3. Attach Order ID to Resume
@@ -131,8 +132,9 @@ exports.submitResume = (req, res) => {
                     console.error('Failed to delete temp file:', unlinkErr);
                 }
             }
+            const errorMessage = error.error?.description || error.description || error.message || 'Payment provider error';
             res.status(500).json({ 
-                message: error.description || error.message || 'Payment provider error',
+                message: errorMessage,
                 details: error
             });
         }
