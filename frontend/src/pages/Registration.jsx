@@ -115,7 +115,7 @@ const Registration = () => {
                     setIsVerifying(true);
                     
                     try {
-                        // 4. Client-side Verification (Instant fallback to Webhook)
+                        // 4. Client-side Verification
                         await dispatch(verifyRegistrationPayment({
                             razorpay_order_id: response.razorpay_order_id,
                             razorpay_payment_id: response.razorpay_payment_id,
@@ -168,9 +168,33 @@ const Registration = () => {
                                         method: "upi"
                                     }
                                 ]
+                            },
+                            cards: {
+                                name: "Cards (Debit/Credit)",
+                                instruments: [
+                                    {
+                                        method: "card"
+                                    }
+                                ]
+                            },
+                            netbanking: {
+                                name: "Netbanking",
+                                instruments: [
+                                    {
+                                        method: "netbanking"
+                                    }
+                                ]
+                            },
+                            wallet: {
+                                name: "Wallets",
+                                instruments: [
+                                    {
+                                        method: "wallet"
+                                    }
+                                ]
                             }
                         },
-                        sequence: ["block.upi"],
+                        sequence: ["block.upi", "block.cards", "block.netbanking", "block.wallet"],
                         preferences: {
                             show_default_blocks: true
                         }
