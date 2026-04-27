@@ -83,14 +83,29 @@ const Navbar = () => {
                         </div>
                     </div>
 
-                    {/* Theme Toggle */}
-                    <button
-                        onClick={toggleTheme}
-                        className="p-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-[#00c57d] transition-all border border-slate-100 dark:border-slate-700 shadow-sm active:scale-95"
-                        aria-label="Toggle Theme"
-                    >
-                        {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
-                    </button>
+                    {/* Theme Toggle Switch */}
+                    <div className="relative flex items-center mr-4">
+                        <button
+                            onClick={toggleTheme}
+                            className="relative w-16 h-8 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 transition-colors duration-500 flex items-center px-1 group shadow-inner"
+                            aria-label="Toggle Theme"
+                        >
+                            {/* Sliding Circle */}
+                            <motion.div 
+                                animate={{ x: theme === 'light' ? 0 : 32 }}
+                                transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                                className="z-10 w-6 h-6 rounded-full bg-white dark:bg-emerald-500 shadow-md flex items-center justify-center border border-slate-200 dark:border-emerald-400"
+                            >
+                                {theme === 'light' ? <Sun className="w-3.5 h-3.5 text-amber-500" /> : <Moon className="w-3.5 h-3.5 text-white" />}
+                            </motion.div>
+                            
+                            {/* Background Symbols */}
+                            <div className="absolute inset-0 flex items-center justify-between px-2 text-slate-400">
+                                <Sun className={`w-3.5 h-3.5 transition-opacity ${theme === 'light' ? 'opacity-0' : 'opacity-40'}`} />
+                                <Moon className={`w-3.5 h-3.5 transition-opacity ${theme === 'dark' ? 'opacity-0' : 'opacity-40'}`} />
+                            </div>
+                        </button>
+                    </div>
 
                     <div className="h-8 w-px bg-slate-100 dark:bg-slate-800 mx-2"></div>
 
