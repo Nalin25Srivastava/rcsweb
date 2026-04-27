@@ -1,97 +1,83 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Briefcase, GraduationCap, Users, Monitor, BarChart, Clock, CheckCircle2, ChevronRight } from 'lucide-react';
+import { fetchServices, reset as resetServices } from '../store/slices/servicesSlice';
 
-const services = [
-    {
-        id: 'career-development',
-        title: 'Career Development',
-        shortDesc: 'Strategic career mapping and professional optimization.',
-        description: 'Our Career Development program is designed to transform candidates into high-value professionals. We provide personalized roadmaps that align your skills with market demands, ensuring you don\'t just find a job, but build a career.',
-        features: ['Resume & LinkedIn Optimization', 'Personal Branding Workshops', 'Interview Simulation & Coaching', 'Long-term Career Pathing'],
-        icon: <GraduationCap className="w-8 h-8" />,
-        color: 'bg-emerald-50 text-emerald-600',
-        borderColor: 'border-emerald-200',
-        accentColor: 'text-emerald-500'
-    },
-    {
-        id: 'permanent-recruitment',
-        title: 'Permanent Recruitment',
-        shortDesc: 'Strategic hiring for long-term organizational growth.',
-        description: 'We specialize in finding the "perfect fit" for permanent roles. Our deep-dive screening process evaluates not just technical competency, but cultural alignment, ensuring high retention rates and immediate impact for organizations.',
-        features: ['Executive Search & Headhunting', 'Technical Competency Mapping', 'Cultural Alignment Assessment', 'Retention Strategy Consulting'],
-        icon: <Users className="w-8 h-8" />,
-        color: 'bg-blue-50 text-blue-600',
-        borderColor: 'border-blue-200',
-        accentColor: 'text-blue-500'
-    },
-    {
-        id: 'campus-recruitment',
-        title: 'Campus Recruitment',
-        shortDesc: 'Connecting fresh talent with industry leaders.',
-        description: 'Bridging the gap between academia and the corporate world. We partner with premier institutions to identify raw talent and facilitate seamless transitions into professional roles through structured campus drives.',
-        features: ['University Relationship Management', 'Pre-placement Talk Orchestration', 'Aptitude & Technical Testing', 'On-campus Interview Logistics'],
-        icon: <Briefcase className="w-8 h-8" />,
-        color: 'bg-amber-50 text-amber-600',
-        borderColor: 'border-amber-200',
-        accentColor: 'text-amber-500'
-    },
-    {
-        id: 'it-services',
-        title: 'IT Services',
-        shortDesc: 'Specialized staffing for the technology ecosystem.',
-        description: 'From software architecture to cybersecurity, our IT services focus on placing highly skilled tech professionals in roles where they can drive innovation. We understand the nuances of modern tech stacks and agile methodologies.',
-        features: ['Full-stack Developer Sourcing', 'Cloud & DevOps Specialists', 'Cybersecurity Expert Placement', 'Project-based Tech Staffing'],
-        icon: <Monitor className="w-8 h-8" />,
-        color: 'bg-purple-50 text-purple-600',
-        borderColor: 'border-purple-200',
-        accentColor: 'text-purple-500'
-    },
-    {
-        id: 'marketing',
-        title: 'Marketing',
-        shortDesc: 'Finding growth drivers and brand builders.',
-        description: 'In a digital-first world, your marketing team is your growth engine. We source professionals who blend creative thinking with data-driven strategy to build brands and scale customer acquisition across all channels.',
-        features: ['Performance Marketing Leads', 'Brand Strategy Consultants', 'Content & Creative Directors', 'SEO & SEM Specialists'],
-        icon: <BarChart className="w-8 h-8" />,
-        color: 'bg-rose-50 text-rose-600',
-        borderColor: 'border-rose-200',
-        accentColor: 'text-rose-500'
-    },
-    {
-        id: 'temporary-recruitment',
-        title: 'Temporary Recruitment',
-        shortDesc: 'Flexible staffing for dynamic business needs.',
-        description: 'Agility is key to modern business. Our temporary recruitment services provide rapid access to skilled professionals for short-term projects, seasonal surges, or specialized tasks without the long-term overhead.',
-        features: ['Contractual Talent Sourcing', 'Seasonal Peak Management', 'Replacement Staffing Solutions', 'Compliance & Payroll Handling'],
-        icon: <Clock className="w-8 h-8" />,
-        color: 'bg-indigo-50 text-indigo-600',
-        borderColor: 'border-indigo-200',
-        accentColor: 'text-indigo-500'
+const getIcon = (iconName) => {
+    const iconProps = { className: "w-full h-full" };
+    switch (iconName) {
+        case 'GraduationCap': return <GraduationCap {...iconProps} />;
+        case 'Users': return <Users {...iconProps} />;
+        case 'Briefcase': return <Briefcase {...iconProps} />;
+        case 'Monitor': return <Monitor {...iconProps} />;
+        case 'BarChart': return <BarChart {...iconProps} />;
+        case 'Clock': return <Clock {...iconProps} />;
+        default: return <Briefcase {...iconProps} />;
     }
-];
+};
 
 const Services = () => {
+    const dispatch = useDispatch();
     const { hash } = useLocation();
-    const [activeTabId, setActiveTabId] = useState(services[0].id);
+    const { services, isLoading, isError, message } = useSelector((state) => state.services);
+    const [activeTabId, setActiveTabId] = useState(null);
 
     useEffect(() => {
-        if (hash) {
-            const id = hash.replace('#', '');
-            const service = services.find(s => s.id === id);
-            if (service) {
-                setActiveTabId(id);
-                // Smooth scroll to the tabs section
-                const element = document.getElementById('services-tabs-container');
-                if (element) {
-                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        dispatch(fetchServices());
+        return () => dispatch(resetServices());
+    }, [dispatch]);
+
+    useEffect(() => {
+        if (services.length > 0) {
+            if (hash) {
+                const id = hash.replace('#', '');
+                const service = services.find(s => s.id === id);
+                if (service) {
+                    setActiveTabId(id);
+                    const element = document.getElementById('services-tabs-container');
+                    if (element) {
+                        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                } else {
+                    setActiveTabId(services[0].id);
                 }
+            } else if (!activeTabId) {
+                setActiveTabId(services[0].id);
             }
         }
-    }, [hash]);
+    }, [hash, services]);
 
-    const activeService = services.find(s => s.id === activeTabId) || services[0];
+    const activeService = services.find(s => s.id === activeTabId) || (services.length > 0 ? services[0] : null);
+
+    if (isLoading && services.length === 0) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-slate-900 text-white">
+                <div className="flex flex-col items-center gap-6">
+                    <div className="w-16 h-16 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin"></div>
+                    <p className="font-black uppercase tracking-[0.4em] text-sm animate-pulse">Initializing Excellence</p>
+                </div>
+            </div>
+        );
+    }
+
+    if (isError && services.length === 0) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
+                <div className="bg-white p-12 rounded-[3rem] shadow-2xl border border-red-100 text-center max-w-lg">
+                    <div className="w-20 h-20 bg-red-50 text-red-500 rounded-3xl flex items-center justify-center mx-auto mb-6">
+                        <Monitor className="w-10 h-10" />
+                    </div>
+                    <h2 className="text-3xl font-black text-slate-900 mb-4">Connection Failed</h2>
+                    <p className="text-slate-500 font-medium mb-8">{message}</p>
+                    <button onClick={() => dispatch(fetchServices())} className="px-8 py-4 bg-slate-900 text-white font-black uppercase tracking-widest rounded-2xl">Retry Connection</button>
+                </div>
+            </div>
+        );
+    }
+
+    if (!activeService) return null;
 
     return (
         <div className="bg-slate-50 min-h-screen pb-20">
@@ -129,7 +115,7 @@ const Services = () => {
                             }`}
                         >
                             <div className={`w-12 h-12 ${service.color} rounded-2xl flex items-center justify-center mb-4 transition-transform duration-500 ${activeTabId === service.id ? 'scale-110 rotate-3' : 'group-hover:scale-110'}`}>
-                                {service.icon}
+                                {getIcon(service.iconName)}
                             </div>
                             <h3 className={`text-[10px] md:text-xs font-black uppercase tracking-widest leading-tight ${activeTabId === service.id ? 'text-slate-900' : 'text-slate-400'}`}>
                                 {service.title}
@@ -166,7 +152,7 @@ const Services = () => {
                                     transition={{ delay: 0.2, type: "spring", stiffness: 100 }}
                                     className={`w-48 h-48 md:w-64 md:h-64 rounded-[3rem] ${activeService.color} flex items-center justify-center shadow-inner`}
                                 >
-                                    {React.cloneElement(activeService.icon, { className: "w-24 h-24 md:w-32 md:h-32" })}
+                                    {getIcon(activeService.iconName)}
                                 </motion.div>
                             </div>
                             {/* Decorative Elements */}
