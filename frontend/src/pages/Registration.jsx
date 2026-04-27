@@ -225,9 +225,9 @@ const Registration = () => {
     };
 
     return (
-        <div className="bg-slate-50 min-h-screen py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+        <div className="bg-slate-50 dark:bg-slate-950 min-h-screen py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center transition-colors duration-300">
             
-            <div className="max-w-6xl w-full bg-white rounded-[2.5rem] shadow-2xl shadow-slate-200/50 overflow-hidden flex flex-col lg:flex-row border border-slate-100">
+            <div className="max-w-6xl w-full bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl shadow-slate-200/50 dark:shadow-none overflow-hidden flex flex-col lg:flex-row border border-slate-100 dark:border-slate-800">
                 
                 {/* Left Side: Info & Branding */}
                 <div className="lg:w-5/12 bg-slate-900 p-12 text-white flex flex-col relative overflow-hidden">
@@ -241,7 +241,7 @@ const Registration = () => {
                         <h2 className="text-4xl lg:text-5xl font-black mb-6 tracking-tight leading-tight">
                             Candidate <span className="text-emerald-400">Registration</span>
                         </h2>
-                        <p className="text-slate-300 font-medium text-lg leading-relaxed mb-10">
+                        <p className="text-slate-300 dark:text-slate-400 font-medium text-lg leading-relaxed mb-10">
                             Complete your registration to unlock premium hiring tools, enterprise client access, and 24/7 dedicated placement support.
                         </p>
 
@@ -311,7 +311,7 @@ const Registration = () => {
                         <div className={`transition-opacity duration-500 ${paymentStatus === 'success' || isVerifying ? 'opacity-30 pointer-events-none' : 'opacity-100'}`}>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
-                                    <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">First Name</label>
+                                    <label className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">First Name</label>
                                     <input
                                         type="text"
                                         name="firstName"
@@ -319,12 +319,12 @@ const Registration = () => {
                                         onChange={handleChange}
                                         required
                                         readOnly
-                                        className="w-full bg-slate-100 border-2 border-slate-100 focus:border-slate-200 rounded-xl py-3 px-4 outline-none transition-all text-slate-500 font-bold cursor-not-allowed"
+                                        className="w-full bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-xl py-3 px-4 outline-none transition-all text-slate-500 dark:text-slate-400 font-bold cursor-not-allowed"
                                         title="Fetched from account"
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Last Name</label>
+                                    <label className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">Last Name</label>
                                     <input
                                         type="text"
                                         name="lastName"
@@ -332,12 +332,12 @@ const Registration = () => {
                                         onChange={handleChange}
                                         required
                                         readOnly
-                                        className="w-full bg-slate-100 border-2 border-slate-100 focus:border-slate-200 rounded-xl py-3 px-4 outline-none transition-all text-slate-500 font-bold cursor-not-allowed"
+                                        className="w-full bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-xl py-3 px-4 outline-none transition-all text-slate-500 dark:text-slate-400 font-bold cursor-not-allowed"
                                         title="Fetched from account"
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Email Address</label>
+                                    <label className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">Email Address</label>
                                     <input
                                         type="email"
                                         name="email"
@@ -345,29 +345,29 @@ const Registration = () => {
                                         onChange={handleChange}
                                         required
                                         readOnly
-                                        className="w-full bg-slate-100 border-2 border-slate-100 focus:border-slate-200 rounded-xl py-3 px-4 outline-none transition-all text-slate-500 font-bold cursor-not-allowed"
+                                        className="w-full bg-slate-100 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-xl py-3 px-4 outline-none transition-all text-slate-500 dark:text-slate-400 font-bold cursor-not-allowed"
                                         title="Fetched from account"
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Phone Number</label>
+                                    <label className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">Phone Number</label>
                                     <input
                                         type="tel"
                                         name="phone"
                                         value={formData.phone}
                                         onChange={handleChange}
                                         required
-                                        className="w-full bg-slate-50 border-2 border-slate-50 focus:border-emerald-500 focus:bg-white rounded-xl py-3 px-4 outline-none transition-all text-slate-900 font-bold"
+                                        className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-slate-50 dark:border-slate-700 focus:border-emerald-500 dark:focus:border-emerald-500 dark:bg-slate-800 rounded-xl py-3 px-4 outline-none transition-all text-slate-900 dark:text-white font-bold"
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Primary Domain</label>
+                                    <label className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">Primary Domain</label>
                                     <select 
                                         name="functionalArea"
                                         value={formData.functionalArea}
                                         onChange={handleChange}
                                         required
-                                        className="w-full bg-slate-50 border-2 border-slate-50 focus:border-emerald-500 focus:bg-white rounded-xl py-3 px-4 outline-none transition-all text-slate-900 font-bold appearance-none cursor-pointer"
+                                        className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-slate-50 dark:border-slate-700 focus:border-emerald-500 dark:focus:border-emerald-500 rounded-xl py-3 px-4 outline-none transition-all text-slate-900 dark:text-white font-bold appearance-none cursor-pointer"
                                     >
                                         <option value="" disabled>-Select Domain-</option>
                                         <option value="Information Technology">Information Technology</option>
@@ -382,22 +382,37 @@ const Registration = () => {
 
                             {/* File Upload */}
                             <div className="space-y-2 mt-6">
-                                <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Profile / Documents (All Formats)</label>
-                                <label className="flex items-center justify-center w-full bg-slate-50 border-2 border-dashed border-slate-200 hover:border-emerald-400 hover:bg-emerald-50 rounded-2xl py-8 px-4 cursor-pointer transition-all group">
-                                    <div className="flex flex-col items-center gap-2">
-                                        <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center text-slate-400 group-hover:text-emerald-500 group-hover:scale-110 transition-all shadow-sm">
-                                            <Upload className="w-5 h-5" />
+                                <label className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">Profile / Documents (All Formats)</label>
+                                <div className="relative">
+                                    <input
+                                        type="file"
+                                        onChange={handleFileChange}
+                                        accept="*/*"
+                                        id="file-upload"
+                                        className="hidden"
+                                    />
+                                    <label 
+                                        htmlFor="file-upload"
+                                        className="w-full flex items-center justify-between bg-slate-50 dark:bg-slate-800 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl py-8 px-6 cursor-pointer hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/5 transition-all group"
+                                    >
+                                        <div className="flex items-center gap-4">
+                                            <div className="p-3 bg-white dark:bg-slate-700 rounded-xl shadow-sm text-slate-400 dark:text-slate-300 group-hover:text-emerald-500 group-hover:scale-110 transition-all">
+                                                <Upload className="w-6 h-6" />
+                                            </div>
+                                            <div>
+                                                <p className="font-black text-slate-900 dark:text-white text-sm">
+                                                    {file ? file.name : 'Upload Profile'}
+                                                </p>
+                                                <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mt-1">Select your resume or document</p>
+                                            </div>
                                         </div>
-                                        <span className="font-bold text-slate-600 group-hover:text-emerald-600 text-sm mt-2 text-center max-w-[200px] truncate">
-                                            {file ? file.name : "Click to select file"}
-                                        </span>
-                                    </div>
-                                    <input type="file" className="hidden" onChange={handleFileChange} accept="*/*" />
-                                </label>
+                                        {file && <CheckCircle className="w-6 h-6 text-emerald-500" />}
+                                    </label>
+                                </div>
                             </div>
 
                             {/* Payment & Submit */}
-                            <div className="bg-slate-50 rounded-2xl p-6 border border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-6 mt-8">
+                            <div className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-6 border border-slate-100 dark:border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-6 mt-8">
                                 <div>
                                     <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Registration Fee</p>
                                     <p className="text-3xl font-black text-slate-900 flex items-center gap-2">
