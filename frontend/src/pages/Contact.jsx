@@ -14,21 +14,16 @@ const Contact = () => {
 
     useEffect(() => {
         if (isSuccess) {
-            // Trigger WhatsApp redirect
             const waMessage = `*New Contact Enquiry - RCS*\n\n*Name:* ${formData.fullName}\n*Phone:* ${formData.phone}\n*Email:* ${formData.email}\n*Subject:* ${formData.subject}\n\n*Message:* ${formData.message}`;
             const encodedMsg = encodeURIComponent(waMessage);
             const waUrl = `https://wa.me/919783945080?text=${encodedMsg}`;
             
-            // Small delay to let user see success message before redirect
-            setTimeout(() => {
-                window.open(waUrl, '_blank');
-            }, 1000);
-
-            setFormData({ fullName: '', phone: '', email: '', subject: '', message: '' });
+            // Try to open automatically
+            window.open(waUrl, '_blank');
         }
         const timer = setTimeout(() => {
             if (isSuccess || isError) dispatch(reset());
-        }, 5000);
+        }, 8000); // Increased time to allow user to click manual button if needed
         return () => clearTimeout(timer);
     }, [isSuccess, isError, dispatch]);
 
@@ -168,9 +163,24 @@ const Contact = () => {
                                         <div className={`p-2 rounded-lg ${isSuccess && !formError ? 'bg-emerald-100' : 'bg-red-100'}`}>
                                             {isSuccess && !formError ? <CheckCircle2 className="w-5 h-5" /> : <AlertCircle className="w-5 h-5" />}
                                         </div>
-                                        <div className="flex flex-col">
+                                        <div className="flex flex-col flex-grow">
                                             <span className="font-bold text-sm">{formError || message}</span>
-                                            {isSuccess && <span className="text-[10px] font-black uppercase tracking-widest opacity-70">Redirecting to WhatsApp...</span>}
+                                            {isSuccess && (
+                                                <div className="mt-2 flex items-center gap-3">
+                                                    <span className="text-[10px] font-black uppercase tracking-widest opacity-70">Automatic redirect failed?</span>
+                                                    <button 
+                                                        type="button"
+                                                        onClick={() => {
+                                                            const waMessage = `*New Contact Enquiry - RCS*\n\n*Name:* ${formData.fullName}\n*Phone:* ${formData.phone}\n*Email:* ${formData.email}\n*Subject:* ${formData.subject}\n\n*Message:* ${formData.message}`;
+                                                            const encodedMsg = encodeURIComponent(waMessage);
+                                                            window.open(`https://wa.me/919783945080?text=${encodedMsg}`, '_blank');
+                                                        }}
+                                                        className="text-[10px] font-black uppercase tracking-widest bg-emerald-600 text-white px-3 py-1 rounded-full hover:bg-emerald-700 transition-colors"
+                                                    >
+                                                        Continue to WhatsApp
+                                                    </button>
+                                                </div>
+                                            )}
                                         </div>
                                     </motion.div>
                                 )}
