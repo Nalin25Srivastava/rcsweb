@@ -11,10 +11,18 @@ const razorpay = new Razorpay({
 });
 
 const isRazorpayConfigured = () => {
-    return process.env.RAZORPAY_KEY_ID && 
-           process.env.RAZORPAY_KEY_ID !== 'rzp_test_your_key_id' &&
-           process.env.RAZORPAY_KEY_SECRET && 
-           process.env.RAZORPAY_KEY_SECRET !== 'your_key_secret';
+    const hasId = !!process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_ID !== 'rzp_test_your_key_id';
+    const hasSecret = !!process.env.RAZORPAY_KEY_SECRET && process.env.RAZORPAY_KEY_SECRET !== 'your_key_secret';
+    
+    if (!hasId || !hasSecret) {
+        console.log('Razorpay Configuration Check Failed:', { 
+            hasId, 
+            hasSecret,
+            idPrefix: process.env.RAZORPAY_KEY_ID ? process.env.RAZORPAY_KEY_ID.substring(0, 8) : 'none'
+        });
+    }
+    
+    return hasId && hasSecret;
 };
 
 // Configure multer for file storage

@@ -8,8 +8,8 @@ const dns = require('dns');
 const net = require('net');
 const path = require('path');
 
-// Load environment variables
-dotenv.config();
+// Load environment variables from the same directory as server.js
+dotenv.config({ path: path.join(__dirname, '.env') });
 
 // Fix for MongoDB SRV lookup issues in some environments
 dns.setServers(['8.8.8.8', '8.8.4.4']);
