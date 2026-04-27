@@ -17,7 +17,7 @@ const Contact = () => {
             // Trigger WhatsApp redirect
             const waMessage = `*New Contact Enquiry - RCS*\n\n*Name:* ${formData.fullName}\n*Phone:* ${formData.phone}\n*Email:* ${formData.email}\n*Subject:* ${formData.subject}\n\n*Message:* ${formData.message}`;
             const encodedMsg = encodeURIComponent(waMessage);
-            const waUrl = `https://wa.me/918104083002?text=${encodedMsg}`;
+            const waUrl = `https://wa.me/919783945080?text=${encodedMsg}`;
             
             // Small delay to let user see success message before redirect
             setTimeout(() => {
