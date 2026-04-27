@@ -10,6 +10,13 @@ const razorpay = new Razorpay({
     key_secret: process.env.RAZORPAY_KEY_SECRET || 'your_key_secret'
 });
 
+const isRazorpayConfigured = () => {
+    return process.env.RAZORPAY_KEY_ID && 
+           process.env.RAZORPAY_KEY_ID !== 'rzp_test_your_key_id' &&
+           process.env.RAZORPAY_KEY_SECRET && 
+           process.env.RAZORPAY_KEY_SECRET !== 'your_key_secret';
+};
+
 // Configure multer for file storage
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -57,6 +64,13 @@ exports.submitResume = (req, res) => {
 
         const { firstName, lastName, email, phone, functionalArea, amount } = req.body;
         const registrationFee = amount || 1000;
+
+        // Check if Razorpay keys are configured
+        if (!isRazorpayConfigured()) {
+            return res.status(500).json({ 
+                message: 'Razorpay keys are not configured in the backend .env file. Please add your real Key ID and Secret.' 
+            });
+        }
 
         try {
             // Use a web-relative path that matches our static serving route
