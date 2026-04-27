@@ -45,9 +45,9 @@ const Navbar = () => {
                         </Link>
                     </div>
 
-                    {/* Desktop Links & Auth */}
-                    <div className="hidden lg:flex items-center space-x-6">
-                        <div className="flex space-x-4">
+                    {/* Desktop Links (Centered) */}
+                    <div className="hidden lg:flex flex-grow items-center justify-center">
+                        <div className="flex space-x-6">
                             {navLinks
                                 .filter(link => {
                                     if (!user && (link.name === 'Registration' || link.name === 'Contact Us')) return false
@@ -79,53 +79,53 @@ const Navbar = () => {
                                         </NavLink>
                                     );
                                 })}
+                        </div>
+                    </div>
 
-                        </div>
-                        
-                        <div className="flex items-center space-x-4 border-l pl-8 border-gray-100">
-                            {user && (user.name || user.email) ? (
-                                <div className="flex items-center gap-6">
-                                    <div className="flex items-center gap-2 text-gray-700 font-bold">
-                                        <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 border border-emerald-200 shadow-sm transition-transform hover:scale-110">
-                                            <User className="w-5 h-5" />
-                                        </div>
-                                        <div className="flex flex-col justify-center">
-                                            <span className="capitalize text-slate-900 leading-none mb-1">
-                                                {user.name || user.email.split('@')[0]}
-                                            </span>
-                                            <span className={`text-[10px] uppercase tracking-tighter font-black px-1.5 rounded shadow-sm w-fit ${
-                                                user.role === 'admin' 
-                                                ? 'text-emerald-600 bg-emerald-50' 
-                                                : 'text-blue-600 bg-blue-50'
-                                            }`}>
-                                                {user.role === 'admin' ? 'Admin' : 'User'}
-                                            </span>
-                                        </div>
+                    {/* Desktop Auth (Right Aligned) */}
+                    <div className="hidden lg:flex items-center space-x-4 border-l pl-8 border-gray-100">
+                        {user && (user.name || user.email) ? (
+                            <div className="flex items-center gap-6">
+                                <div className="flex items-center gap-2 text-gray-700 font-bold">
+                                    <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 border border-emerald-200 shadow-sm transition-transform hover:scale-110">
+                                        <User className="w-5 h-5" />
                                     </div>
-                                    <button 
-                                        onClick={handleLogout}
-                                        className="flex items-center gap-2 text-slate-500 hover:text-red-500 font-bold transition-all transform hover:scale-105 active:scale-95 cursor-pointer bg-slate-50 hover:bg-red-50 px-3 py-2 rounded-full border border-slate-100"
-                                    >
-                                        <LogOut className="w-4 h-4" /> <span className="text-sm">Logout</span>
-                                    </button>
+                                    <div className="flex flex-col justify-center">
+                                        <span className="capitalize text-slate-900 leading-none mb-1">
+                                            {user.name || user.email.split('@')[0]}
+                                        </span>
+                                        <span className={`text-[10px] uppercase tracking-tighter font-black px-1.5 rounded shadow-sm w-fit ${
+                                            user.role === 'admin' 
+                                            ? 'text-emerald-600 bg-emerald-50' 
+                                            : 'text-blue-600 bg-blue-50'
+                                        }`}>
+                                            {user.role === 'admin' ? 'Admin' : 'User'}
+                                        </span>
+                                    </div>
                                 </div>
-                            ) : (
-                                <>
-                                    <NavLink 
-                                        to="/login" 
-                                        className={({ isActive }) => `font-medium text-lg transition-colors ${isActive ? 'text-[#00c57d]' : 'text-gray-600 hover:text-indigo-600'}`}
-                                    >
-                                        Login
-                                    </NavLink>
-                                    <Link 
-                                        to="/signup" 
-                                        className="bg-[#00c57d] hover:bg-[#00ae6e] text-white px-7 py-2.5 rounded-full font-bold transition-all transform hover:scale-105 active:scale-95 shadow-md"
-                                    >
-                                        Sign Up
-                                    </Link>
-                                </>
-                            )}
-                        </div>
+                                <button 
+                                    onClick={handleLogout}
+                                    className="flex items-center gap-2 text-slate-500 hover:text-red-500 font-bold transition-all transform hover:scale-105 active:scale-95 cursor-pointer bg-slate-50 hover:bg-red-50 px-3 py-2 rounded-full border border-slate-100"
+                                >
+                                    <LogOut className="w-4 h-4" /> <span className="text-sm">Logout</span>
+                                </button>
+                            </div>
+                        ) : (
+                            <>
+                                <NavLink 
+                                    to="/login" 
+                                    className={({ isActive }) => `font-medium text-lg transition-colors ${isActive ? 'text-[#00c57d]' : 'text-gray-600 hover:text-indigo-600'}`}
+                                >
+                                    Login
+                                </NavLink>
+                                <Link 
+                                    to="/signup" 
+                                    className="bg-[#00c57d] hover:bg-[#00ae6e] text-white px-7 py-2.5 rounded-full font-bold transition-all transform hover:scale-105 active:scale-95 shadow-md"
+                                >
+                                    Sign Up
+                                </Link>
+                            </>
+                        )}
                     </div>
 
                     {/* Mobile Button & Auth */}
