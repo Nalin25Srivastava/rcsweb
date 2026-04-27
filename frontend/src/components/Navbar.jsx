@@ -83,34 +83,29 @@ const Navbar = () => {
                         </div>
                     </div>
 
-                    {/* Theme Toggle Switch */}
-                    <div className="relative flex items-center mr-4">
-                        <button
-                            onClick={toggleTheme}
-                            className="relative w-16 h-8 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 transition-colors duration-500 flex items-center px-1 group shadow-inner"
-                            aria-label="Toggle Theme"
-                        >
-                            {/* Sliding Circle */}
-                            <motion.div 
-                                animate={{ x: theme === 'light' ? 0 : 32 }}
-                                transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                                className="z-10 w-6 h-6 rounded-full bg-white dark:bg-emerald-500 shadow-md flex items-center justify-center border border-slate-200 dark:border-emerald-400"
+                    {/* Desktop Actions (Right Aligned) */}
+                    <div className="hidden lg:flex items-center gap-6 border-l pl-8 border-gray-100 dark:border-slate-800">
+                        {/* Theme Toggle Switch */}
+                        <div className="relative flex items-center">
+                            <button
+                                onClick={toggleTheme}
+                                className="relative w-14 h-7 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 transition-colors duration-500 flex items-center px-1 group shadow-inner"
+                                aria-label="Toggle Theme"
                             >
-                                {theme === 'light' ? <Sun className="w-3.5 h-3.5 text-amber-500" /> : <Moon className="w-3.5 h-3.5 text-white" />}
-                            </motion.div>
-                            
-                            {/* Background Symbols */}
-                            <div className="absolute inset-0 flex items-center justify-between px-2 text-slate-400">
-                                <Sun className={`w-3.5 h-3.5 transition-opacity ${theme === 'light' ? 'opacity-0' : 'opacity-40'}`} />
-                                <Moon className={`w-3.5 h-3.5 transition-opacity ${theme === 'dark' ? 'opacity-0' : 'opacity-40'}`} />
-                            </div>
-                        </button>
-                    </div>
+                                <motion.div 
+                                    animate={{ x: theme === 'light' ? 0 : 28 }}
+                                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                                    className="z-10 w-5 h-5 rounded-full bg-white dark:bg-emerald-500 shadow-md flex items-center justify-center border border-slate-200 dark:border-emerald-400"
+                                >
+                                    {theme === 'light' ? <Sun className="w-3 h-3 text-amber-500" /> : <Moon className="w-3 h-3 text-white" />}
+                                </motion.div>
+                                <div className="absolute inset-0 flex items-center justify-between px-2 text-slate-400">
+                                    <Sun className={`w-3 h-3 transition-opacity ${theme === 'light' ? 'opacity-0' : 'opacity-40'}`} />
+                                    <Moon className={`w-3 h-3 transition-opacity ${theme === 'dark' ? 'opacity-0' : 'opacity-40'}`} />
+                                </div>
+                            </button>
+                        </div>
 
-                    <div className="h-8 w-px bg-slate-100 dark:bg-slate-800 mx-2"></div>
-
-                    {/* Desktop Auth (Right Aligned) */}
-                    <div className="hidden lg:flex items-center space-x-4 border-l pl-8 border-gray-100">
                         {user && (user.name || user.email) ? (
                             <div className="flex items-center gap-6">
                                 <div className="flex items-center gap-2 text-gray-700 font-bold">
@@ -118,10 +113,10 @@ const Navbar = () => {
                                         <User className="w-5 h-5" />
                                     </div>
                                     <div className="flex flex-col justify-center">
-                                        <span className="capitalize text-slate-900 dark:text-white leading-none mb-1">
+                                        <span className="capitalize text-slate-900 dark:text-white leading-none mb-1 text-sm">
                                             {user.name || user.email.split('@')[0]}
                                         </span>
-                                        <span className={`text-[10px] uppercase tracking-tighter font-black px-1.5 rounded shadow-sm w-fit ${
+                                        <span className={`text-[9px] uppercase tracking-tighter font-black px-1.5 rounded shadow-sm w-fit ${
                                             user.role === 'admin' 
                                             ? 'text-emerald-600 bg-emerald-50' 
                                             : 'text-blue-600 bg-blue-50'
@@ -132,26 +127,26 @@ const Navbar = () => {
                                 </div>
                                 <button 
                                     onClick={handleLogout}
-                                    className="flex items-center gap-2 text-slate-500 hover:text-red-500 font-bold transition-all transform hover:scale-105 active:scale-95 cursor-pointer bg-slate-50 hover:bg-red-50 px-3 py-2 rounded-full border border-slate-100"
+                                    className="flex items-center gap-2 text-slate-500 hover:text-red-500 font-bold transition-all transform hover:scale-105 active:scale-95 cursor-pointer bg-slate-50 hover:bg-red-50 px-3 py-1.5 rounded-full border border-slate-100"
                                 >
-                                    <LogOut className="w-4 h-4" /> <span className="text-sm">Logout</span>
+                                    <LogOut className="w-4 h-4" /> <span className="text-xs">Logout</span>
                                 </button>
                             </div>
                         ) : (
-                            <>
+                            <div className="flex items-center gap-4">
                                 <NavLink 
                                     to="/login" 
-                                    className={({ isActive }) => `font-medium text-lg transition-colors ${isActive ? 'text-[#00c57d]' : 'text-gray-600 hover:text-indigo-600'}`}
+                                    className={({ isActive }) => `font-bold text-sm transition-colors ${isActive ? 'text-[#00c57d]' : 'text-gray-600 dark:text-slate-400 hover:text-indigo-600'}`}
                                 >
                                     Login
                                 </NavLink>
                                 <Link 
                                     to="/signup" 
-                                    className="bg-[#00c57d] hover:bg-[#00ae6e] text-white px-7 py-2.5 rounded-full font-bold transition-all transform hover:scale-105 active:scale-95 shadow-md"
+                                    className="bg-[#00c57d] hover:bg-[#00ae6e] text-white px-6 py-2 rounded-full text-sm font-bold transition-all transform hover:scale-105 active:scale-95 shadow-md"
                                 >
                                     Sign Up
                                 </Link>
-                            </>
+                            </div>
                         )}
                     </div>
 
