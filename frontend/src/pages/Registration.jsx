@@ -5,6 +5,7 @@ import { Upload, CheckCircle, AlertCircle, LoaderCircle, ShieldCheck } from 'luc
 import { motion, AnimatePresence } from 'framer-motion';
 import { submitResume, resetResumeState } from '../store/slices/resumesSlice';
 import { setPaid } from '../store/slices/authSlice';
+import SmartButton from '../components/SmartButton';
 
 const Registration = () => {
     const dispatch = useDispatch();
@@ -66,7 +67,7 @@ const Registration = () => {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        if (e) e.preventDefault();
         
         if (!file) {
             alert('Please select your Agency Profile/Document');
@@ -169,6 +170,18 @@ const Registration = () => {
             console.error('Submit Error:', error);
             alert('An error occurred during order creation: ' + (error || 'Please try again. Check backend logs for Razorpay Keys.'));
         }
+    };
+
+    const isFormIncomplete = !formData.phone || !formData.functionalArea || !file;
+    const getDisabledReason = () => {
+        if (!formData.phone || !formData.functionalArea) return "Form fields are missing";
+        if (!file) return "Profile/Document not uploaded";
+        return "";
+    };
+    const getCorrectionStep = () => {
+        if (!formData.phone || !formData.functionalArea) return "Please fill in your phone number and select a primary domain.";
+        if (!file) return "Click the upload area to select your agency profile or resume.";
+        return "";
     };
 
     return (
@@ -342,11 +355,13 @@ const Registration = () => {
                                         <ShieldCheck className="w-5 h-5 text-emerald-500" />
                                     </p>
                                 </div>
-                                <motion.button
+                                <SmartButton
                                     type="submit"
-                                    disabled={isLoading}
-                                    whileHover={{ scale: 1.02 }}
-                                    whileTap={{ scale: 0.98 }}
+                                    disabled={isLoading || isFormIncomplete}
+                                    isLoading={isLoading}
+                                    disabledReason={getDisabledReason()}
+                                    howToCorrect={getCorrectionStep()}
+                                    onClick={handleSubmit}
                                     className={`w-full sm:w-auto bg-slate-900 hover:bg-emerald-500 text-white font-black py-4 px-10 rounded-xl transition-all shadow-xl shadow-emerald-500/10 cursor-pointer flex items-center justify-center gap-3 uppercase tracking-widest text-sm ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
                                 >
                                     {isLoading ? (
@@ -354,7 +369,7 @@ const Registration = () => {
                                     ) : (
                                         'Pay & Register'
                                     )}
-                                </motion.button>
+                                </SmartButton>
                             </div>
                         </div>
 

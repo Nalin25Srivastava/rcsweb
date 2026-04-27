@@ -4,7 +4,7 @@ import { Mail, Lock, User, ArrowRight, ShieldAlert, CheckCircle, XCircle } from 
 import { useSelector, useDispatch } from 'react-redux';
 import { signup, googleLogin, reset, verifyRegistrationPayment, setSecretVerified } from '../store/slices/authSlice';
 import { motion, AnimatePresence } from 'framer-motion';
-// Reverting to pure native button as per recommendation
+import SmartButton from '../components/SmartButton';
 
 const Signup = () => {
     const [name, setName] = useState('');
@@ -101,7 +101,7 @@ const Signup = () => {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        if (e) e.preventDefault();
 
         // Admin verification guard
         if (role === 'admin' && verificationStatus !== 'success' && !isVIPEmail(email)) {
@@ -116,6 +116,18 @@ const Signup = () => {
         }
     };
 
+    const isAdminUnverified = role === 'admin' && verificationStatus !== 'success' && !isVIPEmail(email);
+    const isFormIncomplete = !name || !email || !password;
+    const getDisabledReason = () => {
+        if (isAdminUnverified) return "Admin verification required";
+        if (isFormIncomplete) return "Account details missing";
+        return "";
+    };
+    const getCorrectionStep = () => {
+        if (isAdminUnverified) return "Please enter the admin passkey and click 'GO' to verify your admin status.";
+        if (isFormIncomplete) return "Please fill in your full name, email, and choose a password.";
+        return "";
+    };
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-slate-50 relative overflow-hidden py-12 px-4">
@@ -290,15 +302,17 @@ const Signup = () => {
                             </AnimatePresence>
                         </div>
 
-                        <motion.button
+                        <SmartButton
                             type="submit"
-                            disabled={isLoading || (role === 'admin' && verificationStatus !== 'success' && !isVIPEmail(email))}
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            className={`w-full bg-slate-900 hover:bg-blue-500 text-white font-black py-4 px-6 rounded-xl text-lg shadow-xl shadow-slate-200 transition-all flex items-center justify-center gap-3 uppercase tracking-widest mt-8 ${(isLoading || (role === 'admin' && verificationStatus !== 'success' && !isVIPEmail(email))) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            disabled={isLoading || isAdminUnverified || isFormIncomplete}
+                            isLoading={isLoading}
+                            disabledReason={getDisabledReason()}
+                            howToCorrect={getCorrectionStep()}
+                            onClick={handleSubmit}
+                            className={`w-full bg-slate-900 hover:bg-blue-500 text-white font-black py-4 px-6 rounded-xl text-lg shadow-xl shadow-slate-200 transition-all flex items-center justify-center gap-3 uppercase tracking-widest mt-8 ${(isLoading || isAdminUnverified) ? 'opacity-50 cursor-not-allowed' : ''}`}
                         >
                             <ArrowRight className="w-5 h-5" /> {isLoading ? 'Creating...' : 'Sign Up'}
-                        </motion.button>
+                        </SmartButton>
 
                         <div className="relative flex items-center gap-4 py-4">
                             <div className="flex-grow border-t border-slate-100"></div>

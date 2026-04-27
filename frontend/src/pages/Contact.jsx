@@ -3,6 +3,7 @@ import { Download, Send, CheckCircle2, AlertCircle, MapPin, Phone, Mail } from '
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
 import { submitContact, reset } from '../store/slices/contactsSlice';
+import SmartButton from '../components/SmartButton';
 
 const Contact = () => {
     const [formData, setFormData] = useState({ fullName: '', phone: '', email: '', subject: '', message: '' });
@@ -25,7 +26,7 @@ const Contact = () => {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        if (e) e.preventDefault();
         if (lastSubmitted && JSON.stringify(formData) === JSON.stringify(lastSubmitted)) {
             setFormError('You have already submitted these details.');
             return;
@@ -40,6 +41,16 @@ const Contact = () => {
     };
 
     const handleDownload = () => window.open('/api/contacts/download', '_blank');
+
+    const isFormIncomplete = !formData.fullName || !formData.phone || !formData.email || !formData.subject || !formData.message;
+    const getDisabledReason = () => {
+        if (isFormIncomplete) return "Contact form incomplete";
+        return "";
+    };
+    const getCorrectionStep = () => {
+        if (isFormIncomplete) return "Please fill in all fields (Name, Phone, Email, Subject, and Message) before submitting.";
+        return "";
+    };
 
     return (
         <div className="bg-slate-50 min-h-screen">
@@ -206,16 +217,18 @@ const Contact = () => {
                                 </div>
                             </div>
 
-                            <motion.button
+                            <SmartButton
                                 type="submit"
-                                disabled={isLoading}
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
+                                disabled={isLoading || isFormIncomplete}
+                                isLoading={isLoading}
+                                disabledReason={getDisabledReason()}
+                                howToCorrect={getCorrectionStep()}
+                                onClick={handleSubmit}
                                 className={`w-full bg-slate-900 hover:bg-emerald-500 text-white font-black py-5 rounded-xl text-lg shadow-xl shadow-slate-200 transition-all cursor-pointer uppercase flex items-center justify-center gap-3 tracking-widest ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
                             >
                                 {isLoading ? 'Transmitting...' : 'Submit Message'} 
                                 <Send className={`w-6 h-6 ${isLoading ? 'animate-bounce' : ''}`} />
-                            </motion.button>
+                            </SmartButton>
                         </form>
                     </div>
 

@@ -4,7 +4,7 @@ import { Mail, Lock, ArrowRight, ShieldAlert, CheckCircle, XCircle } from 'lucid
 import { useSelector, useDispatch } from 'react-redux';
 import { login, googleLogin, reset, setSecretVerified } from '../store/slices/authSlice';
 import { motion, AnimatePresence } from 'framer-motion';
-// Reverting to pure native button as per recommendation
+import SmartButton from '../components/SmartButton';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -111,7 +111,7 @@ const Login = () => {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        if (e) e.preventDefault();
         
         // Admin verification guard
         if (role === 'admin' && verificationStatus !== 'success' && !isVIPEmail(email)) {
@@ -125,6 +125,18 @@ const Login = () => {
                 setUnpaidEmail(action.payload.email);
             }
         }
+    };
+
+    const isAdminUnverified = role === 'admin' && verificationStatus !== 'success' && !isVIPEmail(email);
+    const getDisabledReason = () => {
+        if (isAdminUnverified) return "Admin verification required";
+        if (!email || !password) return "Login credentials missing";
+        return "";
+    };
+    const getCorrectionStep = () => {
+        if (isAdminUnverified) return "Please enter the admin passkey and click 'GO' to verify your admin status.";
+        if (!email || !password) return "Enter your registered email and password to proceed.";
+        return "";
     };
 
     return (
@@ -146,7 +158,7 @@ const Login = () => {
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-slate-900/60"></div>
                     
                     <div className="relative z-10">
-                        <Link to="/" className="text-xl font-bold tracking-tight uppercase flexitems-center gap-2">
+                        <Link to="/" className="text-xl font-bold tracking-tight uppercase flex items-center gap-2">
                             <span>RCS</span><span className="text-emerald-500">Placement</span>
                         </Link>
                     </div>
@@ -310,15 +322,17 @@ const Login = () => {
                             </AnimatePresence>
                         </div>
 
-                        <motion.button
+                        <SmartButton
                             type="submit"
-                            disabled={isLoading || (role === 'admin' && verificationStatus !== 'success' && !isVIPEmail(email))}
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            className={`w-full bg-slate-900 hover:bg-emerald-500 text-white font-black py-4 px-6 rounded-xl text-lg shadow-xl shadow-slate-200 transition-all flex items-center justify-center gap-3 uppercase tracking-widest mt-8 ${(isLoading || (role === 'admin' && verificationStatus !== 'success' && !isVIPEmail(email))) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            disabled={isLoading || isAdminUnverified || !email || !password}
+                            isLoading={isLoading}
+                            disabledReason={getDisabledReason()}
+                            howToCorrect={getCorrectionStep()}
+                            onClick={handleSubmit}
+                            className={`w-full bg-slate-900 hover:bg-emerald-500 text-white font-black py-4 px-6 rounded-xl text-lg shadow-xl shadow-slate-200 transition-all flex items-center justify-center gap-3 uppercase tracking-widest mt-8 ${(isLoading || isAdminUnverified) ? 'opacity-50 cursor-not-allowed' : ''}`}
                         >
                             {isLoading ? 'Authenticating...' : 'Sign In'} <ArrowRight className="w-5 h-5" />
-                        </motion.button>
+                        </SmartButton>
 
                         <div className="relative flex items-center gap-4 py-4">
                             <div className="flex-grow border-t border-slate-100"></div>

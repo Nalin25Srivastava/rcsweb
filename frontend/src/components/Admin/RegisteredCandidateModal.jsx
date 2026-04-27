@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, UserPlus, Info, Search, List, Image as ImageIcon, Upload, Loader2 } from 'lucide-react';
 import { createRegisteredCandidate, updateRegisteredCandidate } from '../../store/slices/registeredCandidatesSlice';
+import SmartButton from '../SmartButton';
 
 const RegisteredCandidateModal = ({ isOpen, onClose, candidate = null, isEditing = false, users = [] }) => {
     const dispatch = useDispatch();
@@ -118,7 +119,7 @@ const RegisteredCandidateModal = ({ isOpen, onClose, candidate = null, isEditing
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        if (e) e.preventDefault();
         try {
             if (isEditing) {
                 await dispatch(updateRegisteredCandidate({ id: candidate._id, candidateData: formData })).unwrap();
@@ -281,15 +282,17 @@ const RegisteredCandidateModal = ({ isOpen, onClose, candidate = null, isEditing
                                             className="hidden"
                                             accept="image/*,video/*"
                                         />
-                                        <button 
-                                            type="button" 
-                                            onClick={() => fileInputRef.current?.click()}
+                                        <SmartButton
                                             disabled={isUploading}
+                                            isLoading={isUploading}
+                                            disabledReason="Upload in progress"
+                                            howToCorrect="Please wait for the current file to finish processing before selecting a new one."
+                                            onClick={() => fileInputRef.current?.click()}
                                             className="flex-1 px-4 py-3 bg-white border-2 border-slate-100 hover:border-emerald-500 rounded-xl text-[10px] font-bold text-slate-700 transition-all flex items-center justify-center gap-2 shadow-sm"
                                         >
                                             <Upload className="w-4 h-4 text-emerald-500" />
                                             {isUploading ? 'Processing...' : 'Upload Media'}
-                                        </button>
+                                        </SmartButton>
                                     </div>
                                     <div className="relative">
                                         <input 
@@ -337,13 +340,16 @@ const RegisteredCandidateModal = ({ isOpen, onClose, candidate = null, isEditing
                             >
                                 Cancel
                             </button>
-                            <button 
+                            <SmartButton
                                 type="submit" 
                                 disabled={!formData.userId}
+                                disabledReason="No candidate selected"
+                                howToCorrect="Please select a candidate from the 'Registered Candidates List' search bar above before confirming."
+                                onClick={handleSubmit}
                                 className="flex-[2] bg-slate-900 hover:bg-emerald-500 text-white font-black py-4 px-4 rounded-2xl shadow-xl transition-colors uppercase tracking-widest text-xs disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 {isEditing ? 'Update Records' : 'Confirm Registration'}
-                            </button>
+                            </SmartButton>
                         </div>
                     </form>
                 </motion.div>

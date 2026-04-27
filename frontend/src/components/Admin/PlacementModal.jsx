@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Image as ImageIcon, Upload, Loader2 } from 'lucide-react';
 import { createPlacedStudent, updatePlacedStudent } from '../../store/slices/placedStudentsSlice';
+import SmartButton from '../SmartButton';
 
 const PlacementModal = ({ isOpen, onClose, student = null, isEditing = false }) => {
     const dispatch = useDispatch();
@@ -87,13 +88,25 @@ const PlacementModal = ({ isOpen, onClose, student = null, isEditing = false }) 
     };
 
     const handleSubmit = (e) => {
-        e.preventDefault();
+        if (e) e.preventDefault();
         if (isEditing && student?._id) {
             dispatch(updatePlacedStudent({ id: student._id, studentData: formData }));
         } else {
             dispatch(createPlacedStudent(formData));
         }
         onClose();
+    };
+
+    const isFormIncomplete = !formData.name || !formData.company || !formData.position || !formData.compensation;
+    const getDisabledReason = () => {
+        if (isFormIncomplete) return "Form details missing";
+        if (isUploading) return "Media processing...";
+        return "";
+    };
+    const getCorrectionStep = () => {
+        if (isFormIncomplete) return "Please fill in all candidate details (Name, Company, Position, and CTC).";
+        if (isUploading) return "Please wait while we process the media file.";
+        return "";
     };
 
     if (!isOpen) return null;
@@ -193,15 +206,17 @@ const PlacementModal = ({ isOpen, onClose, student = null, isEditing = false }) 
                                                 className="hidden"
                                                 accept="image/*,video/*"
                                             />
-                                            <button 
-                                                type="button"
-                                                onClick={() => fileInputRef.current?.click()}
+                                            <SmartButton 
                                                 disabled={isUploading}
+                                                isLoading={isUploading}
+                                                disabledReason="Upload in progress"
+                                                howToCorrect="Please wait for the current file to finish processing before selecting a new one."
+                                                onClick={() => fileInputRef.current?.click()}
                                                 className="flex-1 px-4 py-3 bg-white border-2 border-slate-200 hover:border-emerald-500 rounded-xl text-sm font-bold text-slate-700 transition-all flex items-center justify-center gap-2 shadow-sm"
                                             >
                                                 <Upload className="w-4 h-4" />
                                                 {isUploading ? 'Processing...' : 'Process Media'}
-                                            </button>
+                                            </SmartButton>
                                         </div>
                                         <div className="relative">
                                             <input 
@@ -218,13 +233,17 @@ const PlacementModal = ({ isOpen, onClose, student = null, isEditing = false }) 
                         </div>
 
                         <div className="pt-4">
-                            <button 
+                            <SmartButton 
                                 type="submit"
+                                disabled={isUploading || isFormIncomplete}
+                                disabledReason={getDisabledReason()}
+                                howToCorrect={getCorrectionStep()}
+                                onClick={handleSubmit}
                                 className="w-full bg-slate-900 hover:bg-emerald-600 text-white font-black py-5 rounded-2xl transition-all shadow-xl shadow-slate-200 uppercase tracking-widest text-sm flex items-center justify-center gap-2 group"
                             >
                                 {isEditing ? 'Update Success Story' : 'Publish Success Story'}
                                 <motion.span animate={{ x: [0, 5, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>→</motion.span>
-                            </button>
+                            </SmartButton>
                         </div>
                     </form>
                 </motion.div>
