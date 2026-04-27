@@ -43,8 +43,14 @@ const RegisteredCandidates = () => {
 
     const getImageUrl = (image) => {
         if (!image) return 'https://images.unsplash.com/photo-1594673752579-40993cf394c5?fit=crop&q=80&w=400';
-        if (image.startsWith('http') || image.startsWith('/uploads') || image.startsWith('data:')) return image;
-        return `/images/${image}`;
+        
+        let url = image;
+        if (typeof url === 'string' && url.includes('localhost:5000')) {
+            url = url.replace(/http:\/\/localhost:5000/g, '');
+        }
+
+        if (url.startsWith('http') || url.startsWith('/uploads') || url.startsWith('data:')) return url;
+        return `/images/${url}`;
     };
 
     const handleAdd = () => {

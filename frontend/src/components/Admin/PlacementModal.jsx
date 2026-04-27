@@ -38,9 +38,15 @@ const PlacementModal = ({ isOpen, onClose, student = null, isEditing = false }) 
 
     const getImageUrl = (image) => {
         if (!image) return 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&q=80&w=200';
-        if (image.startsWith('http') || image.startsWith('/uploads') || image.startsWith('data:')) return image;
+        
+        let url = image;
+        if (typeof url === 'string' && url.includes('localhost:5000')) {
+            url = url.replace(/http:\/\/localhost:5000/g, '');
+        }
+
+        if (url.startsWith('http') || url.startsWith('/uploads') || url.startsWith('data:')) return url;
         // If it's just a filename, assume it's in public/images/
-        return `/images/${image}`;
+        return `/images/${url}`;
     };
 
     const handleFileUpload = async (e) => {
