@@ -508,36 +508,44 @@ const StudentManagementView = ({ students = [], onAdd, onEdit, onDelete, getImag
                 </button>
             </div>
             
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-8 gap-2">
                 {(students || []).map((student, i) => (
-                    <div key={i} className="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm relative group overflow-hidden transition-all hover:border-emerald-500">
-                        <div className="absolute top-0 right-0 p-1.5 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                    <div key={i} className="bg-white p-2 rounded-xl border border-slate-100 shadow-sm relative group hover:border-emerald-500 hover:shadow-md transition-all flex items-center gap-3">
+                        {/* Action Overlay */}
+                        <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center gap-2 z-20">
                             <button 
                                 onClick={() => onEdit(student)}
-                                className="p-1.5 bg-white/95 backdrop-blur-sm text-blue-600 rounded-lg shadow-md hover:bg-blue-600 hover:text-white transition-all"
+                                className="p-1.5 bg-blue-500 text-white rounded-lg hover:bg-blue-400 transition-colors"
+                                title="Edit"
                             >
-                                <Pencil className="w-3 h-3" />
+                                <Pencil className="w-3.5 h-3.5" />
                             </button>
                             <button 
                                 onClick={() => onDelete(student._id)}
-                                className="p-1.5 bg-white/95 backdrop-blur-sm text-red-500 rounded-lg shadow-md hover:bg-red-500 hover:text-white transition-all"
+                                className="p-1.5 bg-red-500 text-white rounded-lg hover:bg-red-400 transition-colors"
+                                title="Delete"
                             >
-                                <Trash2 className="w-3 h-3" />
+                                <Trash2 className="w-3.5 h-3.5" />
                             </button>
                         </div>
-                        <div className="w-12 h-12 bg-slate-100 rounded-lg mb-2 overflow-hidden shadow-inner border border-slate-200 mx-auto">
-                                <img 
-                                    src={getImageUrl?.(student?.image)} 
-                                    alt={student?.name} 
-                                    className="w-full h-full object-cover" 
-                                />
+
+                        {/* Student Image */}
+                        <div className="flex-shrink-0 w-10 h-10 rounded-full overflow-hidden border-2 border-slate-50 shadow-inner">
+                            <img 
+                                src={getImageUrl?.(student?.image)} 
+                                alt={student?.name} 
+                                className="w-full h-full object-cover" 
+                            />
                         </div>
-                        <div className="text-center">
-                            <h4 className="font-black text-slate-900 text-sm line-clamp-1 leading-tight">{student.name}</h4>
-                            <p className="text-slate-500 font-bold text-[11px] uppercase tracking-wider line-clamp-1 mt-1">{student.company}</p>
-                            <div className="mt-3 pt-2 border-t border-slate-50 flex flex-col items-center gap-1">
-                                <span className="text-emerald-600 font-black text-xs uppercase tracking-tighter truncate w-full">{student.position}</span>
-                                <span className="text-slate-900 font-black text-xs">{student.package}</span>
+
+                        {/* Student Info */}
+                        <div className="flex-grow min-w-0">
+                            <h4 className="font-black text-slate-900 text-[11px] truncate leading-tight">{student.name}</h4>
+                            <p className="text-slate-400 font-bold text-[9px] uppercase tracking-tighter truncate">{student.company}</p>
+                            <div className="flex items-center gap-1.5 mt-0.5">
+                                <span className="text-emerald-600 font-black text-[8px] uppercase">{student.package}</span>
+                                <span className="w-1 h-1 rounded-full bg-slate-200"></span>
+                                <span className="text-slate-400 font-bold text-[8px] truncate">{student.position}</span>
                             </div>
                         </div>
                     </div>
