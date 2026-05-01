@@ -508,35 +508,37 @@ const StudentManagementView = ({ students = [], onAdd, onEdit, onDelete, getImag
                 </button>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4">
                 {(students || []).map((student, i) => (
-                    <div key={i} className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm relative group overflow-hidden">
-                        <div className="absolute top-0 right-0 p-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div key={i} className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm relative group overflow-hidden transition-all hover:border-emerald-500">
+                        <div className="absolute top-0 right-0 p-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-10">
                             <button 
                                 onClick={() => onEdit(student)}
-                                className="p-2 bg-white/90 backdrop-blur-sm text-blue-600 rounded-xl shadow-lg hover:bg-blue-600 hover:text-white transition-all"
+                                className="p-1.5 bg-white/95 backdrop-blur-sm text-blue-600 rounded-lg shadow-md hover:bg-blue-600 hover:text-white transition-all"
                             >
-                                <Pencil className="w-4 h-4" />
+                                <Pencil className="w-3 h-3" />
                             </button>
                             <button 
                                 onClick={() => onDelete(student._id)}
-                                className="p-2 bg-white/90 backdrop-blur-sm text-red-500 rounded-xl shadow-lg hover:bg-red-500 hover:text-white transition-all"
+                                className="p-1.5 bg-white/95 backdrop-blur-sm text-red-500 rounded-lg shadow-md hover:bg-red-500 hover:text-white transition-all"
                             >
-                                <Trash2 className="w-4 h-4" />
+                                <Trash2 className="w-3 h-3" />
                             </button>
                         </div>
-                        <div className="w-20 h-20 bg-slate-100 rounded-2xl mb-4 overflow-hidden shadow-inner border border-slate-200">
+                        <div className="w-16 h-16 bg-slate-100 rounded-xl mb-3 overflow-hidden shadow-inner border border-slate-200 mx-auto">
                                 <img 
                                     src={getImageUrl?.(student?.image)} 
                                     alt={student?.name} 
                                     className="w-full h-full object-cover" 
                                 />
                         </div>
-                        <h4 className="font-black text-slate-900 text-lg">{student.name}</h4>
-                        <p className="text-slate-500 font-bold text-sm mt-1">{student.company}</p>
-                        <div className="mt-4 flex items-center justify-between">
-                            <span className="text-emerald-600 font-black text-xs uppercase tracking-widest">{student.position}</span>
-                            <span className="text-slate-900 font-black text-sm">{student.package}</span>
+                        <div className="text-center">
+                            <h4 className="font-black text-slate-900 text-sm line-clamp-1">{student.name}</h4>
+                            <p className="text-slate-500 font-bold text-[10px] uppercase tracking-wider line-clamp-1 mt-0.5">{student.company}</p>
+                            <div className="mt-2 pt-2 border-t border-slate-50 flex items-center justify-between gap-1">
+                                <span className="text-emerald-600 font-black text-[9px] uppercase tracking-tighter truncate">{student.position}</span>
+                                <span className="text-slate-900 font-black text-[10px] whitespace-nowrap">{student.package}</span>
+                            </div>
                         </div>
                     </div>
                 ))}
