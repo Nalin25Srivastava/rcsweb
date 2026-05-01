@@ -408,7 +408,7 @@ const Viewjobs = () => {
             location: details.location || prev.location,
             dutyTime: details.time || 'not declared',
             gender: details.gender || prev.gender,
-            description: details.note || rawText || prev.description,
+            description: rawText || prev.description,
             companyName: details.company || prev.companyName,
             contactNumbers: details.phones.length > 0 ? details.phones : prev.contactNumbers,
         }));
