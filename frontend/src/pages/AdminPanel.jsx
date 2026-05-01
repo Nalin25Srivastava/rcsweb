@@ -508,42 +508,35 @@ const StudentManagementView = ({ students = [], onAdd, onEdit, onDelete, getImag
                 </button>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {(students || []).map((student, i) => (
-                    <div key={i} className="bg-white rounded-[2rem] border border-slate-100 shadow-sm relative group hover:border-emerald-500 hover:shadow-xl transition-all overflow-hidden flex flex-col items-center p-5 text-center">
-                        {/* Actions overlaying the card */}
-                        <div className="absolute top-2 right-2 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-20">
+                    <div key={i} className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm relative group overflow-hidden">
+                        <div className="absolute top-0 right-0 p-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                             <button 
                                 onClick={() => onEdit(student)}
-                                className="p-2 bg-white/95 backdrop-blur-sm text-blue-600 rounded-xl shadow-md border border-slate-100 hover:bg-blue-600 hover:text-white transition-all"
+                                className="p-2 bg-white/90 backdrop-blur-sm text-blue-600 rounded-xl shadow-lg hover:bg-blue-600 hover:text-white transition-all"
                             >
                                 <Pencil className="w-4 h-4" />
                             </button>
                             <button 
                                 onClick={() => onDelete(student._id)}
-                                className="p-2 bg-white/95 backdrop-blur-sm text-red-500 rounded-xl shadow-md border border-slate-100 hover:bg-red-500 hover:text-white transition-all"
+                                className="p-2 bg-white/90 backdrop-blur-sm text-red-500 rounded-xl shadow-lg hover:bg-red-500 hover:text-white transition-all"
                             >
                                 <Trash2 className="w-4 h-4" />
                             </button>
                         </div>
-
-                        {/* Image Circle */}
-                        <div className="w-16 h-16 rounded-2xl overflow-hidden mb-4 ring-4 ring-slate-50 shadow-md">
-                            <img 
-                                src={getImageUrl?.(student?.image)} 
-                                alt={student?.name} 
-                                className="w-full h-full object-cover" 
-                            />
+                        <div className="w-20 h-20 bg-slate-100 rounded-2xl mb-4 overflow-hidden shadow-inner border border-slate-200">
+                                <img 
+                                    src={getImageUrl?.(student?.image)} 
+                                    alt={student?.name} 
+                                    className="w-full h-full object-cover" 
+                                />
                         </div>
-
-                        {/* Text Info */}
-                        <div className="space-y-1 w-full">
-                            <h4 className="font-black text-slate-900 text-base line-clamp-1 leading-tight">{student.name}</h4>
-                            <p className="text-slate-500 font-bold text-xs uppercase tracking-wider line-clamp-1">{student.company}</p>
-                            <div className="pt-3 mt-3 border-t border-slate-50">
-                                <span className="text-emerald-600 font-black text-sm block leading-none">{student.package}</span>
-                                <span className="text-slate-400 font-bold text-[10px] uppercase tracking-tighter truncate block mt-1">{student.position}</span>
-                            </div>
+                        <h4 className="font-black text-slate-900 text-lg">{student.name}</h4>
+                        <p className="text-slate-500 font-bold text-sm mt-1">{student.company}</p>
+                        <div className="mt-4 flex items-center justify-between">
+                            <span className="text-emerald-600 font-black text-xs uppercase tracking-widest">{student.position}</span>
+                            <span className="text-slate-900 font-black text-sm">{student.package}</span>
                         </div>
                     </div>
                 ))}
