@@ -307,31 +307,45 @@ const Viewjobs = () => {
         
         const details = {
             phones: [],
+            profiles: [],
         };
         const lines = desc.split('\n');
         
         // Define common patterns to look for
         const patterns = {
-            profile: /PROFILE\s*:\s*(.*)/i,
-            qualification: /QUALIFICATION\s*:\s*(.*)/i,
-            salary: /Salary\s*:\s*(.*)/i,
-            time: /Time\s*:\s*(.*)/i,
-            location: /Location\s*-\s*(.*)/i,
-            age: /AGE\s*:\s*(.*)/i,
-            candidate: /(.*candidate.*apply)/i,
-            note: /Note\s*:\s*(.*)/i,
-            callingTime: /CALLING TIME\s*[:_]\s*(.*)/i,
-            website: /Website\s*[:]\s*(.*)/i,
-            gender: /GENDER\s*:\s*(.*)/i,
-            company: /COMPANY\s*:\s*(.*)/i,
+            title: /(?:PROFILE|TITLE|DESIGNATION|OPPORTUNITY|JOB)\s*[:*]*\s*(.*)/i,
+            qualification: /(?:QUALIFICATION|EDUCATION)\s*[:*]*\s*(.*)/i,
+            salary: /(?:Salary|Package|Pay)\s*[:*]*\s*(.*)/i,
+            time: /(?:Time|Working Hours|Timing)\s*[:*]*\s*(.*)/i,
+            location: /(?:Location|Place)\s*[-:*]*\s*(.*)/i,
+            age: /AGE\s*[:*]*\s*(.*)/i,
+            note: /Note\s*[:*]*\s*(.*)/i,
+            callingTime: /CALLING TIME\s*[:*_]\s*(.*)/i,
+            website: /Website\s*[:*]\s*(.*)/i,
+            gender: /GENDER\s*[:*]\s*(.*)/i,
+            company: /(?:COMPANY|BANK|EMPLOYER)\s*[:*]*\s*(.*)/i,
         };
 
         lines.forEach(line => {
-            const trimmed = line.trim();
+            const trimmed = line.replace(/[*_~🚨✨🏦💼🔥🎯👉📌🎓🎂📍🌍💰👥⏰⚠️🚀🏢📧🌐📞📲🕙✔]/g, '').trim();
+            
             for (const [key, regex] of Object.entries(patterns)) {
                 const match = trimmed.match(regex);
                 if (match && match[1]) {
-                    details[key] = match[1].trim();
+                    const value = match[1].trim();
+                    if (value && !details[key]) {
+                        details[key] = value;
+                    }
+                }
+            }
+            
+            // Extract profiles (lines with bullet points or bullet-like emojis)
+            if (line.includes('👉') || line.includes('✔') || line.includes('•') || line.includes('- ')) {
+                const profileMatch = line.replace(/[*_~👉✔•-]/g, '').trim();
+                if (profileMatch && profileMatch.length > 3 && profileMatch.length < 50 && !profileMatch.toLowerCase().includes('qualification') && !profileMatch.toLowerCase().includes('salary')) {
+                    if (!details.profiles.includes(profileMatch)) {
+                        details.profiles.push(profileMatch);
+                    }
                 }
             }
             
@@ -340,15 +354,46 @@ const Viewjobs = () => {
             if (phoneMatch) {
                 details.phones = [...new Set([...details.phones, ...phoneMatch])];
             }
-
-            // Extract Website specifically if not caught by patterns
-            if (trimmed.toLowerCase().includes('website')) {
-                const webMatch = trimmed.match(/(https?:\/\/[^\s]+|[a-zA-Z0-9-]+\.[a-z]{2,})/i);
-                if (webMatch) details.website = webMatch[0];
-            }
         });
 
-        return Object.keys(details).length > 1 ? details : null;
+        // Specific fallback for "Available Positions" header
+        const posIndex = desc.indexOf('Available Positions');
+        if (posIndex !== -1) {
+            const posText = desc.substring(posIndex).split('\n');
+            posText.slice(1, 6).forEach(l => {
+                if (l.includes('👉')) {
+                    const p = l.replace(/[👉*]/g, '').trim();
+                    if (p && !details.profiles.includes(p)) details.profiles.push(p);
+                }
+            });
+        }
+
+        return details;
+    };
+
+    const [rawText, setRawText] = useState('');
+    const [formMode, setFormMode] = useState('manual'); // 'manual' | 'raw'
+
+    const handleAutoFill = () => {
+        if (!rawText.trim()) return;
+        const details = parseJobDetails(rawText);
+        
+        setJobFormData(prev => ({
+            ...prev,
+            title: details.title || prev.title,
+            qualification: details.qualification || prev.qualification,
+            salary: details.salary || prev.salary,
+            location: details.location || prev.location,
+            dutyTime: details.time || prev.dutyTime,
+            gender: details.gender || prev.gender,
+            description: rawText || prev.description,
+            companyName: details.company || prev.companyName,
+            contactNumbers: details.phones.length > 0 ? details.phones : prev.contactNumbers,
+            customFields: details.profiles.length > 0 ? [{ label: 'Profiles', value: details.profiles.join(', ') }] : prev.customFields
+        }));
+        
+        setFormMode('manual');
+        setRawText('');
     };
 
     return (
@@ -505,15 +550,55 @@ const Viewjobs = () => {
                             exit={{ scale: 0.9, y: 20 }}
                         >
                             <div className="flex justify-between items-center mb-6">
-                                <h2 className="text-3xl font-black text-slate-900 uppercase tracking-tight">
-                                    {isEditing ? 'Edit Job Posting' : 'Create New Job'}
-                                </h2>
+                                <div className="space-y-1">
+                                    <h2 className="text-3xl font-black text-slate-900 uppercase tracking-tight">
+                                        {isEditing ? 'Edit Job Posting' : 'Create New Job'}
+                                    </h2>
+                                    <div className="flex gap-4">
+                                        <button 
+                                            type="button"
+                                            onClick={() => setFormMode('manual')}
+                                            className={`text-[10px] font-black uppercase tracking-widest pb-1 border-b-2 transition-all ${formMode === 'manual' ? 'text-emerald-500 border-emerald-500' : 'text-slate-400 border-transparent'}`}
+                                        >
+                                            Manual Form
+                                        </button>
+                                        <button 
+                                            type="button"
+                                            onClick={() => setFormMode('raw')}
+                                            className={`text-[10px] font-black uppercase tracking-widest pb-1 border-b-2 transition-all ${formMode === 'raw' ? 'text-emerald-500 border-emerald-500' : 'text-slate-400 border-transparent'}`}
+                                        >
+                                            Auto-Fill from Raw Text
+                                        </button>
+                                    </div>
+                                </div>
                                 <button onClick={() => setIsJobFormOpen(false)} className="p-2 hover:bg-slate-100 rounded-full transition-colors">
                                     <X className="w-6 h-6 text-slate-400" />
                                 </button>
                             </div>
 
-                            <form onSubmit={handleFormSubmit} className="flex-grow overflow-y-auto pr-2 custom-scrollbar space-y-6">
+                            {formMode === 'raw' ? (
+                                <div className="flex-grow space-y-4">
+                                    <div className="bg-emerald-50 p-4 rounded-2xl border border-emerald-100">
+                                        <p className="text-xs font-bold text-emerald-800">
+                                            💡 Paste the raw job message (from WhatsApp/Email) below. We will automatically detect titles, salaries, and contacts!
+                                        </p>
+                                    </div>
+                                    <textarea
+                                        value={rawText}
+                                        onChange={(e) => setRawText(e.target.value)}
+                                        placeholder="Paste raw data here..."
+                                        className="w-full h-64 p-4 bg-slate-50 border-2 border-slate-100 focus:border-emerald-500 focus:bg-white rounded-2xl font-bold text-slate-900 transition-all outline-none resize-none"
+                                    ></textarea>
+                                    <button
+                                        type="button"
+                                        onClick={handleAutoFill}
+                                        className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-black py-4 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 uppercase tracking-widest text-sm"
+                                    >
+                                        Auto-Fill Form <ArrowRight className="w-4 h-4" />
+                                    </button>
+                                </div>
+                            ) : (
+                                <form onSubmit={handleFormSubmit} className="flex-grow overflow-y-auto pr-2 custom-scrollbar space-y-6">
                                 {/* Profile / Title */}
                                 <div>
                                     <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Job Profile / Title</label>
