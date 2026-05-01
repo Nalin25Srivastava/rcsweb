@@ -1001,6 +1001,16 @@ const Viewjobs = () => {
                                                             </div>
                                                         </div>
                                                     )}
+                                                    {/* Complete Job Description */}
+                                                    <div className="bg-slate-50 p-6 rounded-3xl border-2 border-slate-100 shadow-inner mt-4">
+                                                        <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+                                                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
+                                                            Complete Job Description
+                                                        </h4>
+                                                        <div className="text-slate-700 font-bold text-sm leading-relaxed space-y-4 whitespace-pre-wrap bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                                                            {selectedJob.description}
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 
                                                 {/* Custom Fields Display */}
