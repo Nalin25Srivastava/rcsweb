@@ -885,9 +885,13 @@ const Viewjobs = () => {
                                                             <span className="text-[18px] font-black text-green-800 uppercase tracking-widest block">Job Title / Designation</span>
                                                         </div>
                                                         {jobData.urgency !== 'Standard' && (
-                                                            <span className="bg-red-600 text-white text-[10px] font-black px-3 py-1 rounded-full animate-pulse uppercase tracking-wider shadow-lg">
+                                                            <motion.span 
+                                                                className="bg-red-600 text-white text-[12px] md:text-sm font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-lg border-2 border-white/20"
+                                                                animate={{ opacity: [1, 0.4, 1] }}
+                                                                transition={{ duration: 0.6, repeat: Infinity, ease: "linear" }}
+                                                            >
                                                                 {jobData.urgency} HIRING
-                                                            </span>
+                                                            </motion.span>
                                                         )}
                                                     </div>
                                                     <h2 className="text-4xl md:text-5xl font-black text-gray-900 uppercase mb-4 leading-tight">
