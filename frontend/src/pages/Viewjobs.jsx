@@ -336,6 +336,7 @@ const Viewjobs = () => {
             company: /(?:BANK|COMPANY|SFB|🏢)\s*[:*-]*\s*(.*)/i,
             profile: /(?:Job Profile|Profile|Role)\s*[:*-]*\s*(.*)/i,
             note: /(?:Additional Note|Note)\s*[:*-]*\s*(.*)/i,
+            hiringFor: /(?:Hiring For|Organization|Project)\s*[:*-]*\s*(.*)/i,
         };
 
         lines.forEach(line => {
@@ -866,6 +867,7 @@ const Viewjobs = () => {
                                     techSkills: req.technical_skills || [],
                                     softSkills: req.soft_skills || [],
                                     status: jp.status || (details.candidate ? 'Limited seats' : 'Active'),
+                                    hiringFor: selectedJob.hiringFor || details.hiringFor || '',
                                     customFields: jp.custom_fields ? Object.entries(jp.custom_fields) : []
                                 };
 
@@ -888,7 +890,10 @@ const Viewjobs = () => {
                                                             </span>
                                                         )}
                                                     </div>
-                                                    <h2 className="text-4xl md:text-5xl font-black text-gray-900 uppercase mb-4 leading-tight">{jobData.title}</h2>
+                                                    <h2 className="text-4xl md:text-5xl font-black text-gray-900 uppercase mb-4 leading-tight">
+                                                        {jobData.hiringFor && <span className="block text-sm text-green-900/60 mb-1">Hiring For: {jobData.hiringFor}</span>}
+                                                        {jobData.title}
+                                                    </h2>
                                                     
                                                     <div className="flex flex-wrap gap-4 mt-4">
                                                         <div className="flex items-baseline gap-3">
