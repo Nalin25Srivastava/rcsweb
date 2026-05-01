@@ -1095,12 +1095,14 @@ const Viewjobs = () => {
                                                             {new Date(selectedJob.createdAt).toLocaleDateString(undefined, { dateStyle: 'long' })} at {new Date(selectedJob.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
                                                         </span>
                                                     </div>
-                                                    <button 
-                                                        onClick={() => handleDelete(selectedJob._id)}
-                                                        className="w-full bg-red-50 hover:bg-red-500 text-red-600 hover:text-white font-black py-3 px-4 rounded-2xl text-[10px] transition-all border border-red-200 hover:border-red-500 uppercase tracking-[0.2em] flex items-center justify-center gap-2"
-                                                    >
-                                                        <Trash2 className="w-4 h-4" /> Delete Listing
-                                                    </button>
+                                                    {user?.role === 'admin' && (
+                                                        <button 
+                                                            onClick={() => handleDelete(selectedJob._id)}
+                                                            className="w-full bg-red-50 hover:bg-red-500 text-red-600 hover:text-white font-black py-3 px-4 rounded-2xl text-[10px] transition-all border border-red-200 hover:border-red-500 uppercase tracking-[0.2em] flex items-center justify-center gap-2"
+                                                        >
+                                                            <Trash2 className="w-4 h-4" /> Delete Listing
+                                                        </button>
+                                                    )}
                                                     
                                                     {user?.role === 'admin' && (
                                                         <button 
