@@ -1001,16 +1001,7 @@ const Viewjobs = () => {
                                                             </div>
                                                         </div>
                                                     )}
-                                                    {/* Complete Job Description */}
-                                                    <div className="bg-slate-50 p-6 rounded-3xl border-2 border-slate-100 shadow-inner mt-4">
-                                                        <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
-                                                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
-                                                            Complete Job Description
-                                                        </h4>
-                                                        <div className="text-slate-700 font-bold text-sm leading-relaxed space-y-4 whitespace-pre-wrap bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-                                                            {selectedJob.description}
-                                                        </div>
-                                                    </div>
+                                                    )}
                                                 </div>
                                                 
                                                 {/* Custom Fields Display */}
@@ -1120,24 +1111,24 @@ const Viewjobs = () => {
                                         </div>
 
                                         {/* Full Description Section - Outside the grid for full width */}
-                                        <div className="bg-green-400 p-8 rounded-[2rem] border-2 border-green-500/20 shadow-xl relative overflow-hidden group">
-                                            <div className="absolute top-0 left-0 w-2 h-full bg-green-700 transition-all group-hover:w-3"></div>
+                                        <div className="bg-green-500 p-8 rounded-[2rem] border-2 border-green-600/20 shadow-xl relative overflow-hidden group mt-6">
+                                            <div className="absolute top-0 left-0 w-2 h-full bg-green-800 transition-all group-hover:w-3"></div>
                                             <div className="flex items-center justify-between mb-8">
                                                 <div className="flex items-center gap-4">
                                                     <div className="w-12 h-12 bg-white/40 rounded-2xl flex items-center justify-center text-green-900 shadow-inner">
-                                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                                        <Briefcase className="w-6 h-6" />
                                                     </div>
                                                     <div>
-                                                        <h4 className="text-xs font-black uppercase tracking-[0.3em] text-green-800/60">Detailed overview</h4>
+                                                        <h4 className="text-xs font-black uppercase tracking-[0.3em] text-green-900/60">Detailed overview</h4>
                                                         <h3 className="text-2xl font-black text-gray-900 uppercase">Complete Job Description</h3>
                                                     </div>
                                                 </div>
-                                                <div className="h-px bg-green-500/20 flex-grow mx-8 hidden sm:block"></div>
+                                                <div className="h-px bg-green-900/10 flex-grow mx-8 hidden sm:block"></div>
                                             </div>
                                             <div className="space-y-4">
-                                                <p className="text-lg font-bold text-red-900 uppercase leading-relaxed whitespace-pre-wrap">
+                                                <div className="text-[16px] font-bold text-gray-900 leading-relaxed whitespace-pre-wrap bg-white/30 p-6 rounded-2xl border border-white/40 backdrop-blur-sm">
                                                     {selectedJob.description}
-                                                </p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
