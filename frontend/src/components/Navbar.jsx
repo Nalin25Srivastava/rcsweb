@@ -30,6 +30,7 @@ const Navbar = () => {
         { name: 'Registered', href: '/registered-candidates', adminOnly: true },
         { name: 'Registration', href: '/postres' },
         { name: 'View Jobs', href: '/viewjobs' },
+        { name: 'Achievements', href: '/achievements' },
         { name: 'Contact Us', href: '/contact' },
         { name: 'Admin Panel', href: '/admin-panel', adminOnly: true },
     ]

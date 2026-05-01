@@ -10,6 +10,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import AdminPanel from './pages/AdminPanel';
 import Services from './pages/Services';
+import Achievements from './pages/Achievements';
 import PrivateRoute from './components/PrivateRoute';
 
 const PageWrapper = ({ children }) => {
@@ -43,6 +44,7 @@ const AppRoutes = () => {
                 <Route path="/contact" element={<PageWrapper><Contact /></PageWrapper>} />
                 <Route path="/services" element={<PageWrapper><Services /></PageWrapper>} />
                 <Route path="/viewjobs" element={<PageWrapper><Viewjobs /></PageWrapper>} />
+                <Route path="/achievements" element={<PageWrapper><Achievements /></PageWrapper>} />
                 <Route path="/login" element={<PageWrapper><Login /></PageWrapper>} />
                 <Route path="/signup" element={<PageWrapper><Signup /></PageWrapper>} />
                 <Route path="/admin-panel" element={
