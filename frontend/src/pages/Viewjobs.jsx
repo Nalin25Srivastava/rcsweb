@@ -308,64 +308,83 @@ const Viewjobs = () => {
         const details = {
             phones: [],
             profiles: [],
+            title: '',
+            company: '',
+            salary: '',
+            location: '',
+            qualification: '',
+            time: '',
+            age: '',
+            gender: '',
         };
-        const lines = desc.split('\n');
         
-        // Define common patterns to look for
+        const lines = desc.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+        
+        // 1. Detect Title (Usually the first prominent line)
+        for (const line of lines) {
+            const clean = line.replace(/[*_~🚨✨🏦💼🔥🎯👉📌🎓🎂📍🌍💰👥⏰⚠️🚀🏢📧🌐📞📲🕙✔]/g, '').trim();
+            if (clean.toLowerCase().includes('opportunity') || clean.toLowerCase().includes('requirement') || clean.toLowerCase().includes('hiring')) {
+                details.title = clean;
+                break;
+            }
+        }
+
+        // 2. Detect Company (Look for Bank or SFB)
+        for (const line of lines) {
+            const clean = line.replace(/[*_~🚨✨🏦💼🔥🎯👉📌🎓🎂📍🌍💰👥⏰⚠️🚀🏢📧🌐📞📲🕙✔]/g, '').trim();
+            if (clean.toLowerCase().includes('bank') || clean.toLowerCase().includes('sfb') || clean.toLowerCase().includes('private limited') || clean.toLowerCase().includes('ltd')) {
+                details.company = clean.split('में')[0].trim(); // Handle Hindi "में"
+                break;
+            }
+        }
+
+        // 3. Patterns for key-value extraction
         const patterns = {
-            title: /(?:PROFILE|TITLE|DESIGNATION|OPPORTUNITY|JOB)\s*[:*]*\s*(.*)/i,
-            qualification: /(?:QUALIFICATION|EDUCATION)\s*[:*]*\s*(.*)/i,
-            salary: /(?:Salary|Package|Pay)\s*[:*]*\s*(.*)/i,
-            time: /(?:Time|Working Hours|Timing)\s*[:*]*\s*(.*)/i,
-            location: /(?:Location|Place)\s*[-:*]*\s*(.*)/i,
-            age: /AGE\s*[:*]*\s*(.*)/i,
-            note: /Note\s*[:*]*\s*(.*)/i,
-            callingTime: /CALLING TIME\s*[:*_]\s*(.*)/i,
-            website: /Website\s*[:*]\s*(.*)/i,
-            gender: /GENDER\s*[:*]\s*(.*)/i,
-            company: /(?:COMPANY|BANK|EMPLOYER)\s*[:*]*\s*(.*)/i,
+            qualification: /(?:Qualification|Education)\s*[:*]*\s*(.*)/i,
+            salary: /(?:Salary|Package|Pay|💵)\s*[:*]*\s*(.*)/i,
+            time: /(?:Time|Working Hours|Timing|⏰)\s*[:*]*\s*(.*)/i,
+            location: /(?:Location|Place|📍|🌍)\s*[-:*]*\s*(.*)/i,
+            age: /(?:Age|🎂)\s*[:*]*\s*(.*)/i,
+            gender: /(?:Gender|👥|Eligibility)\s*[:*]*\s*(.*)/i,
         };
 
         lines.forEach(line => {
-            const trimmed = line.replace(/[*_~🚨✨🏦💼🔥🎯👉📌🎓🎂📍🌍💰👥⏰⚠️🚀🏢📧🌐📞📲🕙✔]/g, '').trim();
+            const cleanLine = line.replace(/[*_~🚨✨🏦💼🔥🎯👉📌🎓🎂📍🌍💰👥⏰⚠️🚀🏢📧🌐📞📲🕙✔]/g, '').trim();
             
             for (const [key, regex] of Object.entries(patterns)) {
-                const match = trimmed.match(regex);
+                const match = line.match(regex) || cleanLine.match(regex);
                 if (match && match[1]) {
                     const value = match[1].trim();
                     if (value && !details[key]) {
-                        details[key] = value;
-                    }
-                }
-            }
-            
-            // Extract profiles (lines with bullet points or bullet-like emojis)
-            if (line.includes('👉') || line.includes('✔') || line.includes('•') || line.includes('- ')) {
-                const profileMatch = line.replace(/[*_~👉✔•-]/g, '').trim();
-                if (profileMatch && profileMatch.length > 3 && profileMatch.length < 50 && !profileMatch.toLowerCase().includes('qualification') && !profileMatch.toLowerCase().includes('salary')) {
-                    if (!details.profiles.includes(profileMatch)) {
-                        details.profiles.push(profileMatch);
+                        details[key] = value.replace(/[*_~✔]/g, '').trim();
                     }
                 }
             }
             
             // Extract phones
-            const phoneMatch = trimmed.match(/(\d{10})/g);
+            const phoneMatch = line.match(/(\d{10})/g);
             if (phoneMatch) {
                 details.phones = [...new Set([...details.phones, ...phoneMatch])];
             }
+            
+            // Extract profiles (lines with specific bullet emojis)
+            if (line.includes('👉') || line.includes('✔') || line.includes('•')) {
+                const profileMatch = line.replace(/[*_~👉✔•-]/g, '').trim();
+                // Avoid capturing labels as profiles
+                if (profileMatch.length > 2 && profileMatch.length < 60 && 
+                    !Object.keys(patterns).some(k => profileMatch.toLowerCase().includes(k.toLowerCase())) &&
+                    !profileMatch.toLowerCase().includes('opportunity') &&
+                    !profileMatch.toLowerCase().includes('requirement')) {
+                    if (!details.profiles.includes(profileMatch)) {
+                        details.profiles.push(profileMatch);
+                    }
+                }
+            }
         });
 
-        // Specific fallback for "Available Positions" header
-        const posIndex = desc.indexOf('Available Positions');
-        if (posIndex !== -1) {
-            const posText = desc.substring(posIndex).split('\n');
-            posText.slice(1, 6).forEach(l => {
-                if (l.includes('👉')) {
-                    const p = l.replace(/[👉*]/g, '').trim();
-                    if (p && !details.profiles.includes(p)) details.profiles.push(p);
-                }
-            });
+        // Fallback for title if still empty
+        if (!details.title && lines.length > 0) {
+            details.title = lines[0].replace(/[*_~🚨✨🏦💼🔥🎯👉📌🎓🎂📍🌍💰👥⏰⚠️🚀🏢📧🌐📞📲🕙✔]/g, '').trim();
         }
 
         return details;
