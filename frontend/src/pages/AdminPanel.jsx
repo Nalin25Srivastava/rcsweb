@@ -508,35 +508,44 @@ const StudentManagementView = ({ students = [], onAdd, onEdit, onDelete, getImag
                 </button>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {(students || []).map((student, i) => (
-                    <div key={i} className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm relative group overflow-hidden">
-                        <div className="absolute top-0 right-0 p-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div key={i} className="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm relative group overflow-hidden hover:border-emerald-500 transition-all flex items-center gap-5">
+                        <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-10">
                             <button 
                                 onClick={() => onEdit(student)}
-                                className="p-2 bg-white/90 backdrop-blur-sm text-blue-600 rounded-xl shadow-lg hover:bg-blue-600 hover:text-white transition-all"
+                                className="p-2 bg-white/95 backdrop-blur-sm text-blue-600 rounded-xl shadow-md border border-slate-50 hover:bg-blue-600 hover:text-white transition-all"
                             >
                                 <Pencil className="w-4 h-4" />
                             </button>
                             <button 
                                 onClick={() => onDelete(student._id)}
-                                className="p-2 bg-white/90 backdrop-blur-sm text-red-500 rounded-xl shadow-lg hover:bg-red-500 hover:text-white transition-all"
+                                className="p-2 bg-white/95 backdrop-blur-sm text-red-500 rounded-xl shadow-md border border-slate-50 hover:bg-red-500 hover:text-white transition-all"
                             >
                                 <Trash2 className="w-4 h-4" />
                             </button>
                         </div>
-                        <div className="w-20 h-20 bg-slate-100 rounded-2xl mb-4 overflow-hidden shadow-inner border border-slate-200">
+
+                        {/* Image on the Left */}
+                        <div className="flex-shrink-0 w-24 h-24 bg-slate-100 rounded-2xl overflow-hidden shadow-inner border border-slate-200">
                                 <img 
                                     src={getImageUrl?.(student?.image)} 
                                     alt={student?.name} 
                                     className="w-full h-full object-cover" 
                                 />
                         </div>
-                        <h4 className="font-black text-slate-900 text-lg">{student.name}</h4>
-                        <p className="text-slate-500 font-bold text-sm mt-1">{student.company}</p>
-                        <div className="mt-4 flex items-center justify-between">
-                            <span className="text-emerald-600 font-black text-xs uppercase tracking-widest">{student.position}</span>
-                            <span className="text-slate-900 font-black text-sm">{student.package}</span>
+
+                        {/* Text Content on the Right */}
+                        <div className="flex-grow min-w-0">
+                            <h4 className="font-black text-slate-900 text-lg truncate">{student.name}</h4>
+                            <p className="text-slate-500 font-bold text-sm uppercase tracking-tight truncate mt-0.5">{student.company}</p>
+                            
+                            <div className="mt-3 space-y-1">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-emerald-600 font-black text-xs uppercase tracking-widest bg-emerald-50 px-2 py-0.5 rounded-full">{student.position}</span>
+                                </div>
+                                <p className="text-slate-900 font-black text-base">{student.package}</p>
+                            </div>
                         </div>
                     </div>
                 ))}
