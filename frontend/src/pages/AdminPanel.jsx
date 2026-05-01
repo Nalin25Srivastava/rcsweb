@@ -508,29 +508,27 @@ const StudentManagementView = ({ students = [], onAdd, onEdit, onDelete, getImag
                 </button>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-8 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3">
                 {(students || []).map((student, i) => (
-                    <div key={i} className="bg-white p-2 rounded-xl border border-slate-100 shadow-sm relative group hover:border-emerald-500 hover:shadow-md transition-all flex items-center gap-3">
-                        {/* Action Overlay */}
-                        <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center gap-2 z-20">
+                    <div key={i} className="bg-white rounded-2xl border border-slate-100 shadow-sm relative group hover:border-emerald-500 hover:shadow-md transition-all overflow-hidden flex flex-col items-center p-3 text-center">
+                        {/* Actions overlaying the card */}
+                        <div className="absolute top-1 right-1 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-20">
                             <button 
                                 onClick={() => onEdit(student)}
-                                className="p-1.5 bg-blue-500 text-white rounded-lg hover:bg-blue-400 transition-colors"
-                                title="Edit"
+                                className="p-1.5 bg-white/90 backdrop-blur-sm text-blue-600 rounded-lg shadow-sm border border-slate-100 hover:bg-blue-600 hover:text-white"
                             >
-                                <Pencil className="w-3.5 h-3.5" />
+                                <Pencil className="w-3 h-3" />
                             </button>
                             <button 
                                 onClick={() => onDelete(student._id)}
-                                className="p-1.5 bg-red-500 text-white rounded-lg hover:bg-red-400 transition-colors"
-                                title="Delete"
+                                className="p-1.5 bg-white/90 backdrop-blur-sm text-red-500 rounded-lg shadow-sm border border-slate-100 hover:bg-red-500 hover:text-white"
                             >
-                                <Trash2 className="w-3.5 h-3.5" />
+                                <Trash2 className="w-3 h-3" />
                             </button>
                         </div>
 
-                        {/* Student Image */}
-                        <div className="flex-shrink-0 w-10 h-10 rounded-full overflow-hidden border-2 border-slate-50 shadow-inner">
+                        {/* Image Circle */}
+                        <div className="w-12 h-12 rounded-full overflow-hidden mb-2 ring-2 ring-slate-50 shadow-inner">
                             <img 
                                 src={getImageUrl?.(student?.image)} 
                                 alt={student?.name} 
@@ -538,14 +536,13 @@ const StudentManagementView = ({ students = [], onAdd, onEdit, onDelete, getImag
                             />
                         </div>
 
-                        {/* Student Info */}
-                        <div className="flex-grow min-w-0">
-                            <h4 className="font-black text-slate-900 text-[11px] truncate leading-tight">{student.name}</h4>
+                        {/* Text Info */}
+                        <div className="space-y-0.5 w-full">
+                            <h4 className="font-black text-slate-900 text-[11px] truncate leading-none">{student.name}</h4>
                             <p className="text-slate-400 font-bold text-[9px] uppercase tracking-tighter truncate">{student.company}</p>
-                            <div className="flex items-center gap-1.5 mt-0.5">
-                                <span className="text-emerald-600 font-black text-[8px] uppercase">{student.package}</span>
-                                <span className="w-1 h-1 rounded-full bg-slate-200"></span>
-                                <span className="text-slate-400 font-bold text-[8px] truncate">{student.position}</span>
+                            <div className="pt-1.5 mt-1.5 border-t border-slate-50">
+                                <span className="text-emerald-600 font-black text-[9px] block leading-none">{student.package}</span>
+                                <span className="text-slate-300 font-medium text-[8px] truncate block mt-0.5">{student.position}</span>
                             </div>
                         </div>
                     </div>
