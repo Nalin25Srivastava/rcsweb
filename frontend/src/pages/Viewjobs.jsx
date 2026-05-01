@@ -320,71 +320,65 @@ const Viewjobs = () => {
         
         const lines = desc.split('\n').map(l => l.trim()).filter(l => l.length > 0);
         
-        // 1. Detect Title (Usually the first prominent line)
-        for (const line of lines) {
-            const clean = line.replace(/[*_~🚨✨🏦💼🔥🎯👉📌🎓🎂📍🌍💰👥⏰⚠️🚀🏢📧🌐📞📲🕙✔]/g, '').trim();
-            if (clean.toLowerCase().includes('opportunity') || clean.toLowerCase().includes('requirement') || clean.toLowerCase().includes('hiring')) {
-                details.title = clean;
-                break;
-            }
-        }
-
-        // 2. Detect Company (Look for Bank or SFB)
-        for (const line of lines) {
-            const clean = line.replace(/[*_~🚨✨🏦💼🔥🎯👉📌🎓🎂📍🌍💰👥⏰⚠️🚀🏢📧🌐📞📲🕙✔]/g, '').trim();
-            if (clean.toLowerCase().includes('bank') || clean.toLowerCase().includes('sfb') || clean.toLowerCase().includes('private limited') || clean.toLowerCase().includes('ltd')) {
-                details.company = clean.split('में')[0].trim(); // Handle Hindi "में"
-                break;
-            }
-        }
-
-        // 3. Patterns for key-value extraction
-        const patterns = {
-            qualification: /(?:Qualification|Education)\s*[:*]*\s*(.*)/i,
-            salary: /(?:Salary|Package|Pay|💵)\s*[:*]*\s*(.*)/i,
-            time: /(?:Time|Working Hours|Timing|⏰)\s*[:*]*\s*(.*)/i,
-            location: /(?:Location|Place|📍|🌍)\s*[-:*]*\s*(.*)/i,
-            age: /(?:Age|🎂)\s*[:*]*\s*(.*)/i,
-            gender: /(?:Gender|👥|Eligibility)\s*[:*]*\s*(.*)/i,
+        // 1. Precise Header Patterns (Targeting user's exact headings)
+        const headerPatterns = {
+            qualification: /(?:Qualification|Education|🎓)\s*[:*]*\s*(.*)/i,
+            salary: /(?:Salary Package|Salary|Package|Pay|💰|💵)\s*[:*]*\s*(.*)/i,
+            time: /(?:Working Hours|Bank Timing|Time|⏰)\s*[:*]*\s*(.*)/i,
+            location: /(?:Job Location|Location|Place|📍|🌍)\s*[-:*]*\s*(.*)/i,
+            age: /(?:Age Limit|Age|🎂)\s*[:*]*\s*(.*)/i,
+            gender: /(?:Eligibility|Gender|👥)\s*[:*]*\s*(.*)/i,
+            company: /(?:BANK|COMPANY|SFB|🏢)\s*[:*]*\s*(.*)/i,
         };
+
+        let currentSection = '';
 
         lines.forEach(line => {
             const cleanLine = line.replace(/[*_~🚨✨🏦💼🔥🎯👉📌🎓🎂📍🌍💰👥⏰⚠️🚀🏢📧🌐📞📲🕙✔]/g, '').trim();
             
-            for (const [key, regex] of Object.entries(patterns)) {
-                const match = line.match(regex) || cleanLine.match(regex);
-                if (match && match[1]) {
-                    const value = match[1].trim();
-                    if (value && !details[key]) {
-                        details[key] = value.replace(/[*_~✔]/g, '').trim();
+            // Check for section markers
+            if (line.toLowerCase().includes('available positions') || line.toLowerCase().includes('job profile')) {
+                currentSection = 'profiles';
+                return;
+            }
+
+            // Extract profiles if in the right section
+            if (currentSection === 'profiles' || line.includes('👉')) {
+                if (line.includes('👉') || line.includes('✔') || line.includes('•')) {
+                    const p = line.replace(/[*_~👉✔•-]/g, '').trim();
+                    if (p && p.length > 2 && p.length < 50 && !Object.keys(headerPatterns).some(k => p.toLowerCase().includes(k.toLowerCase()))) {
+                        if (!details.profiles.includes(p)) details.profiles.push(p);
                     }
                 }
             }
-            
+
+            // Target headings
+            for (const [key, regex] of Object.entries(headerPatterns)) {
+                const match = line.match(regex);
+                if (match && match[1]) {
+                    const val = match[1].trim().replace(/[*_~✔]/g, '').trim();
+                    if (val && !details[key]) {
+                        details[key] = val;
+                        // If we found a header, we are likely out of the profiles section
+                        if (currentSection === 'profiles') currentSection = '';
+                    }
+                }
+            }
+
             // Extract phones
             const phoneMatch = line.match(/(\d{10})/g);
             if (phoneMatch) {
                 details.phones = [...new Set([...details.phones, ...phoneMatch])];
             }
-            
-            // Extract profiles (lines with specific bullet emojis)
-            if (line.includes('👉') || line.includes('✔') || line.includes('•')) {
-                const profileMatch = line.replace(/[*_~👉✔•-]/g, '').trim();
-                // Avoid capturing labels as profiles
-                if (profileMatch.length > 2 && profileMatch.length < 60 && 
-                    !Object.keys(patterns).some(k => profileMatch.toLowerCase().includes(k.toLowerCase())) &&
-                    !profileMatch.toLowerCase().includes('opportunity') &&
-                    !profileMatch.toLowerCase().includes('requirement')) {
-                    if (!details.profiles.includes(profileMatch)) {
-                        details.profiles.push(profileMatch);
-                    }
-                }
-            }
         });
 
-        // Fallback for title if still empty
-        if (!details.title && lines.length > 0) {
-            details.title = lines[0].replace(/[*_~🚨✨🏦💼🔥🎯👉📌🎓🎂📍🌍💰👥⏰⚠️🚀🏢📧🌐📞📲🕙✔]/g, '').trim();
+        // 4. Final Title Selection (Prioritize "Opportunity" or "Bank Name")
+        const firstLineClean = lines[0]?.replace(/[*_~🚨✨🏦💼🔥🎯👉📌🎓🎂📍🌍💰👥⏰⚠️🚀🏢📧🌐📞📲🕙✔]/g, '').trim();
+        details.title = firstLineClean || details.profiles[0] || 'New Job Opening';
+        
+        // If company is in the title line, try to split it
+        if (details.company && details.title.toLowerCase().includes(details.company.toLowerCase())) {
+            // Keep the title as is or refine it
         }
 
         return details;
