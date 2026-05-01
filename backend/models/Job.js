@@ -10,6 +10,10 @@ const jobSchema = new mongoose.Schema({
         type: String,
         trim: true
     },
+    hiringFor: {
+        type: String,
+        trim: true
+    },
     description: {
         type: String,
         required: [true, 'Please add a job description']
