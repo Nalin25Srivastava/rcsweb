@@ -372,9 +372,8 @@ const Viewjobs = () => {
             }
         });
 
-        // 4. Final Title Selection (Prioritize "Opportunity" or "Bank Name")
-        const firstLineClean = lines[0]?.replace(/[*_~🚨✨🏦💼🔥🎯👉📌🎓🎂📍🌍💰👥⏰⚠️🚀🏢📧🌐📞📲🕙✔]/g, '').trim();
-        details.title = firstLineClean || details.profiles[0] || 'New Job Opening';
+        // 4. Final Title Selection (Prioritize the first specific profile/role over generic banners)
+        details.title = details.profiles[0] || lines[0]?.replace(/[*_~🚨✨🏦💼🔥🎯👉📌🎓🎂📍🌍💰👥⏰⚠️🚀🏢📧🌐📞📲🕙✔]/g, '').trim() || 'New Job Opening';
         
         // If company is in the title line, try to split it
         if (details.company && details.title.toLowerCase().includes(details.company.toLowerCase())) {
