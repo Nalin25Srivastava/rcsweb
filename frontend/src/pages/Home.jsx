@@ -162,7 +162,7 @@ const Home = () => {
                 </div>
             </div>
 
-            {/* Placed Students Section */}
+            {/* Placed Students Section - Verified Fix */}
             <div className="bg-slate-50 dark:bg-slate-900 py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-emerald-500 rounded-full blur-[150px] opacity-10"></div>
                 <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-blue-500 rounded-full blur-[150px] opacity-10"></div>
