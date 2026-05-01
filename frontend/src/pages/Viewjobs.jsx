@@ -770,6 +770,7 @@ const Viewjobs = () => {
                                     </button>
                                 </div>
                             </form>
+                        )}
                         </motion.div>
                     </motion.div>
                 )}
