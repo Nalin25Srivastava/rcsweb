@@ -313,43 +313,34 @@ const Viewjobs = () => {
             salary: '',
             location: '',
             qualification: '',
-            time: '',
+            time: 'not declared',
             age: '',
             gender: '',
+            note: '',
         };
         
         const lines = desc.split('\n').map(l => l.trim()).filter(l => l.length > 0);
         
         // 1. Precise Header Patterns (Targeting user's exact headings)
         const headerPatterns = {
-            qualification: /(?:Qualification|Education|🎓)\s*[:*]*\s*(.*)/i,
-            salary: /(?:Salary Package|Salary|Package|Pay|💰|💵)\s*[:*]*\s*(.*)/i,
-            time: /(?:Working Hours|Bank Timing|Time|⏰)\s*[:*]*\s*(.*)/i,
+            qualification: /(?:Qualification|Education|🎓)\s*[:*-]*\s*(.*)/i,
+            salary: /(?:Salary Package|Salary|Package|Pay|💰|💵)\s*[:*-]*\s*(.*)/i,
+            time: /(?:Working Hours|Bank Timing|Time|⏰)\s*[:*-]*\s*(.*)/i,
             location: /(?:Job Location|Location|Place|📍|🌍)\s*[-:*]*\s*(.*)/i,
-            age: /(?:Age Limit|Age|🎂)\s*[:*]*\s*(.*)/i,
-            gender: /(?:Eligibility|Gender|👥)\s*[:*]*\s*(.*)/i,
-            company: /(?:BANK|COMPANY|SFB|🏢)\s*[:*]*\s*(.*)/i,
+            age: /(?:Age Limit|Age|🎂)\s*[:*-]*\s*(.*)/i,
+            gender: /(?:Eligibility|Gender|👥|Candidate)\s*[:*-]*\s*(.*)/i,
+            company: /(?:BANK|COMPANY|SFB|🏢)\s*[:*-]*\s*(.*)/i,
+            profile: /(?:Job Profile|Profile|Role)\s*[:*-]*\s*(.*)/i,
+            note: /(?:Additional Note|Note)\s*[:*-]*\s*(.*)/i,
         };
-
-        let currentSection = '';
 
         lines.forEach(line => {
             const cleanLine = line.replace(/[*_~🚨✨🏦💼🔥🎯👉📌🎓🎂📍🌍💰👥⏰⚠️🚀🏢📧🌐📞📲🕙✔]/g, '').trim();
             
-            // Check for section markers
-            if (line.toLowerCase().includes('available positions') || line.toLowerCase().includes('job profile')) {
-                currentSection = 'profiles';
-                return;
-            }
-
-            // Extract profiles if in the right section
-            if (currentSection === 'profiles' || line.includes('👉')) {
-                if (line.includes('👉') || line.includes('✔') || line.includes('•')) {
-                    const p = line.replace(/[*_~👉✔•-]/g, '').trim();
-                    if (p && p.length > 2 && p.length < 50 && !Object.keys(headerPatterns).some(k => p.toLowerCase().includes(k.toLowerCase()))) {
-                        if (!details.profiles.includes(p)) details.profiles.push(p);
-                    }
-                }
+            // Extract phones first (they can appear anywhere)
+            const phoneMatch = line.match(/(\d{10})/g);
+            if (phoneMatch) {
+                details.phones = [...new Set([...details.phones, ...phoneMatch])];
             }
 
             // Target headings
@@ -359,25 +350,30 @@ const Viewjobs = () => {
                     const val = match[1].trim().replace(/[*_~✔]/g, '').trim();
                     if (val && !details[key]) {
                         details[key] = val;
-                        // If we found a header, we are likely out of the profiles section
-                        if (currentSection === 'profiles') currentSection = '';
                     }
                 }
             }
 
-            // Extract phones
-            const phoneMatch = line.match(/(\d{10})/g);
-            if (phoneMatch) {
-                details.phones = [...new Set([...details.phones, ...phoneMatch])];
+            // Special case for Gender in sentences
+            if (line.toLowerCase().includes('male & female') || line.toLowerCase().includes('both can apply')) {
+                details.gender = 'Any';
+            } else if (line.toLowerCase().includes('male candidate')) {
+                details.gender = 'Male';
+            } else if (line.toLowerCase().includes('female candidate')) {
+                details.gender = 'Female';
             }
         });
 
-        // 4. Final Title Selection (Prioritize the first specific profile/role over generic banners)
-        details.title = details.profiles[0] || lines[0]?.replace(/[*_~🚨✨🏦💼🔥🎯👉📌🎓🎂📍🌍💰👥⏰⚠️🚀🏢📧🌐📞📲🕙✔]/g, '').trim() || 'New Job Opening';
+        // 4. Final Field Mapping
+        details.title = details.profile || details.profiles[0] || lines[0]?.replace(/[*_~🚨✨🏦💼🔥🎯👉📌🎓🎂📍🌍💰👥⏰⚠️🚀🏢📧🌐📞📲🕙✔]/g, '').trim() || 'New Job Opening';
         
-        // If company is in the title line, try to split it
-        if (details.company && details.title.toLowerCase().includes(details.company.toLowerCase())) {
-            // Keep the title as is or refine it
+        // Normalize Gender for Select dropdown
+        if (details.gender.toLowerCase().includes('any') || details.gender.toLowerCase().includes('both') || details.gender.toLowerCase().includes('male & female')) {
+            details.gender = 'Any';
+        } else if (details.gender.toLowerCase().includes('female')) {
+            details.gender = 'Female';
+        } else if (details.gender.toLowerCase().includes('male')) {
+            details.gender = 'Male';
         }
 
         return details;
@@ -396,12 +392,11 @@ const Viewjobs = () => {
             qualification: details.qualification || prev.qualification,
             salary: details.salary || prev.salary,
             location: details.location || prev.location,
-            dutyTime: details.time || prev.dutyTime,
+            dutyTime: details.time || 'not declared',
             gender: details.gender || prev.gender,
-            description: rawText || prev.description,
+            description: details.note || rawText || prev.description,
             companyName: details.company || prev.companyName,
             contactNumbers: details.phones.length > 0 ? details.phones : prev.contactNumbers,
-            customFields: details.profiles.length > 0 ? [{ label: 'Profiles', value: details.profiles.join(', ') }] : prev.customFields
         }));
         
         setFormMode('manual');
