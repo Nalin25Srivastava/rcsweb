@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Download, Send, CheckCircle2, AlertCircle, MapPin, Phone, Mail } from 'lucide-react';
+import { Send, CheckCircle2, AlertCircle, MapPin, Phone, Mail } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
 import { submitContact, reset } from '../store/slices/contactsSlice';
@@ -40,7 +40,7 @@ const Contact = () => {
         dispatch(submitContact(formData));
     };
 
-    const handleDownload = () => window.open('/api/contacts/download', '_blank');
+
 
     const isFormIncomplete = !formData.fullName || !formData.phone || !formData.email || !formData.subject || !formData.message;
     const getDisabledReason = () => {
@@ -69,14 +69,7 @@ const Contact = () => {
                     <p className="text-slate-300 text-lg md:text-xl font-medium leading-relaxed mb-8">
                         Whether you are an enterprise looking for talent, or a candidate seeking your next big leap, our execution team is ready.
                     </p>
-                    <motion.button 
-                        onClick={handleDownload}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="inline-flex flex-col sm:flex-row items-center gap-3 bg-white/10 hover:bg-emerald-500 text-white font-bold backdrop-blur-md px-8 py-4 rounded-full transition-all border border-white/20 uppercase tracking-widest text-sm"
-                    >
-                        <Download className="w-5 h-5" /> Download Contact Data
-                    </motion.button>
+
                 </motion.div>
             </div>
 

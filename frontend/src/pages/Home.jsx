@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import { IoBriefcase, IoSchool, IoPeople, IoTrendingUp } from "react-icons/io5";
-import { Plus, Pencil, Trash2, X, Download, Image as ImageIcon, Upload, Loader2 } from 'lucide-react';
+import { Plus, Pencil, Trash2, X, Image as ImageIcon, Upload, Loader2 } from 'lucide-react';
 import Carousel from '../components/Carousel';
 import PlacementModal from '../components/Admin/PlacementModal';
 import { fetchPlacedStudents, reset as resetPlacedStudents, deletePlacedStudent } from '../store/slices/placedStudentsSlice';
@@ -167,6 +167,15 @@ const Home = () => {
                 <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-emerald-500 rounded-full blur-[150px] opacity-10"></div>
                 <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-blue-500 rounded-full blur-[150px] opacity-10"></div>
                 
+                <div className="max-w-7xl mx-auto flex justify-between items-end mb-12 relative z-10">
+                    <div>
+                        <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight">Our Success <span className="text-emerald-500">Stories</span></h2>
+                        <p className="text-slate-500 dark:text-slate-400 font-bold mt-2 uppercase tracking-widest text-sm">Real placements, real impact.</p>
+                    </div>
+                    {user?.role === 'admin' && (
+                        <motion.button 
+                            onClick={handleAdd}
+                            whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             className="bg-emerald-500 hover:bg-emerald-400 text-slate-900 px-8 py-4 rounded-2xl font-black uppercase tracking-widest flex items-center gap-2 shadow-2xl transition-all border-b-4 border-emerald-700 active:border-b-0 active:translate-y-1"
                         >
@@ -174,6 +183,7 @@ const Home = () => {
                         </motion.button>
                     )}
                 </div>
+
 
                 <motion.div 
                     className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 relative z-10"
