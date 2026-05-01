@@ -42,6 +42,7 @@ const Viewjobs = () => {
         callingTime: '10:00am to 5:00pm',
         website: 'www.rcsconsultant.com',
         companyName: 'RCS PLACEMENT KOTA',
+        hiringFor: '',
         customFields: [] // Array of { label: '', value: '' }
     });
     const itemsPerPage = 8;
@@ -178,6 +179,7 @@ const Viewjobs = () => {
             callingTime: '10:00am to 5:00pm',
             website: 'www.rcsconsultant.com',
             companyName: 'RCS PLACEMENT KOTA',
+            hiringFor: '',
             customFields: []
         });
         setIsEditing(false);
@@ -209,6 +211,7 @@ const Viewjobs = () => {
             callingTime: ad.calling_window || '10:00am to 5:00pm',
             website: ad.website || 'www.rcsconsultant.com',
             companyName: job.companyName || ad.agency_name || 'RCS PLACEMENT KOTA',
+            hiringFor: job.hiringFor || '',
             customFields: job.job_posting?.custom_fields ? Object.entries(job.job_posting.custom_fields).map(([label, value]) => ({ label, value })) : []
         });
         setIsJobFormOpen(true);
@@ -309,6 +312,7 @@ const Viewjobs = () => {
             phones: [],
             profiles: [],
             title: '',
+            hiringFor: '',
             company: '',
             salary: '',
             location: '',
@@ -362,6 +366,14 @@ const Viewjobs = () => {
             } else if (line.toLowerCase().includes('female candidate')) {
                 details.gender = 'Female';
             }
+
+            // Extract Hiring For (e.g., URGENT HIRING FOR GEM PORTAL)
+            if (line.toLowerCase().includes('hiring for')) {
+                const hMatch = line.match(/hiring for\s*[:*-]*\s*(.*)/i);
+                if (hMatch && hMatch[1]) {
+                    details.hiringFor = hMatch[1].trim().replace(/[*_~🚨✨🏦💼🔥🎯👉📌🎓🎂📍🌍💰👥⏰⚠️🚀🏢📧🌐📞📲🕙✔]/g, '').trim();
+                }
+            }
         });
 
         // 4. Final Field Mapping
@@ -389,6 +401,7 @@ const Viewjobs = () => {
         setJobFormData(prev => ({
             ...prev,
             title: details.title || prev.title,
+            hiringFor: details.hiringFor || prev.hiringFor,
             qualification: details.qualification || prev.qualification,
             salary: details.salary || prev.salary,
             location: details.location || prev.location,
@@ -606,6 +619,21 @@ const Viewjobs = () => {
                                 </div>
                             ) : (
                                 <form onSubmit={handleFormSubmit} className="flex-grow overflow-y-auto pr-2 custom-scrollbar space-y-6">
+                                {/* Hiring For */}
+                                <div>
+                                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Hiring For (Organization/Project)</label>
+                                    <div className="relative">
+                                        <Globe className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-500" />
+                                        <input 
+                                            name="hiringFor" 
+                                            value={jobFormData.hiringFor} 
+                                            onChange={handleInputChange} 
+                                            placeholder="e.g. GEM PORTAL / PRIVATE BANK" 
+                                            className="w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl font-bold text-slate-900 transition-all outline-none"
+                                        />
+                                    </div>
+                                </div>
+
                                 {/* Profile / Title */}
                                 <div>
                                     <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Job Profile / Title</label>
