@@ -10,15 +10,18 @@ import SmartButton from '../components/SmartButton';
 const Registration = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { isLoading, isSuccess, isError, message } = useSelector((state) => state.resumes);
+    const { isLoading, isError, message } = useSelector((state) => state.resumes);
     const { user } = useSelector((state) => state.auth);
 
-    const [formData, setFormData] = useState({
-        firstName: '',
-        lastName: '',
-        email: '',
-        phone: '',
-        functionalArea: '',
+    const [formData, setFormData] = useState(() => {
+        const nameParts = user?.name ? user.name.split(' ') : ['', ''];
+        return {
+            firstName: nameParts[0] || '',
+            lastName: nameParts.slice(1).join(' ') || '',
+            email: user?.email || '',
+            phone: '',
+            functionalArea: '',
+        };
     });
     const [file, setFile] = useState(null);
     const [paymentStatus, setPaymentStatus] = useState(null); // 'processing' | 'success' | null
@@ -27,17 +30,8 @@ const Registration = () => {
     useEffect(() => {
         if (!user) {
             navigate('/login?redirect=postres');
-        } else if (user && !formData.email) {
-            // Pre-fill from user account
-            const nameParts = user.name ? user.name.split(' ') : ['', ''];
-            setFormData({
-                ...formData,
-                firstName: nameParts[0] || '',
-                lastName: nameParts.slice(1).join(' ') || '',
-                email: user.email || '',
-            });
         }
-    }, [user, navigate, formData.email]);
+    }, [user, navigate]);
 
     useEffect(() => {
         if (isError) {

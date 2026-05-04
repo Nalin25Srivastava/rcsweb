@@ -222,20 +222,7 @@ const Viewjobs = () => {
         setJobFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const handlePhoneChange = (index, value) => {
-        const newPhones = [...jobFormData.contactNumbers];
-        newPhones[index] = value;
-        setJobFormData(prev => ({ ...prev, contactNumbers: newPhones }));
-    };
 
-    const addPhoneField = () => {
-        setJobFormData(prev => ({ ...prev, contactNumbers: [...prev.contactNumbers, ''] }));
-    };
-
-    const removePhoneField = (index) => {
-        const newPhones = jobFormData.contactNumbers.filter((_, i) => i !== index);
-        setJobFormData(prev => ({ ...prev, contactNumbers: newPhones }));
-    };
 
     const addCustomField = () => {
         setJobFormData(prev => ({ 
@@ -340,7 +327,7 @@ const Viewjobs = () => {
         };
 
         lines.forEach(line => {
-            const cleanLine = line.replace(/[*_~🚨✨🏦💼🔥🎯👉📌🎓🎂📍🌍💰👥⏰⚠️🚀🏢📧🌐📞📲🕙✔]/g, '').trim();
+            line.replace(/[*_~🚨✨🏦💼🔥🎯👉📌🎓🎂📍🌍💰👥⏰⚠️🚀🏢📧🌐📞📲🕙✔]/gu, '').trim();
             
             // Extract phones first (they can appear anywhere)
             const phoneMatch = line.match(/(\d{10})/g);
@@ -372,13 +359,13 @@ const Viewjobs = () => {
             if (line.toLowerCase().includes('hiring for')) {
                 const hMatch = line.match(/hiring for\s*[:*-]*\s*(.*)/i);
                 if (hMatch && hMatch[1]) {
-                    details.hiringFor = hMatch[1].trim().replace(/[*_~🚨✨🏦💼🔥🎯👉📌🎓🎂📍🌍💰👥⏰⚠️🚀🏢📧🌐📞📲🕙✔]/g, '').trim();
+                    details.hiringFor = hMatch[1].trim().replace(/[*_~🚨✨🏦💼🔥🎯👉📌🎓🎂📍🌍💰👥⏰⚠️🚀🏢📧🌐📞📲🕙✔]/gu, '').trim();
                 }
             }
         });
 
         // 4. Final Field Mapping
-        details.title = details.profile || details.profiles[0] || lines[0]?.replace(/[*_~🚨✨🏦💼🔥🎯👉📌🎓🎂📍🌍💰👥⏰⚠️🚀🏢📧🌐📞📲🕙✔]/g, '').trim() || 'New Job Opening';
+        details.title = details.profile || details.profiles[0] || lines[0]?.replace(/[*_~🚨✨🏦💼🔥🎯👉📌🎓🎂📍🌍💰👥⏰⚠️🚀🏢📧🌐📞📲🕙✔]/gu, '').trim() || 'New Job Opening';
         
         // Normalize Gender for Select dropdown
         if (details.gender.toLowerCase().includes('any') || details.gender.toLowerCase().includes('both') || details.gender.toLowerCase().includes('male & female')) {

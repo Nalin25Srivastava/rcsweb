@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, UserPlus, Info, Search, List, Image as ImageIcon, Upload, Loader2 } from 'lucide-react';
@@ -7,15 +7,30 @@ import SmartButton from '../SmartButton';
 
 const RegisteredCandidateModal = ({ isOpen, onClose, candidate = null, isEditing = false, users = [] }) => {
     const dispatch = useDispatch();
-    const [formData, setFormData] = useState({
-        userId: '',
-        name: '',
-        email: '',
-        phone: '',
-        course: '',
-        batch: '',
-        status: 'Active',
-        image: ''
+    const [formData, setFormData] = useState(() => {
+        if (candidate) {
+            const isUserObject = !candidate.user && candidate.email;
+            return {
+                userId: isUserObject ? candidate._id : (candidate.user || ''),
+                name: candidate.name || '',
+                email: candidate.email || '',
+                phone: candidate.phone || (candidate.resume?.phone || ''),
+                course: candidate.course || (candidate.resume?.functionalArea || ''),
+                batch: candidate.batch || '',
+                status: candidate.status || 'Active',
+                image: candidate.image || (candidate.resume?.image || '')
+            };
+        }
+        return {
+            userId: '',
+            name: '',
+            email: '',
+            phone: '',
+            course: '',
+            batch: '',
+            status: 'Active',
+            image: ''
+        };
     });
 
     const [searchTerm, setSearchTerm] = useState('');
@@ -71,34 +86,6 @@ const RegisteredCandidateModal = ({ isOpen, onClose, candidate = null, isEditing
             setIsUploading(false);
         }
     };
-
-    useEffect(() => {
-        if (candidate) {
-            const isUserObject = !candidate.user && candidate.email;
-            
-            setFormData({
-                userId: isUserObject ? candidate._id : (candidate.user || ''),
-                name: candidate.name || '',
-                email: candidate.email || '',
-                phone: candidate.phone || (candidate.resume?.phone || ''),
-                course: candidate.course || (candidate.resume?.functionalArea || ''),
-                batch: candidate.batch || '',
-                status: candidate.status || 'Active',
-                image: candidate.image || (candidate.resume?.image || '')
-            });
-        } else {
-            setFormData({
-                userId: '',
-                name: '',
-                email: '',
-                phone: '',
-                course: '',
-                batch: '',
-                status: 'Active',
-                image: ''
-            });
-        }
-    }, [candidate, isOpen]);
 
     const filteredUsers = users.filter(u => 
         u.name.toLowerCase().includes(searchTerm.toLowerCase()) || 

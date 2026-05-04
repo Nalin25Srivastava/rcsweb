@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { X, Save, AlertCircle, CheckCircle2, Layout, FileText, List, Zap } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDispatch } from 'react-redux';
@@ -6,22 +6,9 @@ import { updateService } from '../../store/slices/servicesSlice';
 
 const ServiceEditModal = ({ isOpen, onClose, service }) => {
     const dispatch = useDispatch();
-    const [formData, setFormData] = useState({
-        title: '',
-        shortDesc: '',
-        description: '',
-        features: [''],
-        iconName: '',
-        color: '',
-        borderColor: '',
-        accentColor: '',
-        order: 0
-    });
-    const [status, setStatus] = useState({ loading: false, success: false, error: null });
-
-    useEffect(() => {
+    const [formData, setFormData] = useState(() => {
         if (service) {
-            setFormData({
+            return {
                 title: service.title || '',
                 shortDesc: service.shortDesc || '',
                 description: service.description || '',
@@ -31,9 +18,21 @@ const ServiceEditModal = ({ isOpen, onClose, service }) => {
                 borderColor: service.borderColor || '',
                 accentColor: service.accentColor || '',
                 order: service.order || 0
-            });
+            };
         }
-    }, [service]);
+        return {
+            title: '',
+            shortDesc: '',
+            description: '',
+            features: [''],
+            iconName: '',
+            color: '',
+            borderColor: '',
+            accentColor: '',
+            order: 0
+        };
+    });
+    const [status, setStatus] = useState({ loading: false, success: false, error: null });
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;

@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, ArrowRight, ShieldAlert, CheckCircle, XCircle } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
-import { login, googleLogin, reset, setSecretVerified } from '../store/slices/authSlice';
+import { login, googleLogin, reset } from '../store/slices/authSlice';
 import { motion, AnimatePresence } from 'framer-motion';
 import SmartButton from '../components/SmartButton';
 
@@ -15,11 +15,48 @@ const Login = () => {
     const navigate = useNavigate();
 
     const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
-    const [unpaidEmail, setUnpaidEmail] = useState(null);
     const [verificationStatus, setVerificationStatus] = useState(null); // 'success' | 'error' | null
-    
-    const VIP_EMAILS = ['hitkarikusum.ngo@gmail.com', 'khmbvs26@gmail.com'];
-    const isVIPEmail = (email) => VIP_EMAILS.includes(email);
+    const VIP_EMAILS = useMemo(() => ['hitkarikusum.ngo@gmail.com', 'khmbvs26@gmail.com'], []);
+    const isVIPEmail = useCallback((email) => VIP_EMAILS.includes(email), [VIP_EMAILS]);
+
+    const handleVerifyAdmin = () => {
+        if (adminSecret === 'rcsplacements2009') {
+            setVerificationStatus('success');
+        } else {
+            setVerificationStatus('error');
+            setTimeout(() => {
+                setRole('user');
+                setAdminSecret('');
+                setVerificationStatus(null);
+            }, 1500);
+        }
+    };
+
+    const handleSubmit = useCallback(async (e) => {
+        if (e) e.preventDefault();
+        
+        // Admin verification guard
+        if (role === 'admin' && verificationStatus !== 'success' && !isVIPEmail(email)) {
+            alert('Verify First');
+            return;
+        }
+
+        const action = await dispatch(login({ email, password, role, adminSecret }));
+        if (login.rejected.match(action)) {
+            if (action.payload && typeof action.payload === 'object' && action.payload.requiresPayment) {
+                // setUnpaidEmail(action.payload.email); // Keeping the logic but removing unused state if needed
+            }
+        }
+    }, [dispatch, email, password, role, adminSecret, verificationStatus, isVIPEmail]);
+
+    const handleEmailChange = (e) => {
+        const val = e.target.value;
+        setEmail(val);
+        if (isVIPEmail(val)) {
+            setRole('admin');
+            setAdminSecret('rcsplacements2009');
+        }
+    };
 
     // Native Google SDK Handler
     useEffect(() => {
@@ -56,11 +93,7 @@ const Login = () => {
             setTimeout(() => dispatch(reset()), 100);
         }
         
-        // Auto-detect admin if VIP email is detected
-        if (isVIPEmail(email) && role !== 'admin') {
-            setRole('admin');
-            setAdminSecret('rcsplacements2009'); // VIPs get the secret pre-filled for the request
-        }
+        /* VIP check moved to handleEmailChange */
 
         if (isError) {
             // Check if it's a role mismatch error
@@ -68,20 +101,26 @@ const Login = () => {
                 message === 'Admins must login using the Admin account type.') {
                 
                 if (isVIPEmail(email)) {
-                    setRole('admin');
-                    setAdminSecret('rcsplacements2009');
-                    // Retry login automatically for VIP
-                    handleSubmit({ preventDefault: () => {} });
+                    setTimeout(() => {
+                        setRole('admin');
+                        setAdminSecret('rcsplacements2009');
+                        // Retry login automatically for VIP
+                        handleSubmit({ preventDefault: () => {} });
+                    }, 0);
                 } else if (role === 'user') {
                     // Admin trying to login as user
                     alert("You are an Admin! Please select 'Admin' account type to login.");
-                    setRole('admin');
-                    dispatch(reset());
+                    setTimeout(() => {
+                        setRole('admin');
+                        dispatch(reset());
+                    }, 0);
                 } else {
                     // User trying to login as admin
                     alert("you are user login or signup as user only");
-                    setRole('user');
-                    dispatch(reset());
+                    setTimeout(() => {
+                        setRole('user');
+                        dispatch(reset());
+                    }, 0);
                 }
             }
 
@@ -95,37 +134,9 @@ const Login = () => {
                 return () => clearTimeout(timer);
             }
         }
-    }, [user, isError, isSuccess, message, navigate, dispatch, email, role]);
+    }, [user, isError, isSuccess, message, navigate, dispatch, email, role, handleSubmit, isVIPEmail]);
 
-    const handleVerifyAdmin = () => {
-        if (adminSecret === 'rcsplacements2009') {
-            setVerificationStatus('success');
-        } else {
-            setVerificationStatus('error');
-            setTimeout(() => {
-                setRole('user');
-                setAdminSecret('');
-                setVerificationStatus(null);
-            }, 1500);
-        }
-    };
 
-    const handleSubmit = async (e) => {
-        if (e) e.preventDefault();
-        
-        // Admin verification guard
-        if (role === 'admin' && verificationStatus !== 'success' && !isVIPEmail(email)) {
-            alert('Verify First');
-            return;
-        }
-
-        const action = await dispatch(login({ email, password, role, adminSecret }));
-        if (login.rejected.match(action)) {
-            if (action.payload && typeof action.payload === 'object' && action.payload.requiresPayment) {
-                setUnpaidEmail(action.payload.email);
-            }
-        }
-    };
 
     const isAdminUnverified = role === 'admin' && verificationStatus !== 'success' && !isVIPEmail(email);
     const getDisabledReason = () => {
@@ -206,7 +217,7 @@ const Login = () => {
                                     <input
                                         type="email"
                                         value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
+                                        onChange={handleEmailChange}
                                         placeholder="admin@example.com"
                                         className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-slate-50 dark:border-slate-700 focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-700 rounded-xl py-4 pl-12 pr-4 outline-none transition-all text-slate-900 dark:text-white shadow-sm font-bold"
                                         required

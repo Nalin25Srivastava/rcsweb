@@ -38,11 +38,10 @@ import ServiceEditModal from '../components/Admin/ServiceEditModal';
 const AdminPanel = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { user, isSecretVerified } = useSelector((state) => state.auth);
+    const { user } = useSelector((state) => state.auth);
     const { jobs } = useSelector((state) => state.jobs);
     const { placedStudents } = useSelector((state) => state.placedStudents);
     const { stats } = useSelector((state) => state.stats);
-    const { users } = useSelector((state) => state.auth);
     const { services } = useSelector((state) => state.services);
 
     const [activeTab, setActiveTab] = useState('dashboard');
@@ -126,10 +125,10 @@ const AdminPanel = () => {
     };
 
     useEffect(() => {
-        if (!user || user.role !== 'admin' || !isSecretVerified) {
+        if (!user || user.role !== 'admin') {
             navigate('/login');
         }
-    }, [user, isSecretVerified, navigate]);
+    }, [user, navigate]);
 
     useEffect(() => {
         dispatch(fetchJobs());
@@ -334,6 +333,7 @@ const AdminPanel = () => {
                 </main>
 
                 <PlacementModal 
+                    key={studentModalMode.student?._id || 'new-student'}
                     isOpen={isStudentModalOpen} 
                     onClose={() => setIsStudentModalOpen(false)} 
                     student={studentModalMode.student}
@@ -341,6 +341,7 @@ const AdminPanel = () => {
                 />
 
                 <JobModal 
+                    key={jobModalMode.job?._id || 'new-job'}
                     isOpen={isJobModalOpen}
                     onClose={() => setIsJobModalOpen(false)}
                     job={jobModalMode.job}
@@ -348,6 +349,7 @@ const AdminPanel = () => {
                 />
 
                 <StatModal 
+                    key={statModalMode.stat?._id || 'new-stat'}
                     isOpen={isStatModalOpen}
                     onClose={() => setIsStatModalOpen(false)}
                     stat={statModalMode.stat}
@@ -360,6 +362,7 @@ const AdminPanel = () => {
                 />
 
                 <ServiceEditModal 
+                    key={selectedService?.id || 'service-edit'}
                     isOpen={isServiceModalOpen}
                     onClose={() => setIsServiceModalOpen(false)}
                     service={selectedService}

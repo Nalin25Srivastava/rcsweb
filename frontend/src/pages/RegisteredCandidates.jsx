@@ -4,8 +4,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { 
     fetchRegisteredCandidates, 
     deleteRegisteredCandidate, 
-    createRegisteredCandidate, 
-    updateRegisteredCandidate, 
     reset 
 } from '../store/slices/registeredCandidatesSlice';
 import { fetchUsers } from '../store/slices/authSlice';

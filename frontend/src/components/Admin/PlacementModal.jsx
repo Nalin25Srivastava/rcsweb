@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Image as ImageIcon, Upload, Loader2 } from 'lucide-react';
@@ -7,35 +7,26 @@ import SmartButton from '../SmartButton';
 
 const PlacementModal = ({ isOpen, onClose, student = null, isEditing = false }) => {
     const dispatch = useDispatch();
-    const [formData, setFormData] = useState({
-        name: '',
-        company: '',
-        position: '',
-        compensation: '',
-        image: ''
-    });
-    const [isUploading, setIsUploading] = useState(false);
-    const fileInputRef = useRef(null);
-
-    useEffect(() => {
+    const [formData, setFormData] = useState(() => {
         if (student && isEditing) {
-            setFormData({
+            return {
                 name: student.name || '',
                 company: student.company || '',
                 position: student.position || '',
                 compensation: student.compensation || '',
                 image: student.image || ''
-            });
-        } else {
-            setFormData({
-                name: '',
-                company: '',
-                position: '',
-                compensation: '',
-                image: ''
-            });
+            };
         }
-    }, [student, isEditing, isOpen]);
+        return {
+            name: '',
+            company: '',
+            position: '',
+            compensation: '',
+            image: ''
+        };
+    });
+    const [isUploading, setIsUploading] = useState(false);
+    const fileInputRef = useRef(null);
 
     const getImageUrl = (image) => {
         if (!image) return 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&q=80&w=200';

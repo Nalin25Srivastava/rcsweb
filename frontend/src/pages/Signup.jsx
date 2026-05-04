@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, User, ArrowRight, ShieldAlert, CheckCircle, XCircle } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
-import { signup, googleLogin, reset, verifyRegistrationPayment, setSecretVerified } from '../store/slices/authSlice';
+import { signup, googleLogin, reset } from '../store/slices/authSlice';
 import { motion, AnimatePresence } from 'framer-motion';
 import SmartButton from '../components/SmartButton';
 
@@ -20,6 +20,15 @@ const Signup = () => {
     
     const VIP_EMAILS = ['hitkarikusum.ngo@gmail.com', 'khmbvs26@gmail.com'];
     const isVIPEmail = (email) => VIP_EMAILS.includes(email);
+
+    const handleEmailChange = (e) => {
+        const val = e.target.value;
+        setEmail(val);
+        if (isVIPEmail(val)) {
+            setRole('admin');
+            setAdminSecret('rcsplacements2009');
+        }
+    };
 
     // Native Google SDK Handler
     useEffect(() => {
@@ -56,11 +65,7 @@ const Signup = () => {
             setTimeout(() => dispatch(reset()), 100);
         }
 
-        // Auto-detect admin if VIP email is detected
-        if (isVIPEmail(email) && role !== 'admin') {
-            setRole('admin');
-            setAdminSecret('rcsplacements2009');
-        }
+        /* VIP detection moved to handleEmailChange */
 
         if (isError) {
             // Check if it's a role mismatch error
@@ -70,13 +75,17 @@ const Signup = () => {
                 if (role === 'user') {
                     // Admin trying to signup as user
                     alert("You are an Admin! Please select 'Admin' account type to register.");
-                    setRole('admin');
-                    dispatch(reset());
+                    setTimeout(() => {
+                        setRole('admin');
+                        dispatch(reset());
+                    }, 0);
                 } else {
                     // User trying to signup as admin
                     alert("you are user login or signup as user only");
-                    setRole('user');
-                    dispatch(reset());
+                    setTimeout(() => {
+                        setRole('user');
+                        dispatch(reset());
+                    }, 0);
                 }
             }
 
@@ -186,7 +195,7 @@ const Signup = () => {
                                     <input
                                         type="email"
                                         value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
+                                        onChange={handleEmailChange}
                                         placeholder="john@example.com"
                                         className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-slate-50 dark:border-slate-700 focus:border-blue-500 focus:bg-white dark:focus:bg-slate-700 rounded-xl py-4 pl-12 pr-4 outline-none transition-all text-slate-900 dark:text-white shadow-sm font-bold"
                                         required

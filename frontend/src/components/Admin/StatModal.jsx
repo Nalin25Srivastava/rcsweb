@@ -1,32 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, BarChart3, Star, CheckCircle2 } from 'lucide-react';
-import { fetchStats, createStat, updateStat } from '../../store/slices/statsSlice';
+import { createStat, updateStat } from '../../store/slices/statsSlice';
 
 const StatModal = ({ isOpen, onClose, stat = null, isEditing = false }) => {
     const dispatch = useDispatch();
-    const [formData, setFormData] = useState({
-        label: '',
-        value: '',
-        iconName: 'Briefcase'
-    });
-
-    useEffect(() => {
+    const [formData, setFormData] = useState(() => {
         if (stat && isEditing) {
-            setFormData({
+            return {
                 label: stat.label || '',
                 value: stat.value || '',
                 iconName: stat.iconName || 'Briefcase'
-            });
-        } else {
-            setFormData({
-                label: '',
-                value: '',
-                iconName: 'Briefcase'
-            });
+            };
         }
-    }, [stat, isEditing, isOpen]);
+        return {
+            label: '',
+            value: '',
+            iconName: 'Briefcase'
+        };
+    });
 
     const handleSubmit = async (e) => {
         e.preventDefault();

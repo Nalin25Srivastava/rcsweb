@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -20,19 +20,19 @@ const Carousel = () => {
         setCurrentIndex(newIndex);
     };
 
-    const nextSlide = () => {
+    const nextSlide = useCallback(() => {
         if (!slides || slides.length === 0) return;
         const isLastSlide = currentIndex === slides.length - 1;
         const newIndex = isLastSlide ? 0 : currentIndex + 1;
         setCurrentIndex(newIndex);
-    };
+    }, [currentIndex, slides]);
 
     useEffect(() => {
         if (slides && slides.length > 0) {
             const slideInterval = setInterval(nextSlide, 5000);
             return () => clearInterval(slideInterval);
         }
-    }, [currentIndex, slides]);
+    }, [slides, nextSlide]);
 
     const isVideo = (url) => {
         if (!url) return false;

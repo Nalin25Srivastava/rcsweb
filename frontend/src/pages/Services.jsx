@@ -35,19 +35,21 @@ const Services = () => {
                 const id = hash.replace('#', '');
                 const service = services.find(s => s.id === id);
                 if (service) {
-                    setActiveTabId(id);
-                    const element = document.getElementById('services-tabs-container');
-                    if (element) {
-                        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    if (activeTabId !== id) {
+                        setTimeout(() => setActiveTabId(id), 0);
+                        const element = document.getElementById('services-tabs-container');
+                        if (element) {
+                            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
                     }
-                } else {
-                    setActiveTabId(services[0].id);
+                } else if (!activeTabId) {
+                    setTimeout(() => setActiveTabId(services[0].id), 0);
                 }
             } else if (!activeTabId) {
-                setActiveTabId(services[0].id);
+                setTimeout(() => setActiveTabId(services[0].id), 0);
             }
         }
-    }, [hash, services]);
+    }, [hash, services, activeTabId]);
 
     const activeService = services.find(s => s.id === activeTabId) || (services.length > 0 ? services[0] : null);
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Briefcase, Mail, MapPin, DollarSign, GraduationCap, Clock, FileText, CheckCircle2 } from 'lucide-react';
@@ -6,25 +6,9 @@ import { createJob, updateJob } from '../../store/slices/jobsSlice';
 
 const JobModal = ({ isOpen, onClose, job = null, isEditing = false }) => {
     const dispatch = useDispatch();
-    const [formData, setFormData] = useState({
-        title: '',
-        companyName: '',
-        location: '',
-        salary: '',
-        description: '',
-        qualification: '',
-        ageLimit: '',
-        gender: 'Both',
-        dutyTime: '',
-        email: '',
-        contactNumbers: '',
-        profiles: '',
-        customFields: [] // Array of { label: '', value: '' }
-    });
-
-    useEffect(() => {
+    const [formData, setFormData] = useState(() => {
         if (job && isEditing) {
-            setFormData({
+            return {
                 title: job.title || '',
                 companyName: job.companyName || '',
                 location: job.location || '',
@@ -38,25 +22,24 @@ const JobModal = ({ isOpen, onClose, job = null, isEditing = false }) => {
                 contactNumbers: job.contactNumbers || '',
                 profiles: job.profiles || '',
                 customFields: job.job_posting?.custom_fields ? Object.entries(job.job_posting.custom_fields).map(([label, value]) => ({ label, value })) : []
-            });
-        } else {
-            setFormData({
-                title: '',
-                companyName: '',
-                location: '',
-                salary: '',
-                description: '',
-                qualification: '',
-                ageLimit: '',
-                gender: 'Both',
-                dutyTime: '',
-                email: '',
-                contactNumbers: '',
-                profiles: '',
-                customFields: []
-            });
+            };
         }
-    }, [job, isEditing, isOpen]);
+        return {
+            title: '',
+            companyName: '',
+            location: '',
+            salary: '',
+            description: '',
+            qualification: '',
+            ageLimit: '',
+            gender: 'Both',
+            dutyTime: '',
+            email: '',
+            contactNumbers: '',
+            profiles: '',
+            customFields: []
+        };
+    });
 
     const handleSubmit = (e) => {
         e.preventDefault();
