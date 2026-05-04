@@ -37,19 +37,19 @@ const Navbar = () => {
 
     return (
         <nav className="fixed top-0 left-0 w-full z-50 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-gray-200 dark:border-slate-800 shadow-sm transition-colors duration-300">
-            <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-10">
-                <div className="mt-3 flex justify-between h-14 items-center">
+            <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-4">
+                <div className="mt-3 flex justify-between h-14 items-center gap-4">
 
                     {/* Logo */}
                     <div className="flex-shrink-0 flex items-center">
                         <Link to="/" className="text-xl font-bold text-indigo-600">
-                            <img className="w-24 h-12 lg:w-32 lg:h-16 object-contain" src="/images/rcs_logo.jpg" alt="RCS Logo" />
+                            <img className="w-20 h-10 lg:w-28 lg:h-14 object-contain" src="/images/rcs_logo.jpg" alt="RCS Logo" />
                         </Link>
                     </div>
 
-                    {/* Desktop Links (Centered) */}
-                    <div className="hidden lg:flex flex-grow items-center justify-center">
-                        <div className="flex space-x-6">
+                    {/* Desktop Links (Left Aligned with little gap) */}
+                    <div className="hidden lg:flex flex-grow items-center justify-start ml-4">
+                        <div className="flex space-x-3">
                             {navLinks
                                 .filter(link => {
                                     if (!user && (link.name === 'Registration' || link.name === 'Contact Us')) return false
@@ -65,7 +65,7 @@ const Navbar = () => {
                                             to={link.href}
                                             className="relative group py-2"
                                         >
-                                            <span className={`px-2 text-lg font-bold transition-colors duration-300 ${
+                                            <span className={`px-1 text-[13px] xl:text-[14px] font-bold transition-colors duration-300 ${
                                                 isActive ? 'text-[#00c57d]' : 'text-gray-600 dark:text-slate-400 group-hover:text-[#00c57d]'
                                             }`}>
                                                 {link.name}
@@ -85,7 +85,7 @@ const Navbar = () => {
                     </div>
 
                     {/* Desktop Actions (Right Aligned) */}
-                    <div className="hidden lg:flex items-center gap-6 border-l pl-8 border-gray-100 dark:border-slate-800">
+                    <div className="hidden lg:flex items-center gap-3 border-l pl-4 border-gray-100 dark:border-slate-800">
                         {/* Theme Toggle Switch */}
                         <div className="relative flex items-center">
                             <button
@@ -108,7 +108,7 @@ const Navbar = () => {
                         </div>
 
                         {user && (user.name || user.email) ? (
-                            <div className="flex items-center gap-6">
+                            <div className="flex items-center gap-3">
                                 <div className="flex items-center gap-2 text-gray-700 font-bold">
                                     <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 border border-emerald-200 shadow-sm transition-transform hover:scale-110">
                                         <User className="w-5 h-5" />
