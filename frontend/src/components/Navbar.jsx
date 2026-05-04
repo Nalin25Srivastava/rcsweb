@@ -12,7 +12,7 @@ const Navbar = () => {
     const { theme, toggleTheme } = useTheme()
     const [isOpen, setIsOpen] = useState(false)
     const { user: reduxUser, isSecretVerified } = useSelector((state) => state.auth)
-    
+
     // Use Redux user as primary, but fallback to localStorage
     const storedUser = JSON.parse(localStorage.getItem('rcs_user') || 'null')
     const user = reduxUser || storedUser
@@ -37,13 +37,13 @@ const Navbar = () => {
 
     return (
         <nav className="fixed top-0 left-0 w-full z-50 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-gray-200 dark:border-slate-800 shadow-sm transition-colors duration-300">
-            <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-4">
-                <div className="mt-3 flex justify-between h-14 items-center gap-4">
+            <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-2">
+                <div className="mt-3 flex justify-between h-14 items-center gap-2">
 
                     {/* Logo */}
                     <div className="flex-shrink-0 flex items-center">
                         <Link to="/" className="text-xl font-bold text-indigo-600">
-                            <img className="w-20 h-10 lg:w-28 lg:h-14 object-contain" src="/images/rcs_logo.jpg" alt="RCS Logo" />
+                            <img className="w-16 h-8 lg:w-24 lg:h-12 object-contain" src="/images/rcs_logo.jpg" alt="RCS Logo" />
                         </Link>
                     </div>
 
@@ -63,15 +63,14 @@ const Navbar = () => {
                                         <NavLink
                                             key={link.name}
                                             to={link.href}
-                                            className="relative group py-2"
+                                            className="relative group py-2 whitespace-nowrap"
                                         >
-                                            <span className={`px-1 text-[13px] xl:text-[14px] font-bold transition-colors duration-300 ${
-                                                isActive ? 'text-[#00c57d]' : 'text-gray-600 dark:text-slate-400 group-hover:text-[#00c57d]'
-                                            }`}>
+                                            <span className={`px-1 text-[13px] xl:text-[14px] font-bold transition-colors duration-300 ${isActive ? 'text-[#00c57d]' : 'text-gray-600 dark:text-slate-400 group-hover:text-[#00c57d]'
+                                                }`}>
                                                 {link.name}
                                             </span>
                                             {isActive && (
-                                                <motion.div 
+                                                <motion.div
                                                     layoutId="activeNav"
                                                     className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#00c57d]"
                                                     initial={false}
@@ -85,7 +84,7 @@ const Navbar = () => {
                     </div>
 
                     {/* Desktop Actions (Right Aligned) */}
-                    <div className="hidden lg:flex items-center gap-3 border-l pl-4 border-gray-100 dark:border-slate-800">
+                    <div className="hidden lg:flex items-center gap-1.5 border-l pl-2 border-gray-100 dark:border-slate-800">
                         {/* Theme Toggle Switch */}
                         <div className="relative flex items-center">
                             <button
@@ -93,7 +92,7 @@ const Navbar = () => {
                                 className="relative w-14 h-7 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 transition-colors duration-500 flex items-center px-1 group shadow-inner"
                                 aria-label="Toggle Theme"
                             >
-                                <motion.div 
+                                <motion.div
                                     animate={{ x: theme === 'light' ? 0 : 28 }}
                                     transition={{ type: "spring", stiffness: 500, damping: 30 }}
                                     className="z-10 w-5 h-5 rounded-full bg-white dark:bg-emerald-500 shadow-md flex items-center justify-center border border-slate-200 dark:border-emerald-400"
@@ -108,7 +107,7 @@ const Navbar = () => {
                         </div>
 
                         {user && (user.name || user.email) ? (
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-1.5">
                                 <div className="flex items-center gap-2 text-gray-700 font-bold">
                                     <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 border border-emerald-200 shadow-sm transition-transform hover:scale-110">
                                         <User className="w-5 h-5" />
@@ -117,16 +116,15 @@ const Navbar = () => {
                                         <span className="capitalize text-slate-900 dark:text-white leading-none mb-1 text-sm">
                                             {user.name || user.email.split('@')[0]}
                                         </span>
-                                        <span className={`text-[9px] uppercase tracking-tighter font-black px-1.5 rounded shadow-sm w-fit ${
-                                            user.role === 'admin' 
-                                            ? 'text-emerald-600 bg-emerald-50' 
+                                        <span className={`text-[9px] uppercase tracking-tighter font-black px-1.5 rounded shadow-sm w-fit ${user.role === 'admin'
+                                            ? 'text-emerald-600 bg-emerald-50'
                                             : 'text-blue-600 bg-blue-50'
-                                        }`}>
+                                            }`}>
                                             {user.role === 'admin' ? 'Admin' : 'User'}
                                         </span>
                                     </div>
                                 </div>
-                                <button 
+                                <button
                                     onClick={handleLogout}
                                     className="flex items-center gap-2 text-slate-500 hover:text-red-500 font-bold transition-all transform hover:scale-105 active:scale-95 cursor-pointer bg-slate-50 hover:bg-red-50 px-3 py-1.5 rounded-full border border-slate-100"
                                 >
@@ -135,14 +133,14 @@ const Navbar = () => {
                             </div>
                         ) : (
                             <div className="flex items-center gap-4">
-                                <NavLink 
-                                    to="/login" 
+                                <NavLink
+                                    to="/login"
                                     className={({ isActive }) => `font-bold text-sm transition-colors ${isActive ? 'text-[#00c57d]' : 'text-gray-600 dark:text-slate-400 hover:text-indigo-600'}`}
                                 >
                                     Login
                                 </NavLink>
-                                <Link 
-                                    to="/signup" 
+                                <Link
+                                    to="/signup"
                                     className="bg-[#00c57d] hover:bg-[#00ae6e] text-white px-6 py-2 rounded-full text-sm font-bold transition-all transform hover:scale-105 active:scale-95 shadow-md"
                                 >
                                     Sign Up
@@ -179,7 +177,7 @@ const Navbar = () => {
             {/* Mobile Menu */}
             <AnimatePresence>
                 {isOpen && (
-                    <motion.div 
+                    <motion.div
                         className="lg:hidden bg-white dark:bg-slate-900 border-t border-gray-100 dark:border-slate-800 overflow-hidden"
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: 'auto', opacity: 1 }}
@@ -197,19 +195,18 @@ const Navbar = () => {
                                     return true
                                 })
                                 .map((link) => (
-                                <motion.div key={link.name} whileTap={{ scale: 0.95 }}>
-                                    <NavLink
-                                        to={link.href}
-                                        onClick={() => setIsOpen(false)}
-                                        className={({ isActive }) => `block px-3 py-3 text-lg font-bold rounded-lg transition-colors capitalize ${
-                                            isActive ? 'text-[#00c57d] bg-emerald-50' : 'text-gray-600 hover:text-[#00c57d] hover:bg-gray-50'
-                                        }`}
-                                    >
-                                        {link.name}
-                                    </NavLink>
-                                </motion.div>
-                            ))}
-                            
+                                    <motion.div key={link.name} whileTap={{ scale: 0.95 }}>
+                                        <NavLink
+                                            to={link.href}
+                                            onClick={() => setIsOpen(false)}
+                                            className={({ isActive }) => `block px-3 py-3 text-lg font-bold rounded-lg transition-colors capitalize ${isActive ? 'text-[#00c57d] bg-emerald-50' : 'text-gray-600 hover:text-[#00c57d] hover:bg-gray-50'
+                                                }`}
+                                        >
+                                            {link.name}
+                                        </NavLink>
+                                    </motion.div>
+                                ))}
+
                             <div className="pt-6 mt-4 border-t border-gray-100 flex flex-col space-y-4">
                                 {user && (user.name || user.email) ? (
                                     <div className="flex flex-col gap-4">
@@ -222,18 +219,17 @@ const Navbar = () => {
                                                     <p className="text-lg font-black text-slate-900 capitalize leading-none">
                                                         {user.name || user.email.split('@')[0]}
                                                     </p>
-                                                        <span className={`text-[10px] uppercase font-black px-2 py-0.5 rounded-full ${
-                                                            user.role === 'admin'
-                                                            ? 'bg-emerald-100 text-emerald-700'
-                                                            : 'bg-blue-100 text-blue-700'
+                                                    <span className={`text-[10px] uppercase font-black px-2 py-0.5 rounded-full ${user.role === 'admin'
+                                                        ? 'bg-emerald-100 text-emerald-700'
+                                                        : 'bg-blue-100 text-blue-700'
                                                         }`}>
-                                                            {user.role === 'admin' ? 'Admin' : 'User'}
-                                                        </span>
+                                                        {user.role === 'admin' ? 'Admin' : 'User'}
+                                                    </span>
                                                 </div>
                                                 <p className="text-xs text-slate-400 font-bold mt-1 truncate max-w-[150px]">{user.email}</p>
                                             </div>
                                         </div>
-                                        <motion.button 
+                                        <motion.button
                                             onClick={handleLogout}
                                             whileHover={{ scale: 1.02 }}
                                             whileTap={{ scale: 0.98 }}
@@ -244,16 +240,16 @@ const Navbar = () => {
                                     </div>
                                 ) : (
                                     <>
-                                        <Link 
-                                            to="/login" 
+                                        <Link
+                                            to="/login"
                                             onClick={() => setIsOpen(false)}
                                             className="text-center py-3 text-lg font-black text-gray-700 hover:text-[#00c57d] uppercase tracking-widest"
                                         >
                                             Login
                                         </Link>
                                         <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                                            <Link 
-                                                to="/signup" 
+                                            <Link
+                                                to="/signup"
                                                 onClick={() => setIsOpen(false)}
                                                 className="bg-[#00c57d] text-white text-center py-4 rounded-xl text-lg font-black shadow-lg block uppercase tracking-widest"
                                             >
