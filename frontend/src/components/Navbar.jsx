@@ -43,13 +43,13 @@ const Navbar = () => {
                     {/* Logo */}
                     <div className="flex-shrink-0 flex items-center">
                         <Link to="/" className="text-xl font-bold text-indigo-600">
-                            <img className="w-16 h-8 lg:w-24 lg:h-12 object-contain" src="/images/rcs_logo.jpg" alt="RCS Logo" />
+                            <img className="w-20 h-10 lg:w-26 lg:h-13 object-contain" src="/images/rcs_logo.jpg" alt="RCS Logo" />
                         </Link>
                     </div>
 
                     {/* Desktop Links (Left Aligned with little gap) */}
                     <div className="hidden lg:flex flex-grow items-center justify-start ml-4">
-                        <div className="flex space-x-3">
+                        <div className="flex space-x-4">
                             {navLinks
                                 .filter(link => {
                                     if (!user && (link.name === 'Registration' || link.name === 'Contact Us')) return false
@@ -65,7 +65,7 @@ const Navbar = () => {
                                             to={link.href}
                                             className="relative group py-2 whitespace-nowrap"
                                         >
-                                            <span className={`px-1 text-[13px] xl:text-[14px] font-bold transition-colors duration-300 ${isActive ? 'text-[#00c57d]' : 'text-gray-600 dark:text-slate-400 group-hover:text-[#00c57d]'
+                                            <span className={`px-2 text-[14px] xl:text-[15px] font-bold transition-colors duration-300 ${isActive ? 'text-[#00c57d]' : 'text-gray-600 dark:text-slate-400 group-hover:text-[#00c57d]'
                                                 }`}>
                                                 {link.name}
                                             </span>
