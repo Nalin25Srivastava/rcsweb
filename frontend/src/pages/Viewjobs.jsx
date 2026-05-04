@@ -1005,7 +1005,6 @@ const Viewjobs = () => {
                                                             </div>
                                                         </div>
                                                     )}
-                                                    )}
                                                 </div>
                                                 
                                                 {/* Custom Fields Display */}
