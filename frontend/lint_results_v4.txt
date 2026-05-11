@@ -1,0 +1,15 @@
+
+D:\react-old\rcsweb\frontend\print_errors.js
+   1:12  error  'require' is not defined       no-undef
+  11:9   error  'e' is defined but never used  no-unused-vars
+
+D:\react-old\rcsweb\frontend\src\pages\Login.jsx
+  137:8  warning  React Hook useEffect has missing dependencies: 'handleSubmit' and 'isVIPEmail'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+D:\react-old\rcsweb\frontend\src\pages\Viewjobs.jsx
+  330:59   warning  Unexpected combined character in character class  no-misleading-character-class
+  362:99   warning  Unexpected combined character in character class  no-misleading-character-class
+  368:118  warning  Unexpected combined character in character class  no-misleading-character-class
+
+✖ 6 problems (2 errors, 4 warnings)
+

@@ -1,0 +1,8 @@
+
+D:\react-old\rcsweb\frontend\src\pages\Viewjobs.jsx
+  330:59   warning  Unexpected combined character in character class  no-misleading-character-class
+  362:99   warning  Unexpected combined character in character class  no-misleading-character-class
+  368:118  warning  Unexpected combined character in character class  no-misleading-character-class
+
+✖ 3 problems (0 errors, 3 warnings)
+

@@ -1,0 +1,11 @@
+
+D:\react-old\rcsweb\frontend\print_errors.js
+  2:12  error  'require' is not defined  no-undef
+
+D:\react-old\rcsweb\frontend\src\pages\Viewjobs.jsx
+  330:59   warning  Unexpected combined character in character class  no-misleading-character-class
+  362:99   warning  Unexpected combined character in character class  no-misleading-character-class
+  368:118  warning  Unexpected combined character in character class  no-misleading-character-class
+
+✖ 4 problems (1 error, 3 warnings)
+

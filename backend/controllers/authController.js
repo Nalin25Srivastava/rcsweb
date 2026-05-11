@@ -155,6 +155,7 @@ const googleLogin = async (req, res) => {
         }
 
         let user = await User.findOne({ email });
+        let isNewUser = false;
 
         if (user) {
             if (!user.googleId) {
@@ -187,17 +188,13 @@ const googleLogin = async (req, res) => {
             role: isVIP(email) ? (role || user.role || 'admin') : user.role,
             isPaid: (user.role === 'admin' || isVIP(email)) ? true : user.isPaid,
             message: 'Login successful',
-            token: generateToken(user._id)
+            token: generateToken(user._id),
+            isNewUser
         };
-
-        if (isRedirectFlow) {
-            // Redirect back with encoded user data in hash
-            const encodedData = encodeURIComponent(JSON.stringify(userData));
-            return res.redirect(`https://rcsweb-3cl5.vercel.app/login#auth_data=${encodedData}`);
-        }
 
         return res.status(200).json(userData);
     } catch (error) {
+        console.error('Google Auth Error:', error);
         return res.status(400).json({ message: 'Google authentication failed' });
     }
 };

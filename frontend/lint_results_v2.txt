@@ -1,0 +1,140 @@
+
+D:\react-old\rcsweb\frontend\print_errors.js
+   1:12  error  'require' is not defined       no-undef
+  11:9   error  'e' is defined but never used  no-unused-vars
+
+D:\react-old\rcsweb\frontend\src\App.jsx
+   8:10  error  'useState' is defined but never used. Allowed unused vars must match /^[A-Z_]|motion/u                   no-unused-vars
+   9:10  error  'logout' is defined but never used. Allowed unused vars must match /^[A-Z_]|motion/u                     no-unused-vars
+   9:18  error  'setSecretVerified' is defined but never used. Allowed unused vars must match /^[A-Z_]|motion/u          no-unused-vars
+  14:30  error  'isSecretVerified' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]|motion/u  no-unused-vars
+
+D:\react-old\rcsweb\frontend\src\components\Admin\CarouselModal.jsx
+  1:27  error  'useEffect' is defined but never used. Allowed unused vars must match /^[A-Z_]|motion/u  no-unused-vars
+
+D:\react-old\rcsweb\frontend\src\components\Admin\JobModal.jsx
+  1:27  error  'useEffect' is defined but never used. Allowed unused vars must match /^[A-Z_]|motion/u  no-unused-vars
+
+D:\react-old\rcsweb\frontend\src\components\Admin\PlacementModal.jsx
+  1:27  error  'useEffect' is defined but never used. Allowed unused vars must match /^[A-Z_]|motion/u  no-unused-vars
+
+D:\react-old\rcsweb\frontend\src\components\Admin\RegisteredCandidateModal.jsx
+  79:13  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  77 |             const isUserObject = !candidate.user && candidate.email;
+  78 |             
+> 79 |             setFormData({
+     |             ^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  80 |                 userId: isUserObject ? candidate._id : (candidate.user || ''),
+  81 |                 name: candidate.name || '',
+  82 |                 email: candidate.email || '',  react-hooks/set-state-in-effect
+
+D:\react-old\rcsweb\frontend\src\components\Admin\ServiceEditModal.jsx
+  1:27  error  'useEffect' is defined but never used. Allowed unused vars must match /^[A-Z_]|motion/u  no-unused-vars
+
+D:\react-old\rcsweb\frontend\src\components\Admin\StatModal.jsx
+  1:27  error  'useEffect' is defined but never used. Allowed unused vars must match /^[A-Z_]|motion/u   no-unused-vars
+  5:10  error  'fetchStats' is defined but never used. Allowed unused vars must match /^[A-Z_]|motion/u  no-unused-vars
+
+D:\react-old\rcsweb\frontend\src\components\Carousel.jsx
+  35:8  warning  React Hook useEffect has a missing dependency: 'nextSlide'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+D:\react-old\rcsweb\frontend\src\pages\AdminPanel.jsx
+  45:13  error  'users' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]|motion/u  no-unused-vars
+
+D:\react-old\rcsweb\frontend\src\pages\Home.jsx
+  1:31  error  'useRef' is defined but never used. Allowed unused vars must match /^[A-Z_]|motion/u  no-unused-vars
+
+D:\react-old\rcsweb\frontend\src\pages\Login.jsx
+   90:13  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  88 |         // Auto-detect admin if VIP email is detected
+  89 |         if (isVIPEmail(email) && role !== 'admin') {
+> 90 |             setRole('admin');
+     |             ^^^^^^^ Avoid calling setState() directly within an effect
+  91 |             setAdminSecret('rcsplacements2009'); // VIPs get the secret pre-filled for the request
+  92 |         }
+  93 |  react-hooks/set-state-in-effect
+  127:8   warning  React Hook useEffect has missing dependencies: 'handleSubmit' and 'isVIPEmail'. Either include them or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                react-hooks/exhaustive-deps
+
+D:\react-old\rcsweb\frontend\src\pages\RegisteredCandidates.jsx
+  7:5  error  'createRegisteredCandidate' is defined but never used. Allowed unused vars must match /^[A-Z_]|motion/u  no-unused-vars
+  8:5  error  'updateRegisteredCandidate' is defined but never used. Allowed unused vars must match /^[A-Z_]|motion/u  no-unused-vars
+
+D:\react-old\rcsweb\frontend\src\pages\Registration.jsx
+  13:24  error    'isSuccess' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]|motion/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         no-unused-vars
+  33:13  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  31 |             // Pre-fill from user account
+  32 |             const nameParts = user.name ? user.name.split(' ') : ['', ''];
+> 33 |             setFormData({
+     |             ^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  34 |                 ...formData,
+  35 |                 firstName: nameParts[0] || '',
+  36 |                 lastName: nameParts.slice(1).join(' ') || '',  react-hooks/set-state-in-effect
+  40:8   warning  React Hook useEffect has a missing dependency: 'formData'. Either include it or remove the dependency array. You can also do a functional update 'setFormData(f => ...)' if you only need 'formData' in the 'setFormData' call                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           react-hooks/exhaustive-deps
+
+D:\react-old\rcsweb\frontend\src\pages\Services.jsx
+  38:21  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  36 |                 const service = services.find(s => s.id === id);
+  37 |                 if (service) {
+> 38 |                     setActiveTabId(id);
+     |                     ^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  39 |                     const element = document.getElementById('services-tabs-container');
+  40 |                     if (element) {
+  41 |                         element.scrollIntoView({ behavior: 'smooth', block: 'start' });  react-hooks/set-state-in-effect
+  50:8   warning  React Hook useEffect has a missing dependency: 'activeTabId'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        react-hooks/exhaustive-deps
+
+D:\react-old\rcsweb\frontend\src\pages\Signup.jsx
+   1:38  error    'useRef' is defined but never used. Allowed unused vars must match /^[A-Z_]|motion/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            no-unused-vars
+   5:38  error    'verifyRegistrationPayment' is defined but never used. Allowed unused vars must match /^[A-Z_]|motion/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         no-unused-vars
+   5:65  error    'setSecretVerified' is defined but never used. Allowed unused vars must match /^[A-Z_]|motion/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 no-unused-vars
+  61:13  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  59 |         // Auto-detect admin if VIP email is detected
+  60 |         if (isVIPEmail(email) && role !== 'admin') {
+> 61 |             setRole('admin');
+     |             ^^^^^^^ Avoid calling setState() directly within an effect
+  62 |             setAdminSecret('rcsplacements2009');
+  63 |         }
+  64 |  react-hooks/set-state-in-effect
+  88:8   warning  React Hook useEffect has a missing dependency: 'isVIPEmail'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   react-hooks/exhaustive-deps
+
+D:\react-old\rcsweb\frontend\src\pages\Viewjobs.jsx
+  330:59   warning  Unexpected combined character in character class  no-misleading-character-class
+  362:99   warning  Unexpected combined character in character class  no-misleading-character-class
+  368:118  warning  Unexpected combined character in character class  no-misleading-character-class
+
+✖ 33 problems (25 errors, 8 warnings)
+

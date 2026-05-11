@@ -1,0 +1,347 @@
+
+D:\react-old\rcsweb\frontend\print_errors.js
+   1:12  error  'require' is not defined       no-undef
+  11:9   error  'e' is defined but never used  no-unused-vars
+
+D:\react-old\rcsweb\frontend\src\App.jsx
+   8:10  error  'useState' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                   no-unused-vars
+   9:10  error  'logout' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                     no-unused-vars
+   9:18  error  'setSecretVerified' is defined but never used. Allowed unused vars must match /^[A-Z_]/u          no-unused-vars
+  14:30  error  'isSecretVerified' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+D:\react-old\rcsweb\frontend\src\AppRoutes.jsx
+  2:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+D:\react-old\rcsweb\frontend\src\components\Admin\CarouselModal.jsx
+  1:27  error  'useEffect' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+  3:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u     no-unused-vars
+
+D:\react-old\rcsweb\frontend\src\components\Admin\JobModal.jsx
+   3:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             no-unused-vars
+  27:13  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  25 |     useEffect(() => {
+  26 |         if (job && isEditing) {
+> 27 |             setFormData({
+     |             ^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  28 |                 title: job.title || '',
+  29 |                 companyName: job.companyName || '',
+  30 |                 location: job.location || '',  react-hooks/set-state-in-effect
+
+D:\react-old\rcsweb\frontend\src\components\Admin\PlacementModal.jsx
+   3:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   no-unused-vars
+  22:13  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  20 |     useEffect(() => {
+  21 |         if (student && isEditing) {
+> 22 |             setFormData({
+     |             ^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  23 |                 name: student.name || '',
+  24 |                 company: student.company || '',
+  25 |                 position: student.position || '',  react-hooks/set-state-in-effect
+
+D:\react-old\rcsweb\frontend\src\components\Admin\RegisteredCandidateModal.jsx
+   3:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        no-unused-vars
+  79:13  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  77 |             const isUserObject = !candidate.user && candidate.email;
+  78 |             
+> 79 |             setFormData({
+     |             ^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  80 |                 userId: isUserObject ? candidate._id : (candidate.user || ''),
+  81 |                 name: candidate.name || '',
+  82 |                 email: candidate.email || '',  react-hooks/set-state-in-effect
+
+D:\react-old\rcsweb\frontend\src\components\Admin\ServiceEditModal.jsx
+   3:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  no-unused-vars
+  24:13  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  22 |     useEffect(() => {
+  23 |         if (service) {
+> 24 |             setFormData({
+     |             ^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  25 |                 title: service.title || '',
+  26 |                 shortDesc: service.shortDesc || '',
+  27 |                 description: service.description || '',  react-hooks/set-state-in-effect
+
+D:\react-old\rcsweb\frontend\src\components\Admin\StatModal.jsx
+   3:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             no-unused-vars
+   5:10  error  'fetchStats' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         no-unused-vars
+  17:13  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  15 |     useEffect(() => {
+  16 |         if (stat && isEditing) {
+> 17 |             setFormData({
+     |             ^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  18 |                 label: stat.label || '',
+  19 |                 value: stat.value || '',
+  20 |                 iconName: stat.iconName || 'Briefcase'  react-hooks/set-state-in-effect
+
+D:\react-old\rcsweb\frontend\src\components\Carousel.jsx
+  35:8  warning  React Hook useEffect has a missing dependency: 'nextSlide'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+D:\react-old\rcsweb\frontend\src\components\Footer.jsx
+  3:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+D:\react-old\rcsweb\frontend\src\components\Navbar.jsx
+  6:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+D:\react-old\rcsweb\frontend\src\components\SmartButton.jsx
+    3:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            no-unused-vars
+  101:14  error  Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+   99 |                 )}
+  100 |             </button>
+> 101 |             <Popup />
+      |              ^^^^^ This component is created during render
+  102 |         </div>
+  103 |     );
+  104 | };
+
+  40 |     };
+  41 |
+> 42 |     const Popup = () => {
+     |                   ^^^^^^^
+> 43 |         if (!showPopup) return null;
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 44 |
+     …
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 81 |         );
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 82 |     };
+     | ^^^^^^ The component is created during render here
+  83 |
+  84 |     return (
+  85 |         <div className="relative inline-block w-full sm:w-auto">  react-hooks/static-components
+
+D:\react-old\rcsweb\frontend\src\context\ThemeContext.jsx
+  29:14  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+D:\react-old\rcsweb\frontend\src\main.jsx
+  16:5  error  'google' is not defined  no-undef
+
+D:\react-old\rcsweb\frontend\src\pages\About.jsx
+  2:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+D:\react-old\rcsweb\frontend\src\pages\Achievements.jsx
+  3:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+D:\react-old\rcsweb\frontend\src\pages\AdminPanel.jsx
+  23:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u          no-unused-vars
+  45:13  error  'users' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+D:\react-old\rcsweb\frontend\src\pages\Contact.jsx
+  3:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+D:\react-old\rcsweb\frontend\src\pages\Home.jsx
+  1:31  error  'useRef' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+  3:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+D:\react-old\rcsweb\frontend\src\pages\Login.jsx
+   1:38  error    'useRef' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       no-unused-vars
+   5:37  error    'setSecretVerified' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            no-unused-vars
+   6:10  error    'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       no-unused-vars
+  18:12  error    'unpaidEmail' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         no-unused-vars
+  43:13  error    'google' is not defined                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             no-undef
+  74:21  error    Error: Cannot access variable before it is declared
+
+`handleSubmit` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.
+
+  72 |                     setAdminSecret('rcsplacements2009');
+  73 |                     // Retry login automatically for VIP
+> 74 |                     handleSubmit({ preventDefault: () => {} });
+     |                     ^^^^^^^^^^^^ `handleSubmit` accessed before it is declared
+  75 |                 } else if (role === 'user') {
+  76 |                     // Admin trying to login as user
+  77 |                     alert("You are an Admin! Please select 'Admin' account type to login.");
+
+  111 |     };
+  112 |
+> 113 |     const handleSubmit = async (e) => {
+      |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 114 |         if (e) e.preventDefault();
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 115 |         
+      …
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 127 |         }
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 128 |     };
+      | ^^^^^^^ `handleSubmit` is declared here
+  129 |
+  130 |     const isAdminUnverified = role === 'admin' && verificationStatus !== 'success' && !isVIPEmail(email);
+  131 |     const getDisabledReason = () => {  react-hooks/immutability
+  98:8   warning  React Hook useEffect has missing dependencies: 'handleSubmit' and 'isVIPEmail'. Either include them or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  react-hooks/exhaustive-deps
+
+D:\react-old\rcsweb\frontend\src\pages\RegisteredCandidates.jsx
+  2:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                     no-unused-vars
+  7:5   error  'createRegisteredCandidate' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+  8:5   error  'updateRegisteredCandidate' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+D:\react-old\rcsweb\frontend\src\pages\Registration.jsx
+   5:10  error    'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            no-unused-vars
+  13:24  error    'isSuccess' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                no-unused-vars
+  33:13  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  31 |             // Pre-fill from user account
+  32 |             const nameParts = user.name ? user.name.split(' ') : ['', ''];
+> 33 |             setFormData({
+     |             ^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  34 |                 ...formData,
+  35 |                 firstName: nameParts[0] || '',
+  36 |                 lastName: nameParts.slice(1).join(' ') || '',  react-hooks/set-state-in-effect
+  40:8   warning  React Hook useEffect has a missing dependency: 'formData'. Either include it or remove the dependency array. You can also do a functional update 'setFormData(f => ...)' if you only need 'formData' in the 'setFormData' call                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           react-hooks/exhaustive-deps
+
+D:\react-old\rcsweb\frontend\src\pages\Services.jsx
+   4:10  error    'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         no-unused-vars
+  38:21  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  36 |                 const service = services.find(s => s.id === id);
+  37 |                 if (service) {
+> 38 |                     setActiveTabId(id);
+     |                     ^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  39 |                     const element = document.getElementById('services-tabs-container');
+  40 |                     if (element) {
+  41 |                         element.scrollIntoView({ behavior: 'smooth', block: 'start' });  react-hooks/set-state-in-effect
+  50:8   warning  React Hook useEffect has a missing dependency: 'activeTabId'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        react-hooks/exhaustive-deps
+
+D:\react-old\rcsweb\frontend\src\pages\Signup.jsx
+   1:38  error    'useRef' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   no-unused-vars
+   5:38  error    'verifyRegistrationPayment' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                no-unused-vars
+   5:65  error    'setSecretVerified' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        no-unused-vars
+   6:10  error    'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   no-unused-vars
+  43:13  error    'google' is not defined                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         no-undef
+  61:13  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  59 |         // Auto-detect admin if VIP email is detected
+  60 |         if (isVIPEmail(email) && role !== 'admin') {
+> 61 |             setRole('admin');
+     |             ^^^^^^^ Avoid calling setState() directly within an effect
+  62 |             setAdminSecret('rcsplacements2009');
+  63 |         }
+  64 |  react-hooks/set-state-in-effect
+  88:8   warning  React Hook useEffect has a missing dependency: 'isVIPEmail'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   react-hooks/exhaustive-deps
+
+D:\react-old\rcsweb\frontend\src\pages\Viewjobs.jsx
+    4:10   error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                      no-unused-vars
+  225:11   error  'handlePhoneChange' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+  231:11   error  'addPhoneField' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u      no-unused-vars
+  235:11   error  'removePhoneField' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u   no-unused-vars
+  343:19   error  'cleanLine' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u          no-unused-vars
+  343:49   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  343:52   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  343:54   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  343:56   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  343:58   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  343:60   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  343:62   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  343:64   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  343:66   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  343:68   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  343:70   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  343:72   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  343:74   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  343:77   error  Unexpected combined character in character class                                                   no-misleading-character-class
+  343:79   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  343:81   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  343:83   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  343:85   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  343:87   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  343:89   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  343:91   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  375:71   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  375:74   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  375:76   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  375:78   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  375:80   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  375:82   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  375:84   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  375:86   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  375:88   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  375:90   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  375:92   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  375:94   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  375:96   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  375:99   error  Unexpected combined character in character class                                                   no-misleading-character-class
+  375:101  error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  375:103  error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  375:105  error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  375:107  error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  375:109  error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  375:111  error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  375:113  error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  381:90   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  381:93   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  381:95   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  381:97   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  381:99   error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  381:101  error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  381:103  error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  381:105  error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  381:107  error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  381:109  error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  381:111  error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  381:113  error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  381:115  error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  381:118  error  Unexpected combined character in character class                                                   no-misleading-character-class
+  381:120  error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  381:122  error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  381:124  error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  381:126  error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  381:128  error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  381:130  error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+  381:132  error  Unexpected surrogate pair in character class. Use 'u' flag                                         no-misleading-character-class
+
+✖ 126 problems (121 errors, 5 warnings)
+
