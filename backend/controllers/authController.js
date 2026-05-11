@@ -9,7 +9,7 @@ const razorpay = new Razorpay({
     key_secret: process.env.RAZORPAY_KEY_SECRET || 'your_key_secret'
 });
 
-const VIP_EMAILS = ['hitkarikusum.ngo@gmail.com', 'khmbvs26@gmail.com', 'hitkarikusu.org@gmail.com'];
+const VIP_EMAILS = ['hitkarikusum.ngo@gmail.com', 'khmbvs26@gmail.com', 'hitkarikusu.org@gmail.com', 'rohan25srivastava@gmail.com'];
 const isVIP = (email) => email && VIP_EMAILS.includes(email.trim().toLowerCase());
 
 // @desc    Register user
@@ -162,12 +162,17 @@ const googleLogin = async (req, res) => {
                 user.googleId = googleId;
                 await user.save();
             }
+            // Detailed role check with clear messages
             if (role === 'admin' && user.role !== 'admin' && !isVIP(email)) {
-                return res.status(403).json({ message: 'You are a standard user and cannot access the admin panel.' });
+                return res.status(403).json({ 
+                    message: `Account type mismatch: '${email}' is registered as a User. Please select 'User' account type or use an Admin account.` 
+                });
             }
 
             if (role === 'user' && user.role === 'admin' && !isVIP(email)) {
-                return res.status(403).json({ message: 'Admins must login using the Admin account type.' });
+                return res.status(403).json({ 
+                    message: `Account type mismatch: '${email}' is an Admin. Please select 'Admin' account type to login.` 
+                });
             }
         } else {
             const resumeExists = await Resume.findOne({ email });
