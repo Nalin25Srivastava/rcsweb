@@ -25,10 +25,7 @@ const limiter = rateLimit({
 
 // Middleware
 
-app.use(helmet({
-    crossOriginOpenerPolicy: { policy: "same-origin-allow-popups" },
-    crossOriginResourcePolicy: { policy: "cross-origin" }
-}));
+app.use(helmet());
 // app.use(limiter);
 const corsOptions = {
     origin: (origin, callback) => {
