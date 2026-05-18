@@ -317,7 +317,6 @@ const Signup = () => {
                                     onError={() => {
                                         console.error('Google Auth Error Details');
                                     }}
-                                    prompt="select_account"
                                     useOneTap={false}
                                     shape="pill"
                                     size="large"

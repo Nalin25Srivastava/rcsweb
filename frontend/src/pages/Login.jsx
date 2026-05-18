@@ -339,7 +339,6 @@ const Login = () => {
                                     onError={() => {
                                         console.error('Google Login Error Details');
                                     }}
-                                    prompt="select_account"
                                     useOneTap={false}
                                     shape="pill"
                                     size="large"
