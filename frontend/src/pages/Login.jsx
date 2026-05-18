@@ -74,7 +74,8 @@ const Login = () => {
             if (error.error === 'idpiframe_initialization_failed') {
                 console.error('Google Auth initialization failed. Whitelist origin in GCP.');
             }
-        }
+        },
+        prompt: 'select_account'
     });
 
     useEffect(() => {
