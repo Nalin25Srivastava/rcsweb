@@ -79,8 +79,11 @@ const Login = () => {
     });
 
     useEffect(() => {
-        if (isSuccess && user) {
+        if (user) {
             navigate('/');
+        }
+        
+        if (isSuccess && user) {
             // Reset state after navigation to prevent "stuck" success state
             setTimeout(() => dispatch(reset()), 100);
         }
