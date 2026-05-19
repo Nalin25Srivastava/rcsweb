@@ -39,7 +39,6 @@ const createJob = async (req, res) => {
 
         const missing = [];
         if (!title || title.trim() === '') missing.push('Title');
-        if (!description || description.trim() === '') missing.push('Description');
         if (!email || email.trim() === '') missing.push('Contact Email');
 
         if (missing.length > 0) {

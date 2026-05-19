@@ -253,13 +253,12 @@ const JobModal = ({ isOpen, onClose, job = null, isEditing = false }) => {
 
                         {/* Section 6: Description */}
                         <div className="space-y-2">
-                            <label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Job Description</label>
+                            <label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Job Description (Optional)</label>
                             <textarea 
                                 className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-emerald-500 focus:bg-white transition-all outline-none font-bold text-slate-700 min-h-[150px]"
                                 placeholder="Describe the job role and responsibilities..."
                                 value={formData.description}
                                 onChange={(e) => setFormData({...formData, description: e.target.value})}
-                                required
                             />
                         </div>
 

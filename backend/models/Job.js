@@ -16,7 +16,7 @@ const jobSchema = new mongoose.Schema({
     },
     description: {
         type: String,
-        required: [true, 'Please add a job description']
+        default: ''
     },
     email: {
         type: String,
