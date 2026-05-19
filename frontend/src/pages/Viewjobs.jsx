@@ -5,6 +5,64 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchJobs, deleteJob, createJob, updateJob } from '../store/slices/jobsSlice';
 
+const JobCardCountdown = ({ expiresAt, timerActive }) => {
+    const [timeLeft, setTimeLeft] = useState('');
+    const [isNearingExpiry, setIsNearingExpiry] = useState(false);
+
+    useEffect(() => {
+        if (!timerActive || !expiresAt) {
+            setTimeLeft('');
+            setIsNearingExpiry(false);
+            return;
+        }
+
+        const calculateTimeLeft = () => {
+            const difference = new Date(expiresAt).getTime() - Date.now();
+            if (difference <= 0) {
+                setTimeLeft('Expired');
+                setIsNearingExpiry(true);
+                return;
+            }
+
+            const minutes = Math.floor(difference / 60000);
+            const seconds = Math.floor((difference % 60000) / 1000);
+            
+            if (minutes < 30) {
+                setIsNearingExpiry(true);
+            } else {
+                setIsNearingExpiry(false);
+            }
+
+            setTimeLeft(`${minutes}m ${seconds}s`);
+        };
+
+        calculateTimeLeft();
+        const intervalId = setInterval(calculateTimeLeft, 1000);
+
+        return () => clearInterval(intervalId);
+    }, [expiresAt, timerActive]);
+
+    if (!timerActive) return null;
+
+    if (timeLeft === 'Expired') {
+        return (
+            <span className="px-3 py-1 bg-red-50 text-red-600 rounded-full text-[10px] font-black uppercase border border-red-100 italic w-fit">
+                Expired
+            </span>
+        );
+    }
+
+    return (
+        <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase border italic w-fit flex items-center gap-1 shadow-sm ${
+            isNearingExpiry 
+                ? 'bg-amber-50 text-amber-600 border-amber-100 animate-pulse' 
+                : 'bg-blue-50 text-blue-600 border-blue-100'
+        }`}>
+            ⏳ {timeLeft} left
+        </span>
+    );
+};
+
 const Viewjobs = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -466,9 +524,15 @@ const Viewjobs = () => {
                             <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-emerald-100 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-bl-full"></div>
                             
                             {/* Job Title */}
-                            <h3 className="text-2xl font-black text-slate-800 tracking-tight leading-tight mb-4 flex items-center line-clamp-2 min-h-[3rem]">
+                            <h3 className="text-2xl font-black text-slate-800 tracking-tight leading-tight mb-2 flex items-center line-clamp-2 min-h-[3rem]">
                                 {job.title} 
                             </h3>
+                            
+                            {job.timerActive && (
+                                <div className="mb-4">
+                                    <JobCardCountdown expiresAt={job.expiresAt} timerActive={job.timerActive} />
+                                </div>
+                            )}
                             
                             {/* Description */}
                             <p className="text-slate-500 font-medium mb-6 text-sm leading-relaxed flex-grow line-clamp-3">
@@ -885,6 +949,11 @@ const Viewjobs = () => {
                                                         {jobData.hiringFor && <span className="block text-sm text-green-900/60 mb-1">Hiring For: {jobData.hiringFor}</span>}
                                                         {jobData.title}
                                                     </h2>
+                                                    {selectedJob.timerActive && (
+                                                        <div className="mt-3 mb-2">
+                                                            <JobCardCountdown expiresAt={selectedJob.expiresAt} timerActive={selectedJob.timerActive} />
+                                                        </div>
+                                                    )}
                                                     
                                                     <div className="flex flex-wrap gap-4 mt-4">
                                                         <div className="flex items-baseline gap-3">

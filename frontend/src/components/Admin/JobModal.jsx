@@ -39,7 +39,7 @@ const JobModal = ({ isOpen, onClose, job = null, isEditing = false }) => {
             email: '',
             contactNumbers: '',
             profiles: '',
-            timerActive: false,
+            timerActive: true,
             durationMinutes: 30,
             customFields: []
         };
