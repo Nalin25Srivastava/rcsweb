@@ -32,13 +32,20 @@ const handleArrayFields = (data) => {
 // @access  Private (Admin)
 const createJob = async (req, res) => {
     try {
+        console.log('Received job data:', req.body);
         const jobData = handleArrayFields(req.body);
         
         const { title, description, email } = jobData;
 
-        if (!title || !description || !email) {
+        const missing = [];
+        if (!title || title.trim() === '') missing.push('Title');
+        if (!description || description.trim() === '') missing.push('Description');
+        if (!email || email.trim() === '') missing.push('Contact Email');
+
+        if (missing.length > 0) {
+            console.log('Missing fields:', missing, jobData);
             return res.status(400).json({ 
-                message: 'Please add all required fields: Title, Description, and Contact Email' 
+                message: `Please add all required fields. Missing: ${missing.join(', ')}` 
             });
         }
 
