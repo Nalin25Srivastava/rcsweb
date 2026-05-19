@@ -1,4 +1,5 @@
 const RegisteredCandidate = require('../models/RegisteredCandidate');
+const { logAdminAction } = require('../utils/auditLogger');
 
 // @desc    Get all registered candidates
 // @route   GET /api/registered-candidates
@@ -29,6 +30,7 @@ const createRegisteredCandidate = async (req, res) => {
             status,
             image
         });
+        await logAdminAction(req.user, 'CREATE', 'RegisteredCandidate', `Added candidate: ${name}`);
 
         res.status(201).json(candidate);
     } catch (error) {
@@ -53,6 +55,7 @@ const updateRegisteredCandidate = async (req, res) => {
             candidate.image = req.body.image || candidate.image;
 
             const updatedCandidate = await candidate.save();
+            await logAdminAction(req.user, 'UPDATE', 'RegisteredCandidate', `Updated candidate: ${updatedCandidate.name}`);
             res.json(updatedCandidate);
         } else {
             res.status(404).json({ message: 'Candidate not found' });
@@ -71,6 +74,7 @@ const deleteRegisteredCandidate = async (req, res) => {
 
         if (candidate) {
             await candidate.deleteOne();
+            await logAdminAction(req.user, 'DELETE', 'RegisteredCandidate', `Deleted candidate: ${candidate.name}`);
             res.json({ message: 'Candidate removed' });
         } else {
             res.status(404).json({ message: 'Candidate not found' });

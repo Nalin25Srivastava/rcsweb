@@ -1,4 +1,5 @@
 const Service = require('../models/Service');
+const { logAdminAction } = require('../utils/auditLogger');
 
 // @desc    Get all services
 // @route   GET /api/services
@@ -18,6 +19,7 @@ exports.getServices = async (req, res) => {
 exports.createService = async (req, res) => {
     try {
         const service = await Service.create(req.body);
+        await logAdminAction(req.user, 'CREATE', 'Service', `Created service: ${service.title}`);
         res.status(201).json(service);
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -31,6 +33,7 @@ exports.updateService = async (req, res) => {
     try {
         const service = await Service.findOneAndUpdate({ id: req.params.id }, req.body, { new: true });
         if (!service) return res.status(404).json({ message: 'Service not found' });
+        await logAdminAction(req.user, 'UPDATE', 'Service', `Updated service: ${service.title}`);
         res.status(200).json(service);
     } catch (error) {
         res.status(400).json({ message: error.message });

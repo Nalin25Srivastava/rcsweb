@@ -1,4 +1,5 @@
 const Stat = require('../models/Stat');
+const { logAdminAction } = require('../utils/auditLogger');
 
 // @desc    Get all stats
 // @route   GET /api/stats
@@ -24,6 +25,7 @@ const createStat = async (req, res) => {
 
     try {
         const stat = await Stat.create({ id, value, label, iconName, order });
+        await logAdminAction(req.user, 'CREATE', 'Stat', `Added stat: ${label}`);
         res.status(201).json(stat);
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -45,6 +47,7 @@ const updateStat = async (req, res) => {
             req.body,
             { new: true, runValidators: true }
         );
+        await logAdminAction(req.user, 'UPDATE', 'Stat', `Updated stat: ${updatedStat.label}`);
         
         res.status(200).json(updatedStat);
     } catch (error) {
@@ -62,6 +65,7 @@ const deleteStat = async (req, res) => {
             return res.status(404).json({ message: 'Stat not found' });
         }
         await stat.deleteOne();
+        await logAdminAction(req.user, 'DELETE', 'Stat', `Deleted stat: ${stat.label}`);
         res.status(200).json({ id: req.params.id });
     } catch (error) {
         res.status(500).json({ message: error.message });

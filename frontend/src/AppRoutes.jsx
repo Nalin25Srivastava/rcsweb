@@ -11,6 +11,7 @@ import Signup from './pages/Signup';
 import AdminPanel from './pages/AdminPanel';
 import Services from './pages/Services';
 import Achievements from './pages/Achievements';
+import Profile from './pages/Profile';
 import PrivateRoute from './components/PrivateRoute';
 
 const PageWrapper = ({ children }) => {
@@ -50,6 +51,11 @@ const AppRoutes = () => {
                 <Route path="/admin-panel" element={
                     <PrivateRoute>
                         <PageWrapper><AdminPanel /></PageWrapper>
+                    </PrivateRoute>
+                } />
+                <Route path="/profile" element={
+                    <PrivateRoute>
+                        <PageWrapper><Profile /></PageWrapper>
                     </PrivateRoute>
                 } />
             </Routes>

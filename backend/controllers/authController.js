@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const Resume = require('../models/Resume');
+const AuditLog = require('../models/AuditLog');
 const jwt = require('jsonwebtoken');
 const { OAuth2Client } = require('google-auth-library');
 const Razorpay = require('razorpay');
@@ -243,9 +244,89 @@ const generateToken = (id) => {
     });
 };
 
+// @desc    Get user profile
+// @route   GET /api/auth/profile
+// @access  Private
+const getProfile = async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// @desc    Update user profile
+// @route   PUT /api/auth/profile
+// @access  Private
+const updateProfile = async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        user.name = req.body.name || user.name;
+        user.mobileNo = req.body.mobileNo !== undefined ? req.body.mobileNo : user.mobileNo;
+        
+        if (user.role === 'user') {
+            user.qualification = req.body.qualification !== undefined ? req.body.qualification : user.qualification;
+            user.gender = req.body.gender !== undefined ? req.body.gender : user.gender;
+            user.age = req.body.age !== undefined ? req.body.age : user.age;
+            user.address = req.body.address !== undefined ? req.body.address : user.address;
+            user.skills = req.body.skills !== undefined ? req.body.skills : user.skills;
+            user.experience = req.body.experience !== undefined ? req.body.experience : user.experience;
+        }
+
+        if (req.body.password) {
+            user.password = req.body.password;
+        }
+
+        const updatedUser = await user.save();
+
+        res.status(200).json({
+            _id: updatedUser._id,
+            name: updatedUser.name,
+            email: updatedUser.email,
+            role: updatedUser.role,
+            isPaid: updatedUser.isPaid,
+            token: generateToken(updatedUser._id),
+            // Profile details included in response
+            qualification: updatedUser.qualification,
+            gender: updatedUser.gender,
+            age: updatedUser.age,
+            mobileNo: updatedUser.mobileNo,
+            address: updatedUser.address,
+            skills: updatedUser.skills,
+            experience: updatedUser.experience
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// @desc    Get admin audit logs
+// @route   GET /api/auth/audit-logs
+// @access  Private/Admin
+const getAdminAuditLogs = async (req, res) => {
+    try {
+        const logs = await AuditLog.find().sort({ createdAt: -1 }).limit(100);
+        res.status(200).json(logs);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 module.exports = {
     registerUser,
     loginUser,
     googleLogin,
-    getUsers
+    getUsers,
+    getProfile,
+    updateProfile,
+    getAdminAuditLogs
 };

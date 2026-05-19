@@ -1,5 +1,6 @@
 const PlacedStudent = require('../models/PlacedStudent');
 const mongoose = require('mongoose');
+const { logAdminAction } = require('../utils/auditLogger');
 
 // @desc    Get all placed students
 // @route   GET /api/placed-students
@@ -36,6 +37,7 @@ const createPlacedStudent = async (req, res) => {
             image,
             placedDate
         });
+        await logAdminAction(req.user, 'CREATE', 'PlacedStudent', `Added placed student: ${name}`);
 
         res.status(201).json(student);
     } catch (error) {
@@ -59,6 +61,7 @@ const updatePlacedStudent = async (req, res) => {
             req.body,
             { new: true }
         );
+        await logAdminAction(req.user, 'UPDATE', 'PlacedStudent', `Updated placed student: ${updatedStudent.name}`);
 
         res.status(200).json(updatedStudent);
     } catch (error) {
@@ -78,6 +81,7 @@ const deletePlacedStudent = async (req, res) => {
         }
 
         await student.deleteOne();
+        await logAdminAction(req.user, 'DELETE', 'PlacedStudent', `Deleted placed student: ${student.name}`);
 
         res.status(200).json({ id: req.params.id, message: 'Student removed' });
     } catch (error) {

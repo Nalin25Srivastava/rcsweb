@@ -108,12 +108,12 @@ const Navbar = () => {
 
                         {user && (user.name || user.email) ? (
                             <div className="flex items-center gap-1.5">
-                                <div className="flex items-center gap-2 text-gray-700 font-bold">
-                                    <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 border border-emerald-200 shadow-sm transition-transform hover:scale-110">
+                                <Link to="/profile" className="flex items-center gap-2 text-gray-700 font-bold hover:bg-slate-50 dark:hover:bg-slate-800 p-1.5 rounded-lg transition-colors cursor-pointer group">
+                                    <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 border border-emerald-200 shadow-sm transition-transform group-hover:scale-110">
                                         <User className="w-5 h-5" />
                                     </div>
                                     <div className="flex flex-col justify-center">
-                                        <span className="capitalize text-slate-900 dark:text-white leading-none mb-1 text-sm">
+                                        <span className="capitalize text-slate-900 dark:text-white leading-none mb-1 text-sm group-hover:text-emerald-600 transition-colors">
                                             {user.name || user.email.split('@')[0]}
                                         </span>
                                         <span className={`text-[9px] uppercase tracking-tighter font-black px-1.5 rounded shadow-sm w-fit ${user.role === 'admin'
@@ -123,7 +123,7 @@ const Navbar = () => {
                                             {user.role === 'admin' ? 'Admin' : 'User'}
                                         </span>
                                     </div>
-                                </div>
+                                </Link>
                                 <button
                                     onClick={handleLogout}
                                     className="flex items-center gap-2 text-slate-500 hover:text-red-500 font-bold transition-all transform hover:scale-105 active:scale-95 cursor-pointer bg-slate-50 hover:bg-red-50 px-3 py-1.5 rounded-full border border-slate-100"
@@ -210,13 +210,13 @@ const Navbar = () => {
                             <div className="pt-6 mt-4 border-t border-gray-100 flex flex-col space-y-4">
                                 {user && (user.name || user.email) ? (
                                     <div className="flex flex-col gap-4">
-                                        <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-2xl border border-slate-100 shadow-sm">
-                                            <div className="w-12 h-12 rounded-2xl bg-emerald-500 flex items-center justify-center text-white shadow-lg shadow-emerald-200">
+                                        <Link to="/profile" onClick={() => setIsOpen(false)} className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm hover:border-emerald-300 transition-colors cursor-pointer group">
+                                            <div className="w-12 h-12 rounded-2xl bg-emerald-500 flex items-center justify-center text-white shadow-lg shadow-emerald-200 group-hover:scale-105 transition-transform">
                                                 <User className="w-6 h-6" />
                                             </div>
                                             <div className="flex-grow">
                                                 <div className="flex items-center gap-2">
-                                                    <p className="text-lg font-black text-slate-900 capitalize leading-none">
+                                                    <p className="text-lg font-black text-slate-900 dark:text-white capitalize leading-none group-hover:text-emerald-500 transition-colors">
                                                         {user.name || user.email.split('@')[0]}
                                                     </p>
                                                     <span className={`text-[10px] uppercase font-black px-2 py-0.5 rounded-full ${user.role === 'admin'
@@ -228,7 +228,7 @@ const Navbar = () => {
                                                 </div>
                                                 <p className="text-xs text-slate-400 font-bold mt-1 truncate max-w-[150px]">{user.email}</p>
                                             </div>
-                                        </div>
+                                        </Link>
                                         <motion.button
                                             onClick={handleLogout}
                                             whileHover={{ scale: 1.02 }}

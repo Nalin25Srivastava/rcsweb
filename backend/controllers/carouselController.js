@@ -1,4 +1,5 @@
 const CarouselSlide = require('../models/CarouselSlide');
+const { logAdminAction } = require('../utils/auditLogger');
 
 // @desc    Get all carousel slides
 // @route   GET /api/carousel
@@ -24,6 +25,7 @@ const createSlide = async (req, res) => {
 
     try {
         const slide = await CarouselSlide.create({ url, title, subtitle, order });
+        await logAdminAction(req.user, 'CREATE', 'CarouselSlide', `Added slide: ${title}`);
         res.status(201).json(slide);
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -45,6 +47,7 @@ const updateSlide = async (req, res) => {
             req.body,
             { new: true, runValidators: true }
         );
+        await logAdminAction(req.user, 'UPDATE', 'CarouselSlide', `Updated slide: ${updatedSlide.title}`);
         
         res.status(200).json(updatedSlide);
     } catch (error) {
@@ -62,6 +65,7 @@ const deleteSlide = async (req, res) => {
             return res.status(404).json({ message: 'Slide not found' });
         }
         await slide.deleteOne();
+        await logAdminAction(req.user, 'DELETE', 'CarouselSlide', `Deleted slide: ${slide.title}`);
         res.status(200).json({ id: req.params.id });
     } catch (error) {
         res.status(500).json({ message: error.message });

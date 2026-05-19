@@ -1,6 +1,7 @@
 const Job = require('../models/Job');
 const path = require('path');
 const fs = require('fs');
+const { logAdminAction } = require('../utils/auditLogger');
 
 // @desc    Get all jobs
 // @route   GET /api/jobs
@@ -42,6 +43,7 @@ const createJob = async (req, res) => {
         }
 
         const job = await Job.create(jobData);
+        await logAdminAction(req.user, 'CREATE', 'Job', `Created job: ${title}`);
         res.status(201).json(job);
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -66,6 +68,7 @@ const updateJob = async (req, res) => {
             jobData,
             { new: true, runValidators: true }
         );
+        await logAdminAction(req.user, 'UPDATE', 'Job', `Updated job: ${updatedJob.title}`);
 
         res.status(200).json(updatedJob);
     } catch (error) {
@@ -85,6 +88,7 @@ const deleteJob = async (req, res) => {
         }
 
         await job.deleteOne();
+        await logAdminAction(req.user, 'DELETE', 'Job', `Deleted job: ${job.title}`);
 
         res.status(200).json({ id: req.params.id, message: 'Job removed successfully' });
     } catch (error) {

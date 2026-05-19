@@ -38,6 +38,34 @@ const userSchema = new mongoose.Schema({
     razorpayOrderId: {
         type: String,
         sparse: true
+    },
+    qualification: {
+        type: String,
+        default: ''
+    },
+    gender: {
+        type: String,
+        default: ''
+    },
+    age: {
+        type: Number,
+        default: null
+    },
+    mobileNo: {
+        type: String,
+        default: ''
+    },
+    address: {
+        type: String,
+        default: ''
+    },
+    skills: {
+        type: String,
+        default: ''
+    },
+    experience: {
+        type: String,
+        default: ''
     }
 }, {
     timestamps: true

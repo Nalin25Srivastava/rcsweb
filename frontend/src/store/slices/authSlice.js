@@ -19,7 +19,9 @@ const initialState = {
     isError: false,
     message: '',
     isSecretVerified: isSecretVerifiedInitial,
-    users: [] // Added users list for admin selection
+    users: [], // Added users list for admin selection
+    auditLogs: [], // For admin dashboard
+    profile: null // For user profile details
 };
 
 // Helper to handle fetch responses safely
@@ -122,6 +124,61 @@ export const fetchUsers = createAsyncThunk('auth/fetchUsers', async (_, thunkAPI
     }
 });
 
+// Fetch Profile
+export const fetchProfile = createAsyncThunk('auth/fetchProfile', async (_, thunkAPI) => {
+    try {
+        const token = thunkAPI.getState().auth.user.token;
+        const response = await fetch('/api/auth/profile', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        return await handleResponse(response, thunkAPI, 'Failed to fetch profile');
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.message);
+    }
+});
+
+// Update Profile
+export const updateProfile = createAsyncThunk('auth/updateProfile', async (profileData, thunkAPI) => {
+    try {
+        const token = thunkAPI.getState().auth.user.token;
+        const response = await fetch('/api/auth/profile', {
+            method: 'PUT',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(profileData)
+        });
+        const result = await handleResponse(response, thunkAPI, 'Failed to update profile');
+        if (result && typeof result !== 'string') {
+            // Update local storage user data to keep it in sync
+            const currentUser = JSON.parse(localStorage.getItem('rcs_user'));
+            const updatedUser = { ...currentUser, ...result };
+            localStorage.setItem('rcs_user', JSON.stringify(updatedUser));
+        }
+        return result;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.message);
+    }
+});
+
+// Fetch Audit Logs (Admin only)
+export const fetchAuditLogs = createAsyncThunk('auth/fetchAuditLogs', async (_, thunkAPI) => {
+    try {
+        const token = thunkAPI.getState().auth.user.token;
+        const response = await fetch('/api/auth/audit-logs', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        return await handleResponse(response, thunkAPI, 'Failed to fetch audit logs');
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.message);
+    }
+});
+
 export const authSlice = createSlice({
     name: 'auth',
     initialState,
@@ -140,6 +197,8 @@ export const authSlice = createSlice({
             state.isSuccess = false;
             state.isError = false;
             state.message = '';
+            state.profile = null;
+            state.auditLogs = [];
         },
         setSecretVerified: (state, action) => {
             state.isSecretVerified = action.payload;
@@ -233,6 +292,47 @@ export const authSlice = createSlice({
                 state.users = action.payload;
             })
             .addCase(fetchUsers.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.message = action.payload;
+            })
+            .addCase(fetchProfile.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(fetchProfile.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.profile = action.payload;
+            })
+            .addCase(fetchProfile.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.message = action.payload;
+            })
+            .addCase(updateProfile.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(updateProfile.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.user = action.payload; // Update user context
+                state.profile = action.payload; // Update profile context
+                state.message = 'Profile updated successfully';
+            })
+            .addCase(updateProfile.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.message = action.payload;
+            })
+            .addCase(fetchAuditLogs.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(fetchAuditLogs.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.auditLogs = action.payload;
+            })
+            .addCase(fetchAuditLogs.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.message = action.payload;
