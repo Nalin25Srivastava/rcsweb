@@ -21,6 +21,8 @@ const JobModal = ({ isOpen, onClose, job = null, isEditing = false }) => {
                 email: job.email || '',
                 contactNumbers: job.contactNumbers || '',
                 profiles: job.profiles || '',
+                timerActive: job.timerActive || false,
+                durationMinutes: job.durationMinutes || 30,
                 customFields: job.job_posting?.custom_fields ? Object.entries(job.job_posting.custom_fields).map(([label, value]) => ({ label, value })) : []
             };
         }
@@ -37,6 +39,8 @@ const JobModal = ({ isOpen, onClose, job = null, isEditing = false }) => {
             email: '',
             contactNumbers: '',
             profiles: '',
+            timerActive: false,
+            durationMinutes: 30,
             customFields: []
         };
     });
@@ -260,6 +264,51 @@ const JobModal = ({ isOpen, onClose, job = null, isEditing = false }) => {
                                 value={formData.description}
                                 onChange={(e) => setFormData({...formData, description: e.target.value})}
                             />
+                        </div>
+
+                        {/* Section 6.5: Expiry Timer Configuration */}
+                        <div className="bg-slate-50 border border-slate-100 rounded-[2rem] p-6 space-y-4 my-6">
+                            <div className="flex justify-between items-center">
+                                <div className="space-y-1">
+                                    <h4 className="text-sm font-black text-slate-700 uppercase tracking-wider flex items-center gap-2">
+                                        <Clock className="w-4.5 h-4.5 text-blue-500" /> Active Job Expiry Timer
+                                    </h4>
+                                    <p className="text-[10px] text-slate-400 font-bold">Auto-expire this posting and send a warning SMS 30 mins before expiry</p>
+                                </div>
+                                <label className="relative inline-flex items-center cursor-pointer">
+                                    <input 
+                                        type="checkbox" 
+                                        className="sr-only peer"
+                                        checked={formData.timerActive}
+                                        onChange={(e) => setFormData({...formData, timerActive: e.target.checked})}
+                                    />
+                                    <div className="w-12 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500"></div>
+                                </label>
+                            </div>
+
+                            {formData.timerActive && (
+                                <motion.div 
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: 'auto' }}
+                                    className="pt-4 border-t border-slate-200/60 grid grid-cols-1 md:grid-cols-2 gap-4 items-center"
+                                >
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-black uppercase tracking-widest text-slate-400">Duration (in Minutes)</label>
+                                        <input 
+                                            type="number"
+                                            min="31"
+                                            className="w-full px-5 py-3.5 bg-white border border-slate-200 rounded-xl focus:border-emerald-500 transition-all outline-none font-bold text-slate-700 text-sm shadow-sm"
+                                            placeholder="Minimum 31 minutes"
+                                            value={formData.durationMinutes}
+                                            onChange={(e) => setFormData({...formData, durationMinutes: Math.max(1, parseInt(e.target.value) || 0)})}
+                                            required
+                                        />
+                                    </div>
+                                    <div className="text-[11px] font-bold text-slate-400 leading-relaxed bg-white border border-slate-100 p-4 rounded-xl">
+                                        💡 <span className="text-slate-600">SMS Alert Trigger:</span> An alert will be sent to your registered mobile number when exactly <span className="text-blue-500">30 minutes</span> remain of this time. Note: Minimal duration is 31 minutes.
+                                    </div>
+                                </motion.div>
+                            )}
                         </div>
 
                         <div className="h-px bg-slate-100 my-8"></div>

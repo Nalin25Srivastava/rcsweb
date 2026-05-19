@@ -17,7 +17,7 @@ const isVIP = (email) => email && VIP_EMAILS.includes(email.trim().toLowerCase()
 // @route   POST /api/auth/register
 // @access  Public
 const registerUser = async (req, res) => {
-    let { name, email, password, role, adminSecret } = req.body;
+    let { name, email, password, role, adminSecret, mobileNo } = req.body;
     if (email) email = email.trim();
 
     try {
@@ -42,6 +42,7 @@ const registerUser = async (req, res) => {
             name,
             email,
             password,
+            mobileNo: mobileNo || '',
             role: (role === 'admin' || isVIP(email)) ? 'admin' : 'user',
             isPaid: isVIP(email) || (role === 'admin' ? true : (resumeExists ? true : false))
         });
@@ -124,7 +125,7 @@ const googleLogin = async (req, res) => {
     const isRedirectFlow = !!req.body.credential;
 
     try {
-        let name, email, googleId;
+        let name, email, googleId, mobileNo = '';
 
         if (isAccessToken) {
             // Fetch user info from Google using the access token
@@ -133,6 +134,7 @@ const googleLogin = async (req, res) => {
             name = data.name;
             email = data.email;
             googleId = data.sub;
+            mobileNo = data.phone_number || '';
         } else {
             // Standard ID Token verification
             if (!process.env.GOOGLE_CLIENT_ID) {
@@ -149,6 +151,7 @@ const googleLogin = async (req, res) => {
             name = payload.name;
             email = payload.email;
             googleId = payload.sub;
+            mobileNo = payload.phone_number || '';
         }
 
         if (role === 'admin' && adminSecret !== 'rcsplacements2009' && !isVIP(email)) {
@@ -161,6 +164,10 @@ const googleLogin = async (req, res) => {
         if (user) {
             if (!user.googleId) {
                 user.googleId = googleId;
+                await user.save();
+            }
+            if (mobileNo && !user.mobileNo) {
+                user.mobileNo = mobileNo;
                 await user.save();
             }
             // Detailed role check with clear messages
@@ -182,6 +189,7 @@ const googleLogin = async (req, res) => {
                 name,
                 email,
                 googleId,
+                mobileNo: mobileNo || '',
                 role: (role === 'admin' || isVIP(email)) ? 'admin' : 'user',
                 isPaid: isVIP(email) || (role === 'admin' ? true : (resumeExists ? true : false))
             });

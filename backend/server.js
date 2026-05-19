@@ -223,6 +223,10 @@ const PORT = process.env.PORT || 5000;
 // Initial connection attempt (background)
 connectDB().catch(() => {});
 
+// Start the Job Expiry Timer background task
+const { startJobTimerScheduler } = require('./utils/jobTimerScheduler');
+startJobTimerScheduler();
+
 // Handle server listener - skip if on Vercel
 if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
     app.listen(PORT, () => {

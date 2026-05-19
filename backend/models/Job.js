@@ -56,6 +56,28 @@ const jobSchema = new mongoose.Schema({
     job_posting: {
         type: Object,
         default: null
+    },
+    // Timer & Notification Fields
+    timerActive: {
+        type: Boolean,
+        default: false
+    },
+    durationMinutes: {
+        type: Number,
+        default: 0
+    },
+    expiresAt: {
+        type: Date,
+        default: null
+    },
+    notificationSent: {
+        type: Boolean,
+        default: false
+    },
+    creator: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: false
     }
 }, {
     timestamps: true

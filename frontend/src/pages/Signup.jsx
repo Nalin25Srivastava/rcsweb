@@ -11,6 +11,7 @@ const Signup = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [mobileNo, setMobileNo] = useState('');
     const [role, setRole] = useState('user');
     const [adminSecret, setAdminSecret] = useState('');
     const dispatch = useDispatch();
@@ -113,7 +114,7 @@ const Signup = () => {
             return;
         }
 
-        const resultAction = await dispatch(signup({ name, email, password, role, adminSecret }));
+        const resultAction = await dispatch(signup({ name, email, password, role, adminSecret, mobileNo }));
         
         if (signup.fulfilled.match(resultAction)) {
             navigate('/');
@@ -121,7 +122,7 @@ const Signup = () => {
     };
 
     const isAdminUnverified = role === 'admin' && verificationStatus !== 'success' && !isVIPEmail(email);
-    const isFormIncomplete = !name || !email || !password;
+    const isFormIncomplete = !name || !email || !password || !mobileNo;
     const getDisabledReason = () => {
         if (isAdminUnverified) return "Admin verification required";
         if (isFormIncomplete) return "Account details missing";
@@ -207,6 +208,23 @@ const Signup = () => {
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                         placeholder="Choose a strong password"
+                                        className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-slate-50 dark:border-slate-700 focus:border-blue-500 focus:bg-white dark:focus:bg-slate-700 rounded-xl py-4 pl-12 pr-4 outline-none transition-all text-slate-900 dark:text-white shadow-sm font-bold"
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="space-y-2 group">
+                                <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Mobile Number</label>
+                                <div className="relative">
+                                    <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300 group-focus-within:text-blue-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 00.096.744L7 9.24a3 3 0 001.3 2.923l1.83 1.83a3 3 0 002.923 1.302l1.39-1.39a1 1 0 01.744-.096l2.2.548A1 1 0 0121 15.28V19a2 2 0 01-2 2h-3c-9.39 0-17-7.61-17-17V5z" />
+                                    </svg>
+                                    <input
+                                        type="text"
+                                        value={mobileNo}
+                                        onChange={(e) => setMobileNo(e.target.value)}
+                                        placeholder="Enter your mobile number"
                                         className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-slate-50 dark:border-slate-700 focus:border-blue-500 focus:bg-white dark:focus:bg-slate-700 rounded-xl py-4 pl-12 pr-4 outline-none transition-all text-slate-900 dark:text-white shadow-sm font-bold"
                                         required
                                     />

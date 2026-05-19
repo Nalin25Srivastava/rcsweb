@@ -86,6 +86,68 @@ export const deleteJob = createAsyncThunk('jobs/delete', async (id, thunkAPI) =>
     }
 });
 
+export const restartJobTimer = createAsyncThunk('jobs/restartTimer', async (id, thunkAPI) => {
+    try {
+        const token = thunkAPI.getState().auth.user.token;
+        const response = await fetch(`/api/jobs/${id}/timer/restart`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        const data = await response.json();
+        if (response.ok) {
+            return data;
+        } else {
+            return thunkAPI.rejectWithValue(data.message);
+        }
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.message);
+    }
+});
+
+export const extendJobTimer = createAsyncThunk('jobs/extendTimer', async ({ id, minutes }, thunkAPI) => {
+    try {
+        const token = thunkAPI.getState().auth.user.token;
+        const response = await fetch(`/api/jobs/${id}/timer/extend`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ minutes })
+        });
+        const data = await response.json();
+        if (response.ok) {
+            return data;
+        } else {
+            return thunkAPI.rejectWithValue(data.message);
+        }
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.message);
+    }
+});
+
+export const endJobTimer = createAsyncThunk('jobs/endTimer', async (id, thunkAPI) => {
+    try {
+        const token = thunkAPI.getState().auth.user.token;
+        const response = await fetch(`/api/jobs/${id}/timer/end`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        const data = await response.json();
+        if (response.ok) {
+            return data;
+        } else {
+            return thunkAPI.rejectWithValue(data.message);
+        }
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.message);
+    }
+});
+
 export const jobsSlice = createSlice({
     name: 'jobs',
     initialState,
@@ -147,6 +209,21 @@ export const jobsSlice = createSlice({
                 state.isLoading = false;
                 state.isError = true;
                 state.message = action.payload;
+            })
+            .addCase(restartJobTimer.fulfilled, (state, action) => {
+                state.jobs = state.jobs.map(job => 
+                    job._id === action.payload._id ? action.payload : job
+                );
+            })
+            .addCase(extendJobTimer.fulfilled, (state, action) => {
+                state.jobs = state.jobs.map(job => 
+                    job._id === action.payload._id ? action.payload : job
+                );
+            })
+            .addCase(endJobTimer.fulfilled, (state, action) => {
+                state.jobs = state.jobs.map(job => 
+                    job._id === action.payload._id ? action.payload : job
+                );
             });
     }
 });

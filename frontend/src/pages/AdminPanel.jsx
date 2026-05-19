@@ -23,7 +23,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { fetchJobs, deleteJob } from '../store/slices/jobsSlice';
+import { fetchJobs, deleteJob, restartJobTimer, extendJobTimer, endJobTimer } from '../store/slices/jobsSlice';
 import { fetchPlacedStudents, deletePlacedStudent } from '../store/slices/placedStudentsSlice';
 import { fetchStats, deleteStat } from '../store/slices/statsSlice';
 import { fetchSlides, deleteSlide } from '../store/slices/carouselSlice';
@@ -78,6 +78,20 @@ const AdminPanel = () => {
     const handleDeleteJob = (id) => {
         if (window.confirm('Are you sure you want to delete this job posting?')) {
             dispatch(deleteJob(id));
+        }
+    };
+
+    const handleRestartTimer = (id) => {
+        dispatch(restartJobTimer(id));
+    };
+
+    const handleExtendTimer = (id, minutes) => {
+        dispatch(extendJobTimer({ id, minutes }));
+    };
+
+    const handleEndTimer = (id) => {
+        if (window.confirm('Are you sure you want to stop this timer and expire the job posting immediately?')) {
+            dispatch(endJobTimer(id));
         }
     };
 
@@ -177,6 +191,9 @@ const AdminPanel = () => {
                         onAdd={handleAddJob}
                         onEdit={handleEditJob}
                         onDelete={handleDeleteJob}
+                        onRestart={handleRestartTimer}
+                        onExtend={handleExtendTimer}
+                        onEnd={handleEndTimer}
                     />
                 );
             case 'students':
@@ -320,6 +337,23 @@ const AdminPanel = () => {
 
                 {/* Content Area */}
                 <main className="flex-grow overflow-y-auto p-8 bg-slate-50 dark:bg-slate-950/50">
+                    {!user?.mobileNo && (
+                        <div className="mb-8 bg-amber-50 border-2 border-amber-100 p-5 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-4 text-amber-800 shadow-md">
+                            <div className="flex items-center gap-3">
+                                <AlertCircle className="w-5 h-5 text-amber-500 flex-shrink-0" />
+                                <div className="space-y-0.5">
+                                    <span className="font-black text-sm block">⚠️ SMS Expiry Notifications Inactive</span>
+                                    <span className="text-xs text-amber-600 font-bold block">You have not set a Mobile Number in your profile. Please add it to receive Twilio SMS alerts 30 minutes before timed job expiries.</span>
+                                </div>
+                            </div>
+                            <button 
+                                onClick={() => navigate('/profile')}
+                                className="bg-amber-600 hover:bg-amber-700 text-white text-[10px] font-black uppercase tracking-widest px-5 py-3 rounded-2xl transition-all shadow-md shadow-amber-600/10 flex-shrink-0"
+                            >
+                                Configure Profile
+                            </button>
+                        </div>
+                    )}
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={activeTab}
@@ -435,7 +469,104 @@ const DashboardView = ({ jobs = [], students = [], stats = [], onNavigate }) => 
     );
 };
 
-const JobManagementView = ({ jobs = [], onAdd, onEdit, onDelete }) => {
+const JobCountdown = ({ expiresAt, timerActive, onEnd, onExtend, onRestart }) => {
+    const [timeLeft, setTimeLeft] = useState('');
+    const [isNearingExpiry, setIsNearingExpiry] = useState(false);
+
+    useEffect(() => {
+        if (!timerActive || !expiresAt) {
+            setTimeLeft('Infinite');
+            setIsNearingExpiry(false);
+            return;
+        }
+
+        const calculateTimeLeft = () => {
+            const difference = new Date(expiresAt).getTime() - Date.now();
+            if (difference <= 0) {
+                setTimeLeft('Expired');
+                setIsNearingExpiry(true);
+                return;
+            }
+
+            const minutes = Math.floor(difference / 60000);
+            const seconds = Math.floor((difference % 60000) / 1000);
+            
+            if (minutes < 30) {
+                setIsNearingExpiry(true);
+            } else {
+                setIsNearingExpiry(false);
+            }
+
+            setTimeLeft(`${minutes}m ${seconds}s`);
+        };
+
+        calculateTimeLeft();
+        const intervalId = setInterval(calculateTimeLeft, 1000);
+
+        return () => clearInterval(intervalId);
+    }, [expiresAt, timerActive]);
+
+    if (!timerActive) {
+        return (
+            <span className="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-full text-[10px] font-black uppercase border border-emerald-100 italic">
+                Active
+            </span>
+        );
+    }
+
+    if (timeLeft === 'Expired') {
+        return (
+            <div className="flex flex-col gap-1.5">
+                <span className="px-3 py-1 bg-red-50 text-red-600 rounded-full text-[10px] font-black uppercase border border-red-100 italic w-max">
+                    Expired
+                </span>
+                <button 
+                    onClick={onRestart}
+                    className="text-[9px] font-black uppercase tracking-wider text-blue-500 hover:text-blue-600 bg-blue-50 hover:bg-blue-100 px-2 py-1 rounded border border-blue-100 transition-all w-max shadow-sm"
+                >
+                    Restart Timer
+                </button>
+            </div>
+        );
+    }
+
+    return (
+        <div className="flex flex-col gap-2">
+            <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase border italic w-max flex items-center gap-1.5 shadow-sm ${
+                isNearingExpiry 
+                    ? 'bg-amber-50 text-amber-600 border-amber-100 animate-pulse' 
+                    : 'bg-blue-50 text-blue-600 border-blue-100'
+            }`}>
+                ⏳ {timeLeft} left
+            </span>
+            <div className="flex items-center gap-1">
+                <button 
+                    onClick={() => onExtend(30)}
+                    className="text-[8px] font-black uppercase tracking-wider text-emerald-600 hover:bg-emerald-500 hover:text-white bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-100 transition-all"
+                    title="Extend by 30 mins"
+                >
+                    +30m
+                </button>
+                <button 
+                    onClick={onRestart}
+                    className="text-[8px] font-black uppercase tracking-wider text-blue-500 hover:bg-blue-500 hover:text-white bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100 transition-all"
+                    title="Restart timer"
+                >
+                    Reset
+                </button>
+                <button 
+                    onClick={onEnd}
+                    className="text-[8px] font-black uppercase tracking-wider text-red-500 hover:bg-red-500 hover:text-white bg-red-50 px-1.5 py-0.5 rounded border border-red-100 transition-all"
+                    title="Stop timer and expire now"
+                >
+                    Stop
+                </button>
+            </div>
+        </div>
+    );
+};
+
+const JobManagementView = ({ jobs = [], onAdd, onEdit, onDelete, onRestart, onExtend, onEnd }) => {
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
@@ -455,7 +586,7 @@ const JobManagementView = ({ jobs = [], onAdd, onEdit, onDelete }) => {
                             <th className="px-6 py-4 text-xs font-black text-slate-400 uppercase tracking-widest">Job Title</th>
                             <th className="px-6 py-4 text-xs font-black text-slate-400 uppercase tracking-widest">Location</th>
                             <th className="px-6 py-4 text-xs font-black text-slate-400 uppercase tracking-widest">Salary</th>
-                            <th className="px-6 py-4 text-xs font-black text-slate-400 uppercase tracking-widest">Status</th>
+                            <th className="px-6 py-4 text-xs font-black text-slate-400 uppercase tracking-widest">Status / Timer</th>
                             <th className="px-6 py-4 text-xs font-black text-slate-400 uppercase tracking-widest">Actions</th>
                         </tr>
                     </thead>
@@ -469,7 +600,13 @@ const JobManagementView = ({ jobs = [], onAdd, onEdit, onDelete }) => {
                                 <td className="px-6 py-4 text-sm font-bold text-slate-600">{job.location}</td>
                                 <td className="px-6 py-4 text-sm font-bold text-slate-600">{job.salary}</td>
                                 <td className="px-6 py-4">
-                                    <span className="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-full text-[10px] font-black uppercase border border-emerald-100 italic">Active</span>
+                                    <JobCountdown 
+                                        expiresAt={job.expiresAt} 
+                                        timerActive={job.timerActive}
+                                        onRestart={() => onRestart(job._id)}
+                                        onExtend={(minutes) => onExtend(job._id, minutes)}
+                                        onEnd={() => onEnd(job._id)}
+                                    />
                                 </td>
                                 <td className="px-6 py-4">
                                     <div className="flex items-center gap-2">
