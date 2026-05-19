@@ -93,7 +93,8 @@ const Login = () => {
         if (isError) {
             // Check if it's a role mismatch error
             if (message === 'You are a standard user and cannot access the admin panel.' || 
-                message === 'Admins must login using the Admin account type.') {
+                message === 'Admins must login using the Admin account type.' ||
+                message.includes('Account type mismatch')) {
                 
                 if (isVIPEmail(email)) {
                     setTimeout(() => {
@@ -102,7 +103,7 @@ const Login = () => {
                         // Retry login automatically for VIP
                         handleSubmit({ preventDefault: () => {} });
                     }, 0);
-                } else if (role === 'user') {
+                } else if (role === 'user' || message.includes('is an Admin')) {
                     // Admin trying to login as user
                     alert("You are an Admin! Please select 'Admin' account type to login.");
                     setTimeout(() => {

@@ -64,9 +64,10 @@ const Signup = () => {
         if (isError) {
             // Check if it's a role mismatch error
             if (message === 'You are a standard user and cannot access the admin panel.' || 
-                message === 'Admins must login using the Admin account type.') {
+                message === 'Admins must login using the Admin account type.' ||
+                message.includes('Account type mismatch')) {
                 
-                if (role === 'user') {
+                if (role === 'user' || message.includes('is an Admin')) {
                     // Admin trying to signup as user
                     alert("You are an Admin! Please select 'Admin' account type to register.");
                     setTimeout(() => {

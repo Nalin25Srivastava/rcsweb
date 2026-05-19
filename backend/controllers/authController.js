@@ -27,10 +27,10 @@ const registerUser = async (req, res) => {
         const userExists = await User.findOne({ email });
 
         if (userExists) {
-            if (role === 'admin' && userExists.role !== 'admin' && !isVIP(email)) {
+            if (role === 'admin' && userExists.role !== 'admin') {
                 return res.status(403).json({ message: 'You are a standard user and cannot access the admin panel.' });
             }
-            if (role === 'user' && userExists.role === 'admin' && !isVIP(email)) {
+            if (role === 'user' && userExists.role === 'admin') {
                 return res.status(400).json({ message: 'Admins must login using the Admin account type.' });
             }
             return res.status(400).json({ message: 'User already exists' });
@@ -76,11 +76,11 @@ const loginUser = async (req, res) => {
 
         const user = await User.findOne({ email }).select('+password');
 
-        if (user && role === 'admin' && user.role !== 'admin' && !isVIP(email)) {
+        if (user && role === 'admin' && user.role !== 'admin') {
             return res.status(403).json({ message: 'You are a standard user and cannot access the admin panel.' });
         }
 
-        if (user && role === 'user' && user.role === 'admin' && !isVIP(email)) {
+        if (user && role === 'user' && user.role === 'admin') {
             return res.status(403).json({ message: 'Admins must login using the Admin account type.' });
         }
 
@@ -97,8 +97,8 @@ const loginUser = async (req, res) => {
                 _id: user._id,
                 name: user.name,
                 email: user.email,
-                role: isVIP(email) ? (role || user.role || 'admin') : user.role,
-                isPaid: (user.role === 'admin' || isVIP(email)) ? true : user.isPaid,
+                role: user.role,
+                isPaid: user.role === 'admin' ? true : user.isPaid,
                 message: 'Login successful',
                 token: generateToken(user._id)
             });
@@ -163,13 +163,13 @@ const googleLogin = async (req, res) => {
                 await user.save();
             }
             // Detailed role check with clear messages
-            if (role === 'admin' && user.role !== 'admin' && !isVIP(email)) {
+            if (role === 'admin' && user.role !== 'admin') {
                 return res.status(403).json({ 
                     message: `Account type mismatch: '${email}' is registered as a User. Please select 'User' account type or use an Admin account.` 
                 });
             }
 
-            if (role === 'user' && user.role === 'admin' && !isVIP(email)) {
+            if (role === 'user' && user.role === 'admin') {
                 return res.status(403).json({ 
                     message: `Account type mismatch: '${email}' is an Admin. Please select 'Admin' account type to login.` 
                 });
@@ -190,8 +190,8 @@ const googleLogin = async (req, res) => {
             _id: user._id,
             name: user.name,
             email: user.email,
-            role: isVIP(email) ? (role || user.role || 'admin') : user.role,
-            isPaid: (user.role === 'admin' || isVIP(email)) ? true : user.isPaid,
+            role: user.role,
+            isPaid: user.role === 'admin' ? true : user.isPaid,
             message: 'Login successful',
             token: generateToken(user._id),
             isNewUser
