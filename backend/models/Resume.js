@@ -41,7 +41,7 @@ const resumeSchema = new mongoose.Schema({
     },
     paymentStatus: {
         type: String,
-        enum: ['Pending', 'Completed', 'Failed'],
+        enum: ['Pending', 'Pending Verification', 'Completed', 'Failed'],
         default: 'Pending'
     },
     amount: {
@@ -49,6 +49,10 @@ const resumeSchema = new mongoose.Schema({
         default: 1000
     },
     transactionId: {
+        type: String,
+        required: false
+    },
+    paymentReceiptPath: {
         type: String,
         required: false
     },

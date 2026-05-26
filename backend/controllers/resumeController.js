@@ -2,28 +2,7 @@ const Resume = require('../models/Resume');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-const Razorpay = require('razorpay');
-
-// Initialize Razorpay
-const razorpay = new Razorpay({
-    key_id: process.env.RAZORPAY_KEY_ID || 'rzp_test_your_key_id',
-    key_secret: process.env.RAZORPAY_KEY_SECRET || 'your_key_secret'
-});
-
-const isRazorpayConfigured = () => {
-    const hasId = !!process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_ID !== 'rzp_test_your_key_id';
-    const hasSecret = !!process.env.RAZORPAY_KEY_SECRET && process.env.RAZORPAY_KEY_SECRET !== 'your_key_secret';
-    
-    if (!hasId || !hasSecret) {
-        console.log('Razorpay Configuration Check Failed:', { 
-            hasId, 
-            hasSecret,
-            idPrefix: process.env.RAZORPAY_KEY_ID ? process.env.RAZORPAY_KEY_ID.substring(0, 8) : 'none'
-        });
-    }
-    
-    return hasId && hasSecret;
-};
+// Removed Razorpay Initialization as we use manual UPI Verification
 
 // Configure multer for file storage
 const storage = multer.diskStorage({
@@ -44,18 +23,30 @@ const storage = multer.diskStorage({
 const upload = multer({
     storage: storage,
     fileFilter: (req, file, cb) => {
-        // Allow only standard resume document formats
-        const filetypes = /pdf|doc|docx|txt|rtf/;
-        const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-        const mimetype = filetypes.test(file.mimetype);
-
-        if (extname || mimetype) {
-            return cb(null, true);
-        } else {
+        if (file.fieldname === 'resume') {
+            const filetypes = /pdf|doc|docx|txt|rtf/;
+            const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+            const mimetype = filetypes.test(file.mimetype);
+            if (extname || mimetype) {
+                return cb(null, true);
+            }
             cb(new Error('Invalid file type! Please upload a valid resume document (PDF, DOC, DOCX, TXT, RTF).'));
+        } else if (file.fieldname === 'paymentReceipt') {
+            const filetypes = /jpeg|jpg|png|webp|pdf/;
+            const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+            const mimetype = filetypes.test(file.mimetype);
+            if (extname || mimetype) {
+                return cb(null, true);
+            }
+            cb(new Error('Invalid file type! Please upload a valid payment receipt image (JPG, PNG, WEBP, PDF).'));
+        } else {
+            cb(new Error('Unexpected field'));
         }
     }
-}).single('resume');
+}).fields([
+    { name: 'resume', maxCount: 1 },
+    { name: 'paymentReceipt', maxCount: 1 }
+]);
 
 // @desc    Submit a resume & Create Razorpay Order
 // @route   POST /api/resumes
@@ -66,83 +57,63 @@ exports.submitResume = (req, res) => {
             return res.status(400).json({ message: err.message });
         }
 
-        if (!req.file) {
+        if (!req.files || !req.files['resume']) {
             return res.status(400).json({ message: 'Please upload a resume file' });
         }
+        if (!req.files['paymentReceipt']) {
+            return res.status(400).json({ message: 'Please upload your payment receipt' });
+        }
 
-        const { firstName, lastName, email, phone, functionalArea, amount } = req.body;
+        const { firstName, lastName, email, phone, functionalArea, amount, transactionId } = req.body;
         const registrationFee = amount || 1000;
 
-        // Check if Razorpay keys are configured
-        if (!isRazorpayConfigured()) {
-            return res.status(500).json({ 
-                message: 'Razorpay keys are not configured in the backend .env file. Please add your real Key ID and Secret.' 
-            });
+        if (!transactionId) {
+            return res.status(400).json({ message: 'Please provide the UPI Transaction ID' });
         }
 
         try {
-            // Use a web-relative path that matches our static serving route
-            const normalizedPath = `/uploads/resumes/${req.file.filename}`;
+            const resumeFile = req.files['resume'][0];
+            const receiptFile = req.files['paymentReceipt'][0];
 
-            // 1. Create Pending Resume in DB
+            const resumePath = `/uploads/resumes/${resumeFile.filename}`;
+            const receiptPath = `/uploads/resumes/${receiptFile.filename}`;
+
+            // 1. Create Pending Verification Resume in DB
             const resume = await Resume.create({
                 firstName,
                 lastName,
                 email,
                 phone,
                 functionalArea,
-                resumePath: normalizedPath,
-                originalName: req.file.originalname,
-                fileMimetype: req.file.mimetype,
+                resumePath: resumePath,
+                paymentReceiptPath: receiptPath,
+                originalName: resumeFile.originalname,
+                fileMimetype: resumeFile.mimetype,
                 amount: registrationFee,
-                paymentStatus: 'Pending',
-                user: req.user?._id // Link registration to logged-in user if available
+                paymentStatus: 'Pending Verification',
+                transactionId: transactionId,
+                user: req.user?._id
             });
 
-            // 2. Generate Razorpay Order
-            const options = {
-                amount: registrationFee * 100, // Razorpay works in paise
-                currency: 'INR',
-                receipt: `receipt_resume_${resume._id}`
-            };
-
-            console.log('Creating Razorpay order with options:', JSON.stringify(options, null, 2));
-            const order = await razorpay.orders.create(options);
-
-            // 3. Attach Order ID to Resume
-            resume.razorpayOrderId = order.id;
-            await resume.save();
-
-            // 4. Update user's razorpayOrderId for verification later
-            if (req.user) {
-                const User = require('../models/User');
-                await User.findByIdAndUpdate(req.user._id, { razorpayOrderId: order.id });
-            } else if (email) {
-                const User = require('../models/User');
-                await User.findOneAndUpdate({ email }, { razorpayOrderId: order.id });
-            }
-
-            // 5. Return Order Details to Frontend
+            // 2. Return Details to Frontend
             res.status(201).json({
                 success: true,
-                message: 'Resume uploaded, pending payment.',
-                data: resume,
-                order
+                message: 'Registration submitted successfully. Pending manual payment verification.',
+                data: resume
             });
 
         } catch (error) {
             console.error('Submit Resume Error:', error);
-            // Rollback uploaded file if DB/Razorpay fails
-            if (req.file) {
-                try {
-                    fs.unlinkSync(req.file.path);
-                } catch (unlinkErr) {
-                    console.error('Failed to delete temp file:', unlinkErr);
-                }
+            // Rollback uploaded files if DB fails
+            if (req.files) {
+                Object.values(req.files).forEach(fileArray => {
+                    fileArray.forEach(file => {
+                        try { fs.unlinkSync(file.path); } catch (e) {}
+                    });
+                });
             }
-            const errorMessage = error.error?.description || error.description || error.message || 'Payment provider error';
             res.status(500).json({ 
-                message: errorMessage,
+                message: error.message || 'Server error during submission',
                 details: error
             });
         }

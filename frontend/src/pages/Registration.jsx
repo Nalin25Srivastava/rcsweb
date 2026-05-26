@@ -24,6 +24,8 @@ const Registration = () => {
         };
     });
     const [file, setFile] = useState(null);
+    const [receiptFile, setReceiptFile] = useState(null);
+    const [transactionId, setTransactionId] = useState('');
     const [paymentStatus, setPaymentStatus] = useState(null); // 'processing' | 'success' | null
     const [isVerifying, setIsVerifying] = useState(false);
 
@@ -51,14 +53,8 @@ const Registration = () => {
         setFile(e.target.files[0]);
     };
 
-    const loadScript = (src) => {
-        return new Promise((resolve) => {
-            const script = document.createElement('script');
-            script.src = src;
-            script.onload = () => resolve(true);
-            script.onerror = () => resolve(false);
-            document.body.appendChild(script);
-        });
+    const handleReceiptChange = (e) => {
+        setReceiptFile(e.target.files[0]);
     };
 
     const handleSubmit = async (e) => {
@@ -69,13 +65,19 @@ const Registration = () => {
             return;
         }
 
-        const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js');
-        if (!res) {
-            alert('Razorpay SDK failed to load. Are you online?');
+        if (!receiptFile) {
+            alert('Please upload your payment receipt/screenshot.');
+            return;
+        }
+
+        if (!transactionId.trim()) {
+            alert('Please enter your PhonePe Transaction ID.');
             return;
         }
 
         try {
+            setIsVerifying(true);
+            
             // Pack form data
             const data = new FormData();
             data.append('firstName', formData.firstName);
@@ -84,137 +86,50 @@ const Registration = () => {
             data.append('phone', formData.phone);
             data.append('functionalArea', formData.functionalArea);
             data.append('resume', file);
+            data.append('paymentReceipt', receiptFile);
+            data.append('transactionId', transactionId);
             data.append('amount', 1000);
 
-            // 1. Dispatch form to backend which creates a Pending standard + Order ID
-            const resultAction = await dispatch(submitResume(data)).unwrap();
+            // 1. Dispatch form to backend which creates a Pending Verification resume
+            await dispatch(submitResume(data)).unwrap();
 
-            // 2. Extract Razorpay Order from the successful backend response
-            const orderData = resultAction.order;
+            setPaymentStatus('success');
             
-            if (!orderData || !orderData.id) {
-                alert('Database saved, but failed to generate payment order. Contact Support.');
-                return;
-            }
-
-            // 3. Prompt user with Razorpay Pop Up
-            const options = {
-                key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_your_key_id',
-                amount: orderData.amount,
-                currency: orderData.currency,
-                name: "RCS Placement",
-                description: "Agency Registration Fee",
-                order_id: orderData.id,
-                handler: async function (response) {
-                    setIsVerifying(true);
-                    
-                    try {
-                        // 4. Client-side Verification
-                        await dispatch(verifyRegistrationPayment({
-                            razorpay_order_id: response.razorpay_order_id,
-                            razorpay_payment_id: response.razorpay_payment_id,
-                            razorpay_signature: response.razorpay_signature
-                        })).unwrap();
-
-                        dispatch(setPaid());
-                        setPaymentStatus('success');
-                        
-                        // Clear form for future use
-                        setFormData({
-                            firstName: '', lastName: '', email: '', 
-                            phone: '', functionalArea: ''
-                        });
-                        setFile(null);
-                        
-                        // Reset redux state after a delay
-                        setTimeout(() => {
-                            dispatch(resetResumeState());
-                            setPaymentStatus(null);
-                            setIsVerifying(false);
-                            navigate('/');
-                        }, 3000);
-
-                    } catch (verifyErr) {
-                        console.error('Verification Error:', verifyErr);
-                        alert('Payment recorded but verification failed. Please contact support if your account is not activated within 10 minutes.');
-                        setIsVerifying(false);
-                    }
-                },
-                modal: {
-                    ondismiss: function() {
-                        alert('Payment was cancelled. You can log into your portal later to complete the payment.');
-                        dispatch(resetResumeState());
-                    }
-                },
-                prefill: {
-                    name: `${formData.firstName} ${formData.lastName}`,
-                    email: formData.email,
-                    contact: formData.phone,
-                    method: 'upi'
-                },
-                config: {
-                    display: {
-                        blocks: {
-                            upi: {
-                                name: "UPI (PhonePe, GPay, etc.)",
-                                instruments: [
-                                    {
-                                        method: "upi"
-                                    }
-                                ]
-                            },
-                            cards: {
-                                name: "Cards (Debit/Credit)",
-                                instruments: [
-                                    {
-                                        method: "card"
-                                    }
-                                ]
-                            },
-                            netbanking: {
-                                name: "Netbanking",
-                                instruments: [
-                                    {
-                                        method: "netbanking"
-                                    }
-                                ]
-                            },
-                            wallet: {
-                                name: "Wallets",
-                                instruments: [
-                                    {
-                                        method: "wallet"
-                                    }
-                                ]
-                            }
-                        },
-                        sequence: ["block.upi", "block.cards", "block.netbanking", "block.wallet"],
-                        preferences: {
-                            show_default_blocks: true
-                        }
-                    }
-                },
-                theme: { color: "#10b981" }
-            };
-
-            const rzp = new window.Razorpay(options);
-            rzp.open();
+            // Clear form for future use
+            setFormData({
+                firstName: '', lastName: '', email: '', 
+                phone: '', functionalArea: ''
+            });
+            setFile(null);
+            setReceiptFile(null);
+            setTransactionId('');
+            
+            // Reset redux state after a delay
+            setTimeout(() => {
+                dispatch(resetResumeState());
+                setPaymentStatus(null);
+                setIsVerifying(false);
+                navigate('/');
+            }, 4000);
 
         } catch (error) {
             console.error('Submit Error:', error);
-            alert('An error occurred during order creation: ' + (error || 'Please try again. Check backend logs for Razorpay Keys.'));
+            setIsVerifying(false);
+            alert('An error occurred during submission: ' + (error.message || error || 'Please try again.'));
         }
     };
 
-    const isFormIncomplete = !formData.phone || !formData.functionalArea || !file;
+    const isFormIncomplete = !formData.phone || !formData.functionalArea || !file || !receiptFile || !transactionId;
     const getDisabledReason = () => {
         if (!formData.phone || !formData.functionalArea) return "Form fields are missing";
         if (!file) return "Profile/Document not uploaded";
+        if (!receiptFile || !transactionId) return "Payment details missing";
         return "";
     };
     const getCorrectionStep = () => {
         if (!formData.phone || !formData.functionalArea) return "Please fill in your phone number and select a primary domain.";
         if (!file) return "Click the upload area to select your agency profile or resume.";
+        if (!receiptFile || !transactionId) return "Please complete the payment, enter the Transaction ID, and upload the receipt screenshot.";
         return "";
     };
 
@@ -294,8 +209,8 @@ const Registration = () => {
                                         </h4>
                                         <p className={`font-medium mt-1 ${paymentStatus === 'success' ? 'text-blue-800' : 'text-blue-700'}`}>
                                             {paymentStatus === 'success' 
-                                                ? 'Your account has been activated. Redirecting you to home...' 
-                                                : 'Please do not close this window while we verify your transaction.'}
+                                                ? 'Your submission is successful and pending manual verification. Redirecting...' 
+                                                : 'Please wait while we submit your registration details...'}
                                         </p>
                                     </div>
                                 </motion.div>
@@ -405,30 +320,72 @@ const Registration = () => {
                                 </div>
                             </div>
 
-                            {/* Payment & Submit */}
-                            <div className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-6 border border-slate-100 dark:border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-6 mt-8">
-                                <div>
-                                    <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Registration Fee</p>
-                                    <p className="text-3xl font-black text-slate-900 flex items-center gap-2">
-                                        ₹1000 
-                                        <ShieldCheck className="w-5 h-5 text-blue-600" />
-                                    </p>
+                            {/* Manual QR Payment Section */}
+                            <div className="mt-8 p-6 bg-blue-50 dark:bg-slate-800 rounded-2xl border-2 border-blue-100 dark:border-slate-700">
+                                <h3 className="text-lg font-black text-blue-900 dark:text-blue-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                    <ShieldCheck className="w-5 h-5" /> Registration Fee Payment
+                                </h3>
+                                
+                                <div className="flex flex-col md:flex-row gap-8 items-center justify-center bg-white dark:bg-slate-900 p-6 rounded-xl shadow-sm mb-6">
+                                    <div className="text-center space-y-3">
+                                        <div className="bg-white p-3 rounded-xl border-4 border-slate-900 inline-block">
+                                            {/* Static QR Code provided by user */}
+                                            <img 
+                                                src="/payment-qr.jpg" 
+                                                alt="PhonePe QR Code for Nalin Srivastava" 
+                                                className="w-40 h-auto object-contain"
+                                            />
+                                        </div>
+                                        <p className="text-xs font-black text-slate-500 uppercase tracking-widest">Scan to Pay via PhonePe/GPay</p>
+                                    </div>
+                                    <div className="space-y-4 w-full max-w-sm">
+                                        <div>
+                                            <p className="text-3xl font-black text-slate-900 dark:text-white">₹1000</p>
+                                            <p className="text-sm font-bold text-slate-500">PhonePe Number: <span className="text-blue-600 font-black">9950962509</span></p>
+                                        </div>
+                                        
+                                        <div className="space-y-2 pt-2">
+                                            <label className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">Payment Receipt (Screenshot)</label>
+                                            <input
+                                                type="file"
+                                                onChange={handleReceiptChange}
+                                                accept="image/*,.pdf"
+                                                className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-xl py-2 px-3 outline-none transition-all text-sm font-bold text-slate-600 dark:text-slate-300"
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">Transaction ID (UTR)</label>
+                                            <input
+                                                type="text"
+                                                placeholder="e.g. T230526012345"
+                                                value={transactionId}
+                                                onChange={(e) => setTransactionId(e.target.value)}
+                                                className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 focus:border-blue-600 rounded-xl py-3 px-4 outline-none transition-all text-slate-900 dark:text-white font-bold"
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
-                                <SmartButton
-                                    type="submit"
-                                    disabled={isLoading || isFormIncomplete || isVerifying}
-                                    isLoading={isLoading || isVerifying}
-                                    disabledReason={getDisabledReason()}
-                                    howToCorrect={getCorrectionStep()}
-                                    onClick={handleSubmit}
-                                    className={`w-full sm:w-auto bg-slate-900 hover:bg-blue-600 text-white font-black py-4 px-10 rounded-xl transition-all shadow-xl shadow-blue-600/10 cursor-pointer flex items-center justify-center gap-3 uppercase tracking-widest text-sm ${(isLoading || isVerifying) ? 'opacity-70 cursor-not-allowed' : ''}`}
-                                >
-                                    {isLoading || isVerifying ? (
-                                        <><LoaderCircle className="w-5 h-5 animate-spin" /> {isVerifying ? 'Verifying...' : 'Processing...'}</>
-                                    ) : (
-                                        'Pay & Register'
-                                    )}
-                                </SmartButton>
+                                
+                                <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-4 border-t border-blue-200/50 dark:border-slate-700">
+                                    <p className="text-xs font-bold text-slate-500 dark:text-slate-400 max-w-sm leading-relaxed">
+                                        After successful payment, your account will be manually verified by our team shortly. Please upload the correct screenshot and transaction ID.
+                                    </p>
+                                    <SmartButton
+                                        type="submit"
+                                        disabled={isLoading || isFormIncomplete || isVerifying}
+                                        isLoading={isLoading || isVerifying}
+                                        disabledReason={getDisabledReason()}
+                                        howToCorrect={getCorrectionStep()}
+                                        onClick={handleSubmit}
+                                        className={`w-full sm:w-auto bg-slate-900 hover:bg-blue-600 text-white font-black py-4 px-10 rounded-xl transition-all shadow-xl shadow-blue-600/10 cursor-pointer flex items-center justify-center gap-3 uppercase tracking-widest text-sm ${(isLoading || isVerifying) ? 'opacity-70 cursor-not-allowed' : ''}`}
+                                    >
+                                        {isLoading || isVerifying ? (
+                                            <><LoaderCircle className="w-5 h-5 animate-spin" /> {isVerifying ? 'Verifying...' : 'Processing...'}</>
+                                        ) : (
+                                            'Submit Details'
+                                        )}
+                                    </SmartButton>
+                                </div>
                             </div>
                         </div>
 
