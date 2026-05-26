@@ -329,9 +329,9 @@ const Registration = () => {
                                 <div className="flex flex-col md:flex-row gap-8 items-center justify-center bg-white dark:bg-slate-900 p-6 rounded-xl shadow-sm mb-6">
                                     <div className="text-center space-y-3">
                                         <div className="bg-white p-3 rounded-xl border-4 border-slate-900 inline-block">
-                                            {/* Static QR Code provided by user, falls back to dynamic API if missing */}
+                                            {/* Cropped Static QR Code provided by user, falls back to dynamic API if missing */}
                                             <img 
-                                                src="/payment-qr.jpg" 
+                                                src="/payment-qr-cropped.jpg" 
                                                 alt="PhonePe QR Code for Nalin Srivastava" 
                                                 className="w-40 h-auto object-contain"
                                                 onError={(e) => {
