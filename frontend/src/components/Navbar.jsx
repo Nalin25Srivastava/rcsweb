@@ -109,8 +109,12 @@ const Navbar = () => {
                         {user && (user.name || user.email) ? (
                             <div className="flex items-center gap-1.5">
                                 <Link to="/profile" className="flex items-center gap-2 text-gray-700 font-bold hover:bg-slate-50 dark:hover:bg-slate-800 p-1.5 rounded-lg transition-colors cursor-pointer group">
-                                    <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 border border-emerald-200 shadow-sm transition-transform group-hover:scale-110">
-                                        <User className="w-5 h-5" />
+                                    <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 border border-emerald-200 shadow-sm transition-transform group-hover:scale-110 overflow-hidden">
+                                        {user.profilePicture ? (
+                                            <img src={user.profilePicture} alt={user.name || 'User'} className="w-full h-full object-cover" />
+                                        ) : (
+                                            <User className="w-5 h-5" />
+                                        )}
                                     </div>
                                     <div className="flex flex-col justify-center">
                                         <span className="capitalize text-slate-900 dark:text-white leading-none mb-1 text-sm group-hover:text-emerald-600 transition-colors">
@@ -211,8 +215,12 @@ const Navbar = () => {
                                 {user && (user.name || user.email) ? (
                                     <div className="flex flex-col gap-4">
                                         <Link to="/profile" onClick={() => setIsOpen(false)} className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm hover:border-emerald-300 transition-colors cursor-pointer group">
-                                            <div className="w-12 h-12 rounded-2xl bg-emerald-500 flex items-center justify-center text-white shadow-lg shadow-emerald-200 group-hover:scale-105 transition-transform">
-                                                <User className="w-6 h-6" />
+                                            <div className="w-12 h-12 rounded-2xl bg-emerald-500 flex items-center justify-center text-white shadow-lg shadow-emerald-200 group-hover:scale-105 transition-transform overflow-hidden">
+                                                {user.profilePicture ? (
+                                                    <img src={user.profilePicture} alt={user.name || 'User'} className="w-full h-full object-cover" />
+                                                ) : (
+                                                    <User className="w-6 h-6" />
+                                                )}
                                             </div>
                                             <div className="flex-grow">
                                                 <div className="flex items-center gap-2">

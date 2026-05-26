@@ -53,6 +53,7 @@ const registerUser = async (req, res) => {
                 name: user.name,
                 email: user.email,
                 role: user.role,
+                profilePicture: user.profilePicture,
                 isPaid: user.role === 'admin' ? true : user.isPaid,
                 token: generateToken(user._id)
             });
@@ -100,6 +101,7 @@ const loginUser = async (req, res) => {
                 name: user.name,
                 email: user.email,
                 role: user.role,
+                profilePicture: user.profilePicture,
                 isPaid: user.role === 'admin' ? true : user.isPaid,
                 message: 'Login successful',
                 token: generateToken(user._id)
@@ -125,7 +127,7 @@ const googleLogin = async (req, res) => {
     const isRedirectFlow = !!req.body.credential;
 
     try {
-        let name, email, googleId, mobileNo = '';
+        let name, email, googleId, mobileNo = '', profilePicture = '';
 
         if (isAccessToken) {
             // Fetch user info from Google using the access token
@@ -135,6 +137,7 @@ const googleLogin = async (req, res) => {
             email = data.email;
             googleId = data.sub;
             mobileNo = data.phone_number || '';
+            profilePicture = data.picture || '';
         } else {
             // Standard ID Token verification
             if (!process.env.GOOGLE_CLIENT_ID) {
@@ -152,6 +155,7 @@ const googleLogin = async (req, res) => {
             email = payload.email;
             googleId = payload.sub;
             mobileNo = payload.phone_number || '';
+            profilePicture = payload.picture || '';
         }
 
         if (role === 'admin' && adminSecret !== 'rcsplacements2009' && !isVIP(email)) {
@@ -168,6 +172,10 @@ const googleLogin = async (req, res) => {
             }
             if (mobileNo && !user.mobileNo) {
                 user.mobileNo = mobileNo;
+                await user.save();
+            }
+            if (profilePicture && !user.profilePicture) {
+                user.profilePicture = profilePicture;
                 await user.save();
             }
             // Detailed role check with clear messages
@@ -190,6 +198,7 @@ const googleLogin = async (req, res) => {
                 email,
                 googleId,
                 mobileNo: mobileNo || '',
+                profilePicture: profilePicture || '',
                 role: (role === 'admin' || isVIP(email)) ? 'admin' : 'user',
                 isPaid: isVIP(email) || (role === 'admin' ? true : (resumeExists ? true : false))
             });
@@ -200,6 +209,7 @@ const googleLogin = async (req, res) => {
             name: user.name,
             email: user.email,
             role: user.role,
+            profilePicture: user.profilePicture,
             isPaid: user.role === 'admin' ? true : user.isPaid,
             message: 'Login successful',
             token: generateToken(user._id),
@@ -301,6 +311,7 @@ const updateProfile = async (req, res) => {
             name: updatedUser.name,
             email: updatedUser.email,
             role: updatedUser.role,
+            profilePicture: updatedUser.profilePicture,
             isPaid: updatedUser.isPaid,
             token: generateToken(updatedUser._id),
             // Profile details included in response
