@@ -43,7 +43,7 @@ const Footer = () => {
                                 <motion.a 
                                     key={i} 
                                     href="#" 
-                                    className="p-2 bg-gray-900 text-gray-400 hover:bg-[#00c57d] hover:text-white rounded-lg transition-all border border-gray-800"
+                                    className="p-2 bg-gray-900 text-gray-400 hover:bg-[#2563eb] hover:text-white rounded-lg transition-all border border-gray-800"
                                     whileHover={{ scale: 1.1, y: -5 }}
                                     whileTap={{ scale: 0.9 }}
                                 >
@@ -56,11 +56,11 @@ const Footer = () => {
 
                     {/* Quick Links */}
                     <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}>
-                        <h4 className=" font-black mb-6 uppercase tracking-widest text-[#00c57d]">Quick Links</h4>
+                        <h4 className=" font-black mb-6 uppercase tracking-widest text-[#2563eb]">Quick Links</h4>
                         <ul className="space-y-4">
                             {quickLinks.map((link) => (
                                 <li key={link.name}>
-                                    <Link to={link.href} className=" text-gray-400 hover:text-[#00c57d] transition-colors text-sm font-bold uppercase tracking-wider">
+                                    <Link to={link.href} className=" text-gray-400 hover:text-[#2563eb] transition-colors text-sm font-bold uppercase tracking-wider">
                                         {link.name}
                                     </Link>
                                 </li>
@@ -71,7 +71,7 @@ const Footer = () => {
 
                     {/* Services */}
                     <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}>
-                        <h4 className=" font-black mb-6 uppercase tracking-widest text-[#00c57d]">Services</h4>
+                        <h4 className=" font-black mb-6 uppercase tracking-widest text-[#2563eb]">Services</h4>
                         <ul className="space-y-4">
                             {[
                                 { name: 'Career Development', id: 'career-development' },
@@ -82,7 +82,7 @@ const Footer = () => {
                                 { name: 'Temporary Recruitment', id: 'temporary-recruitment' }
                             ].map((service) => (
                                 <li key={service.id}>
-                                    <Link to={`/services#${service.id}`} className=" text-gray-400 hover:text-[#00c57d] transition-colors text-sm font-bold uppercase tracking-wider">
+                                    <Link to={`/services#${service.id}`} className=" text-gray-400 hover:text-[#2563eb] transition-colors text-sm font-bold uppercase tracking-wider">
                                         {service.name}
                                     </Link>
                                 </li>
@@ -93,18 +93,18 @@ const Footer = () => {
 
                     {/* Contact Info */}
                     <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}>
-                        <h4 className=" font-black mb-6 uppercase tracking-widest text-[#00c57d]">Contact Us</h4>
+                        <h4 className=" font-black mb-6 uppercase tracking-widest text-[#2563eb]">Contact Us</h4>
                         <ul className="space-y-4">
                             <li className="flex items-start space-x-3 group">
-                                <MapPin className="h-5 w-5 text-[#00c57d] flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform" />
+                                <MapPin className="h-5 w-5 text-[#2563eb] flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform" />
                                 <span className=" text-sm text-gray-400 font-medium">Building No. 645, Behind Allahabad Bank, In front of Gumanpura Thana, Aerodrome Circle, Kota-Rajasthan - 324001</span>
                             </li>
                             <li className="flex items-center space-x-3 group">
-                                <Phone className="h-5 w-5 text-[#00c57d] flex-shrink-0 group-hover:scale-110 transition-transform" />
+                                <Phone className="h-5 w-5 text-[#2563eb] flex-shrink-0 group-hover:scale-110 transition-transform" />
                                 <span className=" text-sm text-gray-400 font-medium">+(91) 9667618794, +(91) 6378103533, +(91) 8104083002</span>
                             </li>
                             <li className="flex items-center space-x-3 group">
-                                <Mail className="h-5 w-5 text-[#00c57d] flex-shrink-0 group-hover:scale-110 transition-transform" />
+                                <Mail className="h-5 w-5 text-[#2563eb] flex-shrink-0 group-hover:scale-110 transition-transform" />
                                 <span className=" text-sm text-gray-400 font-medium font-bold">r.c.sindiaconcept@gmail.com</span>
                             </li>
                         </ul>

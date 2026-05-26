@@ -88,11 +88,11 @@ const Home = () => {
                 >
                     {statsLoading ? (
                         <div className="col-span-full flex justify-center py-4">
-                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
+                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
                         </div>
                     ) : stats.map((stat, i) => (
                         <div key={i} className="text-center group">
-                            <div className="mx-auto w-16 h-16 bg-emerald-100 dark:bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-4 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
+                            <div className="mx-auto w-16 h-16 bg-blue-100 dark:bg-blue-600/10 rounded-2xl flex items-center justify-center text-blue-700 dark:text-blue-500 mb-4 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
                                 {getIcon(stat.iconName)}
                             </div>
                             <h3 className="text-3xl font-black text-slate-800 dark:text-white">{stat.value}</h3>
@@ -112,7 +112,7 @@ const Home = () => {
                         transition={{ duration: 0.6 }}
                         className="relative"
                     >
-                        <div className="absolute inset-0 bg-emerald-400 rounded-3xl blur-3xl opacity-20 transform -rotate-6"></div>
+                        <div className="absolute inset-0 bg-blue-500 rounded-3xl blur-3xl opacity-20 transform -rotate-6"></div>
                         <img 
                             src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1000" 
                             alt="Team working" 
@@ -126,11 +126,11 @@ const Home = () => {
                         transition={{ duration: 0.6, delay: 0.2 }}
                         className="space-y-6"
                     >
-                        <div className="inline-block px-4 py-2 bg-emerald-100 text-emerald-700 rounded-full font-bold uppercase tracking-widest text-sm">
+                        <div className="inline-block px-4 py-2 bg-blue-100 text-blue-800 rounded-full font-bold uppercase tracking-widest text-sm">
                             Why RCS Placement?
                         </div>
                         <h2 className="text-3xl md:text-5xl lg:text-6xl font-black text-slate-900 leading-tight">
-                            Accelerating Careers, <span className="text-emerald-500">Bridging the Gap.</span>
+                            Accelerating Careers, <span className="text-blue-600">Bridging the Gap.</span>
                         </h2>
                         <p className="text-lg text-slate-600 leading-relaxed font-medium">
                             We don't just find jobs; we build careers. Our exclusive partnerships with top-tier technology and corporate enterprises ensure our registered members always have access to premium unlisted opportunities.
@@ -138,7 +138,7 @@ const Home = () => {
                         <ul className="space-y-4 pt-4">
                             {['Exclusive Top-Tier Partnerships', 'Dedicated Placement Guidance', 'Resume & Interview Prep', 'Transparent Agency Ecosystem'].map((item, i) => (
                                 <li key={i} className="flex items-center gap-3 text-slate-700 font-bold">
-                                    <div className="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center">
+                                    <div className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center">
                                         <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
                                         </svg>
@@ -154,7 +154,7 @@ const Home = () => {
                                     className="inline-flex items-center gap-2 px-8 py-4 bg-slate-900 hover:bg-slate-800 text-white font-black uppercase tracking-widest rounded-2xl transition-all shadow-xl shadow-slate-200 group"
                                 >
                                     Manage Records
-                                    <span className="text-emerald-400 group-hover:translate-x-1 transition-transform">→</span>
+                                    <span className="text-blue-500 group-hover:translate-x-1 transition-transform">→</span>
                                 </Link>
                             </div>
                         )}
@@ -164,12 +164,12 @@ const Home = () => {
 
             {/* Placed Students Section - Verified Fix */}
             <div className="bg-slate-50 dark:bg-slate-900 py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-emerald-500 rounded-full blur-[150px] opacity-10"></div>
+                <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-blue-600 rounded-full blur-[150px] opacity-10"></div>
                 <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-blue-500 rounded-full blur-[150px] opacity-10"></div>
                 
                 <div className="max-w-7xl mx-auto flex justify-between items-end mb-12 relative z-10">
                     <div>
-                        <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight">Our Success <span className="text-emerald-500">Stories</span></h2>
+                        <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight">Our Success <span className="text-blue-600">Stories</span></h2>
                         <p className="text-slate-500 dark:text-slate-400 font-bold mt-2 uppercase tracking-widest text-sm">Real placements, real impact.</p>
                     </div>
                     {user?.role === 'admin' && (
@@ -177,7 +177,7 @@ const Home = () => {
                             onClick={handleAdd}
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            className="bg-emerald-500 hover:bg-emerald-400 text-slate-900 px-8 py-4 rounded-2xl font-black uppercase tracking-widest flex items-center gap-2 shadow-2xl transition-all border-b-4 border-emerald-700 active:border-b-0 active:translate-y-1"
+                            className="bg-blue-600 hover:bg-blue-500 text-slate-900 px-8 py-4 rounded-2xl font-black uppercase tracking-widest flex items-center gap-2 shadow-2xl transition-all border-b-4 border-blue-800 active:border-b-0 active:translate-y-1"
                         >
                             <Plus className="w-6 h-6" /> Add Success Story
                         </motion.button>
@@ -194,7 +194,7 @@ const Home = () => {
                 >
                     {studentsLoading ? (
                         <div className="col-span-full flex justify-center py-10">
-                            <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-emerald-500 border-t-transparent"></div>
+                            <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-600 border-t-transparent"></div>
                         </div>
                     ) : studentsError ? (
                         <div className="col-span-full text-center py-20 text-red-400 font-bold bg-red-900/10 rounded-3xl border border-red-500/20">
@@ -217,7 +217,7 @@ const Home = () => {
                                     <div className="absolute top-4 right-4 z-30 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                         <button 
                                             onClick={(e) => { e.stopPropagation(); handleEdit(student); }}
-                                            className="p-2 bg-white/10 hover:bg-emerald-500 backdrop-blur-md rounded-xl text-white transition-all border border-white/20 hover:border-emerald-400 shadow-xl"
+                                            className="p-2 bg-white/10 hover:bg-blue-600 backdrop-blur-md rounded-xl text-white transition-all border border-white/20 hover:border-blue-500 shadow-xl"
                                         >
                                             <Pencil className="w-4 h-4" />
                                         </button>
@@ -238,15 +238,15 @@ const Home = () => {
                                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out"
                                     />
                                     <div className="absolute bottom-0 left-0 right-0 p-6 z-20">
-                                        <h3 className="text-2xl font-bold text-white mb-1 group-hover:text-emerald-400 transition-colors">{student.name}</h3>
-                                        <p className="text-emerald-500 font-bold text-sm tracking-widest uppercase">{student.position}</p>
+                                        <h3 className="text-2xl font-bold text-white mb-1 group-hover:text-blue-500 transition-colors">{student.name}</h3>
+                                        <p className="text-blue-600 font-bold text-sm tracking-widest uppercase">{student.position}</p>
                                     </div>
                                 </div>
                                 <div className="p-6 bg-slate-800 text-center flex flex-col justify-between">
                                     <div className="flex justify-between items-center mb-2">
                                         <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest">Hired By</p>
-                                        <div className="bg-emerald-500/20 px-2 py-0.5 rounded-full border border-emerald-500/30">
-                                            <p className="text-emerald-400 text-[10px] font-black uppercase tracking-widest">{student.compensation || '---'}</p>
+                                        <div className="bg-blue-600/20 px-2 py-0.5 rounded-full border border-blue-600/30">
+                                            <p className="text-blue-500 text-[10px] font-black uppercase tracking-widest">{student.compensation || '---'}</p>
                                         </div>
                                     </div>
                                     <p className="text-xl font-extrabold text-white truncate">{student.company}</p>
@@ -262,7 +262,7 @@ const Home = () => {
             </div>
 
             {/* Call to Action */}
-            <div className="bg-emerald-500 py-20 relative overflow-hidden">
+            <div className="bg-blue-600 py-20 relative overflow-hidden">
                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
                 <motion.div 
                     initial={{ opacity: 0, scale: 0.95 }}
@@ -271,16 +271,16 @@ const Home = () => {
                     className="max-w-4xl mx-auto text-center relative z-10 px-4"
                 >
                     <h2 className="text-4xl md:text-5xl font-black text-white mb-6 tracking-tight">Ready to Transform Your Future?</h2>
-                    <p className="text-xl text-emerald-100 font-medium mb-10 max-w-2xl mx-auto">
+                    <p className="text-xl text-blue-100 font-medium mb-10 max-w-2xl mx-auto">
                         Join thousands of professionals securing high-status organizational roles through the RCS Placement Hub.
                     </p>
                     <div className="flex flex-col sm:flex-row justify-center gap-4">
                         {user?.role !== 'admin' && (
                             <Link to="/postres" className="px-8 py-4 bg-slate-900 hover:bg-slate-800 text-white font-black uppercase tracking-widest rounded-full transition-colors shadow-2xl flex items-center justify-center gap-2">
-                                Register Now <span className="text-emerald-400 text-xl">→</span>
+                                Register Now <span className="text-blue-500 text-xl">→</span>
                             </Link>
                         )}
-                        <Link to="/viewjobs" className="px-8 py-4 bg-emerald-400 hover:bg-emerald-300 text-emerald-900 border-2 border-emerald-300 font-black uppercase tracking-widest rounded-full transition-colors shadow-lg shadow-emerald-600/50 flex items-center justify-center gap-2">
+                        <Link to="/viewjobs" className="px-8 py-4 bg-blue-500 hover:bg-blue-400 text-blue-950 border-2 border-blue-400 font-black uppercase tracking-widest rounded-full transition-colors shadow-lg shadow-blue-700/50 flex items-center justify-center gap-2">
                             Explore Opportunities
                         </Link>
                     </div>

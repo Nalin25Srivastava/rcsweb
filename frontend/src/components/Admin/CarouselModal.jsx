@@ -53,7 +53,7 @@ const CarouselModal = ({ isOpen, onClose }) => {
                 >
                     <div className="flex justify-between items-center mb-6">
                         <div className="flex items-center gap-3">
-                            <div className="p-2 bg-emerald-50 text-emerald-600 rounded-xl">
+                            <div className="p-2 bg-blue-50 text-blue-700 rounded-xl">
                                 <ImageIcon className="w-6 h-6" />
                             </div>
                             <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tight">Add Carousel Slide</h2>
@@ -66,7 +66,7 @@ const CarouselModal = ({ isOpen, onClose }) => {
                     <form onSubmit={handleSubmit} className="space-y-6">
                         {/* File Upload Area */}
                         <div className="relative group">
-                            <div className={`aspect-video rounded-3xl border-4 border-dashed transition-all overflow-hidden flex flex-col items-center justify-center gap-4 ${preview ? 'border-emerald-500' : 'border-slate-100 bg-slate-50 hover:border-emerald-300'}`}>
+                            <div className={`aspect-video rounded-3xl border-4 border-dashed transition-all overflow-hidden flex flex-col items-center justify-center gap-4 ${preview ? 'border-blue-600' : 'border-slate-100 bg-slate-50 hover:border-blue-400'}`}>
                                 {preview ? (
                                     <>
                                         {fileType === 'video' ? (
@@ -75,7 +75,7 @@ const CarouselModal = ({ isOpen, onClose }) => {
                                             <img src={preview} alt="Preview" className="w-full h-full object-cover" />
                                         )}
                                         <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                            <label className="bg-white text-slate-900 px-6 py-3 rounded-xl font-bold cursor-pointer hover:bg-emerald-50 transition-colors flex items-center gap-2">
+                                            <label className="bg-white text-slate-900 px-6 py-3 rounded-xl font-bold cursor-pointer hover:bg-blue-50 transition-colors flex items-center gap-2">
                                                 <Upload className="w-5 h-5" /> Change File
                                                 <input type="file" className="hidden" accept="image/*,video/*" onChange={handleFileChange} />
                                             </label>
@@ -83,7 +83,7 @@ const CarouselModal = ({ isOpen, onClose }) => {
                                     </>
                                 ) : (
                                     <label className="flex flex-col items-center cursor-pointer group">
-                                        <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-slate-400 group-hover:text-emerald-500 shadow-sm mb-2 transition-colors">
+                                        <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-slate-400 group-hover:text-blue-600 shadow-sm mb-2 transition-colors">
                                             <Upload className="w-8 h-8" />
                                         </div>
                                         <span className="text-slate-500 font-bold">Click to upload image or video</span>
@@ -102,7 +102,7 @@ const CarouselModal = ({ isOpen, onClose }) => {
                                     <input 
                                         type="text"
                                         placeholder="e.g. Empower Your Future"
-                                        className="w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl font-bold text-slate-900 transition-all outline-none"
+                                        className="w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl font-bold text-slate-900 transition-all outline-none"
                                         value={formData.title}
                                         onChange={(e) => setFormData({...formData, title: e.target.value})}
                                         required
@@ -117,7 +117,7 @@ const CarouselModal = ({ isOpen, onClose }) => {
                                     <input 
                                         type="text"
                                         placeholder="e.g. Join the best placement network in Kota"
-                                        className="w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl font-bold text-slate-900 transition-all outline-none"
+                                        className="w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl font-bold text-slate-900 transition-all outline-none"
                                         value={formData.subtitle}
                                         onChange={(e) => setFormData({...formData, subtitle: e.target.value})}
                                     />
@@ -130,7 +130,7 @@ const CarouselModal = ({ isOpen, onClose }) => {
                                     <Hash className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                                     <input 
                                         type="number"
-                                        className="w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl font-bold text-slate-900 transition-all outline-none"
+                                        className="w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl font-bold text-slate-900 transition-all outline-none"
                                         value={formData.order}
                                         onChange={(e) => setFormData({...formData, order: parseInt(e.target.value)})}
                                     />
@@ -148,7 +148,7 @@ const CarouselModal = ({ isOpen, onClose }) => {
                             </button>
                             <button 
                                 type="submit"
-                                className="flex-[2] py-4 bg-emerald-500 text-white font-black rounded-2xl hover:bg-emerald-600 transition-all shadow-lg shadow-emerald-500/20 uppercase tracking-widest text-sm"
+                                className="flex-[2] py-4 bg-blue-600 text-white font-black rounded-2xl hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/20 uppercase tracking-widest text-sm"
                             >
                                 Publish Slide
                             </button>

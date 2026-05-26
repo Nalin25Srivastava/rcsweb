@@ -225,15 +225,15 @@ const Registration = () => {
                 
                 {/* Left Side: Info & Branding */}
                 <div className="lg:w-5/12 bg-slate-900 p-12 text-white flex flex-col relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500 rounded-full blur-[100px] opacity-20"></div>
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600 rounded-full blur-[100px] opacity-20"></div>
                     <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500 rounded-full blur-[100px] opacity-20"></div>
                     
                     <div className="relative z-10 flex-grow drop-shadow-md">
-                        <div className="inline-block px-4 py-2 bg-emerald-500/20 text-emerald-400 rounded-full font-black uppercase tracking-widest text-xs mb-8 border border-emerald-500/30">
+                        <div className="inline-block px-4 py-2 bg-blue-600/20 text-blue-500 rounded-full font-black uppercase tracking-widest text-xs mb-8 border border-blue-600/30">
                             Partner Network
                         </div>
                         <h2 className="text-4xl lg:text-5xl font-black mb-6 tracking-tight leading-tight">
-                            Candidate <span className="text-emerald-400">Registration</span>
+                            Candidate <span className="text-blue-500">Registration</span>
                         </h2>
                         <p className="text-slate-300 dark:text-slate-400 font-medium text-lg leading-relaxed mb-10">
                             Complete your registration to unlock premium hiring tools, enterprise client access, and 24/7 dedicated placement support.
@@ -247,7 +247,7 @@ const Registration = () => {
                             ].map((item, i) => (
                                 <div key={i} className="flex gap-4 items-start">
                                     <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center flex-shrink-0 border border-slate-700">
-                                        <CheckCircle className="w-5 h-5 text-emerald-400" />
+                                        <CheckCircle className="w-5 h-5 text-blue-500" />
                                     </div>
                                     <div>
                                         <h3 className="font-bold text-white tracking-wide">{item.title}</h3>
@@ -281,18 +281,18 @@ const Registration = () => {
                                     initial={{ opacity: 0, height: 0 }}
                                     animate={{ opacity: 1, height: 'auto' }}
                                     exit={{ opacity: 0, height: 0 }}
-                                    className={`p-6 rounded-2xl flex items-center gap-4 border shadow-lg ${paymentStatus === 'success' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-blue-50 text-blue-700 border-blue-200'}`}
+                                    className={`p-6 rounded-2xl flex items-center gap-4 border shadow-lg ${paymentStatus === 'success' ? 'bg-blue-50 text-blue-800 border-blue-300' : 'bg-blue-50 text-blue-700 border-blue-200'}`}
                                 >
                                     {paymentStatus === 'success' ? (
-                                        <CheckCircle className="w-8 h-8 text-emerald-500 flex-shrink-0" />
+                                        <CheckCircle className="w-8 h-8 text-blue-600 flex-shrink-0" />
                                     ) : (
                                         <LoaderCircle className="w-8 h-8 text-blue-500 animate-spin flex-shrink-0" />
                                     )}
                                     <div>
-                                        <h4 className={`font-black text-lg ${paymentStatus === 'success' ? 'text-emerald-900' : 'text-blue-900'}`}>
+                                        <h4 className={`font-black text-lg ${paymentStatus === 'success' ? 'text-blue-950' : 'text-blue-900'}`}>
                                             {paymentStatus === 'success' ? 'Registration Successful' : 'Verifying Payment...'}
                                         </h4>
-                                        <p className={`font-medium mt-1 ${paymentStatus === 'success' ? 'text-emerald-700' : 'text-blue-700'}`}>
+                                        <p className={`font-medium mt-1 ${paymentStatus === 'success' ? 'text-blue-800' : 'text-blue-700'}`}>
                                             {paymentStatus === 'success' 
                                                 ? 'Your account has been activated. Redirecting you to home...' 
                                                 : 'Please do not close this window while we verify your transaction.'}
@@ -351,7 +351,7 @@ const Registration = () => {
                                         value={formData.phone}
                                         onChange={handleChange}
                                         required
-                                        className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-slate-50 dark:border-slate-700 focus:border-emerald-500 dark:focus:border-emerald-500 dark:bg-slate-800 rounded-xl py-3 px-4 outline-none transition-all text-slate-900 dark:text-white font-bold"
+                                        className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-slate-50 dark:border-slate-700 focus:border-blue-600 dark:focus:border-blue-600 dark:bg-slate-800 rounded-xl py-3 px-4 outline-none transition-all text-slate-900 dark:text-white font-bold"
                                     />
                                 </div>
                                 <div className="space-y-2">
@@ -361,7 +361,7 @@ const Registration = () => {
                                         value={formData.functionalArea}
                                         onChange={handleChange}
                                         required
-                                        className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-slate-50 dark:border-slate-700 focus:border-emerald-500 dark:focus:border-emerald-500 rounded-xl py-3 px-4 outline-none transition-all text-slate-900 dark:text-white font-bold appearance-none cursor-pointer"
+                                        className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-slate-50 dark:border-slate-700 focus:border-blue-600 dark:focus:border-blue-600 rounded-xl py-3 px-4 outline-none transition-all text-slate-900 dark:text-white font-bold appearance-none cursor-pointer"
                                     >
                                         <option value="" disabled>-Select Domain-</option>
                                         <option value="Information Technology">Information Technology</option>
@@ -387,10 +387,10 @@ const Registration = () => {
                                     />
                                     <label 
                                         htmlFor="file-upload"
-                                        className="w-full flex items-center justify-between bg-slate-50 dark:bg-slate-800 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl py-8 px-6 cursor-pointer hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/5 transition-all group"
+                                        className="w-full flex items-center justify-between bg-slate-50 dark:bg-slate-800 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl py-8 px-6 cursor-pointer hover:border-blue-600 hover:bg-blue-50 dark:hover:bg-blue-600/5 transition-all group"
                                     >
                                         <div className="flex items-center gap-4">
-                                            <div className="p-3 bg-white dark:bg-slate-700 rounded-xl shadow-sm text-slate-400 dark:text-slate-300 group-hover:text-emerald-500 group-hover:scale-110 transition-all">
+                                            <div className="p-3 bg-white dark:bg-slate-700 rounded-xl shadow-sm text-slate-400 dark:text-slate-300 group-hover:text-blue-600 group-hover:scale-110 transition-all">
                                                 <Upload className="w-6 h-6" />
                                             </div>
                                             <div>
@@ -400,7 +400,7 @@ const Registration = () => {
                                                 <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mt-1">Select your resume or document</p>
                                             </div>
                                         </div>
-                                        {file && <CheckCircle className="w-6 h-6 text-emerald-500" />}
+                                        {file && <CheckCircle className="w-6 h-6 text-blue-600" />}
                                     </label>
                                 </div>
                             </div>
@@ -411,7 +411,7 @@ const Registration = () => {
                                     <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Registration Fee</p>
                                     <p className="text-3xl font-black text-slate-900 flex items-center gap-2">
                                         ₹1000 
-                                        <ShieldCheck className="w-5 h-5 text-emerald-500" />
+                                        <ShieldCheck className="w-5 h-5 text-blue-600" />
                                     </p>
                                 </div>
                                 <SmartButton
@@ -421,7 +421,7 @@ const Registration = () => {
                                     disabledReason={getDisabledReason()}
                                     howToCorrect={getCorrectionStep()}
                                     onClick={handleSubmit}
-                                    className={`w-full sm:w-auto bg-slate-900 hover:bg-emerald-500 text-white font-black py-4 px-10 rounded-xl transition-all shadow-xl shadow-emerald-500/10 cursor-pointer flex items-center justify-center gap-3 uppercase tracking-widest text-sm ${(isLoading || isVerifying) ? 'opacity-70 cursor-not-allowed' : ''}`}
+                                    className={`w-full sm:w-auto bg-slate-900 hover:bg-blue-600 text-white font-black py-4 px-10 rounded-xl transition-all shadow-xl shadow-blue-600/10 cursor-pointer flex items-center justify-center gap-3 uppercase tracking-widest text-sm ${(isLoading || isVerifying) ? 'opacity-70 cursor-not-allowed' : ''}`}
                                 >
                                     {isLoading || isVerifying ? (
                                         <><LoaderCircle className="w-5 h-5 animate-spin" /> {isVerifying ? 'Verifying...' : 'Processing...'}</>

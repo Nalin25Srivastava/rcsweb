@@ -139,7 +139,7 @@ const Signup = () => {
             
             {/* Background elements */}
             <div className="absolute top-[-10%] right-[-10%] w-96 h-96 bg-blue-500 rounded-full blur-[120px] opacity-20"></div>
-            <div className="absolute bottom-[-10%] left-[-10%] w-96 h-96 bg-emerald-500 rounded-full blur-[120px] opacity-20"></div>
+            <div className="absolute bottom-[-10%] left-[-10%] w-96 h-96 bg-blue-600 rounded-full blur-[120px] opacity-20"></div>
 
             <motion.div 
                 className="max-w-5xl w-full bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl overflow-y-auto border border-slate-100 dark:border-slate-800 flex flex-col md:flex-row relative z-10"
@@ -288,7 +288,7 @@ const Signup = () => {
                                                 }}
                                                 placeholder="Enter admin passkey"
                                                 className={`w-full bg-blue-50/50 border-2 rounded-xl py-4 pl-12 pr-16 outline-none transition-all text-slate-900 shadow-sm font-bold placeholder:text-blue-200 ${
-                                                    verificationStatus === 'success' ? 'border-emerald-500 bg-emerald-50' : 
+                                                    verificationStatus === 'success' ? 'border-blue-600 bg-blue-50' : 
                                                     verificationStatus === 'error' ? 'border-red-500 bg-red-50' : 
                                                     'border-blue-100 focus:border-blue-500 focus:bg-white'
                                                 }`}
@@ -308,11 +308,11 @@ const Signup = () => {
                                                     initial={{ opacity: 0, x: -10 }}
                                                     animate={{ opacity: 1, x: 0 }}
                                                     className={`text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 ml-1 ${
-                                                        verificationStatus === 'success' ? 'text-emerald-600' : 'text-red-600'
+                                                        verificationStatus === 'success' ? 'text-blue-700' : 'text-red-600'
                                                     }`}
                                                 >
                                                     {verificationStatus === 'success' ? (
-                                                        <><CheckCircle className="w-3 h-3 text-emerald-500" /> Verification Successful</>
+                                                        <><CheckCircle className="w-3 h-3 text-blue-600" /> Verification Successful</>
                                                     ) : (
                                                         <><XCircle className="w-3 h-3 text-red-500" /> Verification Failed</>
                                                     )}

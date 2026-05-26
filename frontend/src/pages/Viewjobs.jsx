@@ -481,7 +481,7 @@ const Viewjobs = () => {
                     className="relative z-10 text-center max-w-3xl mx-auto"
                 >
                     <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white tracking-tighter mb-6 drop-shadow-2xl">
-                        Explore <span className="text-emerald-400">Opportunities</span>
+                        Explore <span className="text-blue-500">Opportunities</span>
                     </h1>
                     <p className="text-slate-100 text-base md:text-lg lg:text-xl font-bold leading-relaxed drop-shadow-lg">
                         Find unparalleled career paths across our enterprise network.
@@ -492,7 +492,7 @@ const Viewjobs = () => {
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={() => { resetForm(); setIsJobFormOpen(true); }}
-                            className="mt-8 bg-emerald-500 hover:bg-emerald-600 text-white font-black py-4 px-8 rounded-2xl shadow-xl shadow-emerald-500/20 flex items-center gap-3 mx-auto uppercase tracking-widest text-sm"
+                            className="mt-8 bg-blue-600 hover:bg-blue-700 text-white font-black py-4 px-8 rounded-2xl shadow-xl shadow-blue-600/20 flex items-center gap-3 mx-auto uppercase tracking-widest text-sm"
                         >
                             <Plus className="w-5 h-5" /> Post New Job
                         </motion.button>
@@ -511,7 +511,7 @@ const Viewjobs = () => {
 
                 {isLoading ? (
                     <div className="col-span-full text-center py-10">
-                        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-emerald-500 mx-auto"></div>
+                        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600 mx-auto"></div>
                         <p className="mt-2 text-sm text-gray-600 font-bold italic tracking-widest">LOADING OPPORTUNITIES...</p>
                     </div>
                 ) : isError ? (
@@ -522,12 +522,12 @@ const Viewjobs = () => {
                     (currentJobs || []).map((job, index) => (
                         <motion.div 
                             key={index} 
-                            className="flex flex-col p-6 rounded-3xl bg-white border border-slate-100 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-emerald-500/10 cursor-pointer h-full relative overflow-hidden group"
+                            className="flex flex-col p-6 rounded-3xl bg-white border border-slate-100 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-blue-600/10 cursor-pointer h-full relative overflow-hidden group"
                             variants={cardVariants}
                             initial="visible"
                             whileHover="hover"
                         >
-                            <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-emerald-100 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-bl-full"></div>
+                            <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-blue-100 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-bl-full"></div>
                             
                             {/* Job Title */}
                             <h3 className="text-2xl font-black text-slate-800 tracking-tight leading-tight mb-2 flex items-center line-clamp-2 min-h-[3rem]">
@@ -547,7 +547,7 @@ const Viewjobs = () => {
                             
                             {/* Contact Email & Action */}
                             <div className="mt-auto">
-                                <div className="flex items-center gap-2 text-emerald-600 font-bold text-sm mb-6 bg-emerald-50 w-fit px-3 py-1.5 rounded-lg border border-emerald-100">
+                                <div className="flex items-center gap-2 text-blue-700 font-bold text-sm mb-6 bg-blue-50 w-fit px-3 py-1.5 rounded-lg border border-blue-100">
                                     <Mail className="w-4 h-4" />
                                     <span className="truncate">{job.email}</span>
                                 </div>
@@ -556,7 +556,7 @@ const Viewjobs = () => {
                                     onClick={() => setSelectedJob(job)}
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
-                                    className="w-full bg-slate-900 group-hover:bg-emerald-500 text-white font-black py-4 px-4 rounded-xl shadow-md transition-colors flex items-center justify-center gap-2 uppercase tracking-widest text-xs"
+                                    className="w-full bg-slate-900 group-hover:bg-blue-600 text-white font-black py-4 px-4 rounded-xl shadow-md transition-colors flex items-center justify-center gap-2 uppercase tracking-widest text-xs"
                                 >
                                     View Requirements <ArrowRight className="w-4 h-4 ml-1" />
                                 </motion.button>
@@ -636,14 +636,14 @@ const Viewjobs = () => {
                                         <button 
                                             type="button"
                                             onClick={() => setFormMode('manual')}
-                                            className={`text-[10px] font-black uppercase tracking-widest pb-1 border-b-2 transition-all ${formMode === 'manual' ? 'text-emerald-500 border-emerald-500' : 'text-slate-400 border-transparent'}`}
+                                            className={`text-[10px] font-black uppercase tracking-widest pb-1 border-b-2 transition-all ${formMode === 'manual' ? 'text-blue-600 border-blue-600' : 'text-slate-400 border-transparent'}`}
                                         >
                                             Manual Form
                                         </button>
                                         <button 
                                             type="button"
                                             onClick={() => setFormMode('raw')}
-                                            className={`text-[10px] font-black uppercase tracking-widest pb-1 border-b-2 transition-all ${formMode === 'raw' ? 'text-emerald-500 border-emerald-500' : 'text-slate-400 border-transparent'}`}
+                                            className={`text-[10px] font-black uppercase tracking-widest pb-1 border-b-2 transition-all ${formMode === 'raw' ? 'text-blue-600 border-blue-600' : 'text-slate-400 border-transparent'}`}
                                         >
                                             Auto-Fill from Raw Text
                                         </button>
@@ -656,8 +656,8 @@ const Viewjobs = () => {
 
                             {formMode === 'raw' ? (
                                 <div className="flex-grow space-y-4">
-                                    <div className="bg-emerald-50 p-4 rounded-2xl border border-emerald-100">
-                                        <p className="text-xs font-bold text-emerald-800">
+                                    <div className="bg-blue-50 p-4 rounded-2xl border border-blue-100">
+                                        <p className="text-xs font-bold text-blue-900">
                                             💡 Paste the raw job message (from WhatsApp/Email) below. We will automatically detect titles, salaries, and contacts!
                                         </p>
                                     </div>
@@ -665,12 +665,12 @@ const Viewjobs = () => {
                                         value={rawText}
                                         onChange={(e) => setRawText(e.target.value)}
                                         placeholder="Paste raw data here..."
-                                        className="w-full h-64 p-4 bg-slate-50 border-2 border-slate-100 focus:border-emerald-500 focus:bg-white rounded-2xl font-bold text-slate-900 transition-all outline-none resize-none"
+                                        className="w-full h-64 p-4 bg-slate-50 border-2 border-slate-100 focus:border-blue-600 focus:bg-white rounded-2xl font-bold text-slate-900 transition-all outline-none resize-none"
                                     ></textarea>
                                     <button
                                         type="button"
                                         onClick={handleAutoFill}
-                                        className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-black py-4 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 uppercase tracking-widest text-sm"
+                                        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 uppercase tracking-widest text-sm"
                                     >
                                         Auto-Fill Form <ArrowRight className="w-4 h-4" />
                                     </button>
@@ -681,13 +681,13 @@ const Viewjobs = () => {
                                 <div>
                                     <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Hiring For (Organization/Project)</label>
                                     <div className="relative">
-                                        <Globe className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-500" />
+                                        <Globe className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-600" />
                                         <input 
                                             name="hiringFor" 
                                             value={jobFormData.hiringFor} 
                                             onChange={handleInputChange} 
                                             placeholder="e.g. GEM PORTAL / PRIVATE BANK" 
-                                            className="w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl font-bold text-slate-900 transition-all outline-none"
+                                            className="w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl font-bold text-slate-900 transition-all outline-none"
                                         />
                                     </div>
                                 </div>
@@ -696,14 +696,14 @@ const Viewjobs = () => {
                                 <div>
                                     <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Job Profile / Title</label>
                                     <div className="relative">
-                                        <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-500" />
+                                        <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-600" />
                                         <input 
                                             name="title" 
                                             value={jobFormData.title} 
                                             onChange={handleInputChange} 
                                             placeholder="e.g. Mechanical Engineer" 
                                             required 
-                                            className="w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl font-bold text-slate-900 transition-all outline-none"
+                                            className="w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl font-bold text-slate-900 transition-all outline-none"
                                         />
                                     </div>
                                 </div>
@@ -717,7 +717,7 @@ const Viewjobs = () => {
                                             value={jobFormData.qualification} 
                                             onChange={handleInputChange} 
                                             placeholder="e.g. B.Tech / Diploma" 
-                                            className="w-full px-4 py-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl font-bold text-slate-900 transition-all outline-none"
+                                            className="w-full px-4 py-4 bg-slate-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl font-bold text-slate-900 transition-all outline-none"
                                         />
                                     </div>
                                     {/* Salary */}
@@ -728,7 +728,7 @@ const Viewjobs = () => {
                                             value={jobFormData.salary} 
                                             onChange={handleInputChange} 
                                             placeholder="e.g. 15k - 25k" 
-                                            className="w-full px-4 py-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl font-bold text-slate-900 transition-all outline-none"
+                                            className="w-full px-4 py-4 bg-slate-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl font-bold text-slate-900 transition-all outline-none"
                                         />
                                     </div>
                                     {/* Location */}
@@ -741,7 +741,7 @@ const Viewjobs = () => {
                                                 value={jobFormData.location} 
                                                 onChange={handleInputChange} 
                                                 placeholder="e.g. Kota, Rajasthan" 
-                                                className="w-full pl-10 pr-4 py-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl font-bold text-slate-900 transition-all outline-none"
+                                                className="w-full pl-10 pr-4 py-4 bg-slate-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl font-bold text-slate-900 transition-all outline-none"
                                             />
                                         </div>
                                     </div>
@@ -755,7 +755,7 @@ const Viewjobs = () => {
                                                 value={jobFormData.dutyTime} 
                                                 onChange={handleInputChange} 
                                                 placeholder="e.g. 10am to 6pm" 
-                                                className="w-full pl-10 pr-4 py-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl font-bold text-slate-900 transition-all outline-none"
+                                                className="w-full pl-10 pr-4 py-4 bg-slate-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl font-bold text-slate-900 transition-all outline-none"
                                             />
                                         </div>
                                     </div>
@@ -769,7 +769,7 @@ const Viewjobs = () => {
                                             name="gender" 
                                             value={jobFormData.gender} 
                                             onChange={handleInputChange} 
-                                            className="w-full px-4 py-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl font-bold text-slate-900 transition-all outline-none appearance-none"
+                                            className="w-full px-4 py-4 bg-slate-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl font-bold text-slate-900 transition-all outline-none appearance-none"
                                         >
                                             <option value="">Select Gender</option>
                                             <option value="Male">Male Only</option>
@@ -787,7 +787,7 @@ const Viewjobs = () => {
                                                 type="email"
                                                 value={jobFormData.email} 
                                                 onChange={handleInputChange} 
-                                                className="w-full pl-10 pr-4 py-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl font-bold text-slate-900 transition-all outline-none"
+                                                className="w-full pl-10 pr-4 py-4 bg-slate-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl font-bold text-slate-900 transition-all outline-none"
                                             />
                                         </div>
                                     </div>
@@ -802,7 +802,7 @@ const Viewjobs = () => {
                                         onChange={handleInputChange} 
                                         rows="3"
                                         placeholder="e.g. Interview going on, reach soon..." 
-                                        className="w-full px-4 py-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl font-bold text-slate-900 transition-all outline-none resize-none"
+                                        className="w-full px-4 py-4 bg-slate-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl font-bold text-slate-900 transition-all outline-none resize-none"
                                     ></textarea>
                                 </div>
 
@@ -822,7 +822,7 @@ const Viewjobs = () => {
                                                 checked={jobFormData.timerActive}
                                                 onChange={(e) => setJobFormData({...jobFormData, timerActive: e.target.checked})}
                                             />
-                                            <div className="w-12 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500"></div>
+                                            <div className="w-12 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
                                         </label>
                                     </div>
 
@@ -837,7 +837,7 @@ const Viewjobs = () => {
                                                 <input 
                                                     type="number"
                                                     min="31"
-                                                    className="w-full px-5 py-3.5 bg-white border border-slate-200 rounded-xl focus:border-emerald-500 transition-all outline-none font-bold text-slate-700 text-sm shadow-sm"
+                                                    className="w-full px-5 py-3.5 bg-white border border-slate-200 rounded-xl focus:border-blue-600 transition-all outline-none font-bold text-slate-700 text-sm shadow-sm"
                                                     placeholder="Minimum 31 minutes"
                                                     value={jobFormData.durationMinutes}
                                                     onChange={(e) => setJobFormData({...jobFormData, durationMinutes: Math.max(1, parseInt(e.target.value) || 0)})}
@@ -858,7 +858,7 @@ const Viewjobs = () => {
                                         <button 
                                             type="button" 
                                             onClick={addCustomField}
-                                            className="text-[10px] font-black text-emerald-600 uppercase tracking-widest flex items-center gap-1 hover:text-emerald-700 transition-colors"
+                                            className="text-[10px] font-black text-blue-700 uppercase tracking-widest flex items-center gap-1 hover:text-blue-800 transition-colors"
                                         >
                                             <Plus className="w-3 h-3" /> Add Field
                                         </button>
@@ -901,7 +901,7 @@ const Viewjobs = () => {
                                     </button>
                                     <button 
                                         type="submit" 
-                                        className="flex-[2] bg-slate-900 hover:bg-emerald-500 text-white font-black py-4 px-4 rounded-2xl shadow-xl transition-colors uppercase tracking-widest text-xs"
+                                        className="flex-[2] bg-slate-900 hover:bg-blue-600 text-white font-black py-4 px-4 rounded-2xl shadow-xl transition-colors uppercase tracking-widest text-xs"
                                     >
                                         {isEditing ? 'Save Changes' : 'Post Job Listing'}
                                     </button>
@@ -1118,12 +1118,12 @@ const Viewjobs = () => {
                                                 
                                                 {/* Custom Fields Display */}
                                                 {jobData.customFields.length > 0 && (
-                                                    <div className="bg-emerald-50 p-6 rounded-3xl border border-emerald-100 shadow-sm">
-                                                        <h4 className="text-[10px] font-black uppercase tracking-[0.2em] mb-4 text-emerald-800 opacity-70">Additional Specifications</h4>
+                                                    <div className="bg-blue-50 p-6 rounded-3xl border border-blue-100 shadow-sm">
+                                                        <h4 className="text-[10px] font-black uppercase tracking-[0.2em] mb-4 text-blue-900 opacity-70">Additional Specifications</h4>
                                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                                             {jobData.customFields.map(([label, value], ci) => (
                                                                 <div key={ci} className="flex flex-col gap-1">
-                                                                    <span className="text-[10px] font-black text-emerald-600 uppercase tracking-widest">{label}</span>
+                                                                    <span className="text-[10px] font-black text-blue-700 uppercase tracking-widest">{label}</span>
                                                                     <span className="text-base font-black text-gray-900 uppercase">{value}</span>
                                                                 </div>
                                                             ))}

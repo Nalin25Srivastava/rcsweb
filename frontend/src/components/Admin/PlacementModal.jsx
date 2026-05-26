@@ -125,7 +125,7 @@ const PlacementModal = ({ isOpen, onClose, student = null, isEditing = false }) 
                             <div className="space-y-2">
                                 <label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Candidate Name</label>
                                 <input 
-                                    className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-emerald-500 focus:bg-white transition-all outline-none font-bold text-slate-700 placeholder:text-slate-300"
+                                    className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-blue-600 focus:bg-white transition-all outline-none font-bold text-slate-700 placeholder:text-slate-300"
                                     placeholder="Enter full name"
                                     value={formData.name}
                                     onChange={(e) => setFormData({...formData, name: e.target.value})}
@@ -136,7 +136,7 @@ const PlacementModal = ({ isOpen, onClose, student = null, isEditing = false }) 
                             <div className="space-y-2">
                                 <label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Company Name</label>
                                 <input 
-                                    className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-emerald-500 focus:bg-white transition-all outline-none font-bold text-slate-700 placeholder:text-slate-300"
+                                    className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-blue-600 focus:bg-white transition-all outline-none font-bold text-slate-700 placeholder:text-slate-300"
                                     placeholder="e.g. Google, Microsoft, Accenture"
                                     value={formData.company}
                                     onChange={(e) => setFormData({...formData, company: e.target.value})}
@@ -148,7 +148,7 @@ const PlacementModal = ({ isOpen, onClose, student = null, isEditing = false }) 
                                 <div className="space-y-2">
                                     <label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Position</label>
                                     <input 
-                                        className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-emerald-500 focus:bg-white transition-all outline-none font-bold text-slate-700 placeholder:text-slate-300"
+                                        className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-blue-600 focus:bg-white transition-all outline-none font-bold text-slate-700 placeholder:text-slate-300"
                                         placeholder="e.g. Software Engineer"
                                         value={formData.position}
                                         onChange={(e) => setFormData({...formData, position: e.target.value})}
@@ -158,7 +158,7 @@ const PlacementModal = ({ isOpen, onClose, student = null, isEditing = false }) 
                                 <div className="space-y-2">
                                     <label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Compensation (CTC)</label>
                                     <input 
-                                        className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-emerald-500 focus:bg-white transition-all outline-none font-bold text-slate-700 placeholder:text-slate-300"
+                                        className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-blue-600 focus:bg-white transition-all outline-none font-bold text-slate-700 placeholder:text-slate-300"
                                         placeholder="e.g. 6.5 LPA"
                                         value={formData.compensation}
                                         onChange={(e) => setFormData({...formData, compensation: e.target.value})}
@@ -183,7 +183,7 @@ const PlacementModal = ({ isOpen, onClose, student = null, isEditing = false }) 
                                         )}
                                         {isUploading && (
                                             <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center">
-                                                <Loader2 className="w-6 h-6 text-emerald-500 animate-spin" />
+                                                <Loader2 className="w-6 h-6 text-blue-600 animate-spin" />
                                             </div>
                                         )}
                                     </div>
@@ -203,7 +203,7 @@ const PlacementModal = ({ isOpen, onClose, student = null, isEditing = false }) 
                                                 disabledReason="Upload in progress"
                                                 howToCorrect="Please wait for the current file to finish processing before selecting a new one."
                                                 onClick={() => fileInputRef.current?.click()}
-                                                className="flex-1 px-4 py-3 bg-white border-2 border-slate-200 hover:border-emerald-500 rounded-xl text-sm font-bold text-slate-700 transition-all flex items-center justify-center gap-2 shadow-sm"
+                                                className="flex-1 px-4 py-3 bg-white border-2 border-slate-200 hover:border-blue-600 rounded-xl text-sm font-bold text-slate-700 transition-all flex items-center justify-center gap-2 shadow-sm"
                                             >
                                                 <Upload className="w-4 h-4" />
                                                 {isUploading ? 'Processing...' : 'Process Media'}
@@ -211,7 +211,7 @@ const PlacementModal = ({ isOpen, onClose, student = null, isEditing = false }) 
                                         </div>
                                         <div className="relative">
                                             <input 
-                                                className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:border-emerald-500 focus:bg-white transition-all outline-none text-xs font-medium text-slate-600 placeholder:text-slate-300"
+                                                className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:border-blue-600 focus:bg-white transition-all outline-none text-xs font-medium text-slate-600 placeholder:text-slate-300"
                                                 placeholder="Or type local filename"
                                                 value={formData.image}
                                                 onChange={(e) => setFormData({...formData, image: e.target.value})}
@@ -230,7 +230,7 @@ const PlacementModal = ({ isOpen, onClose, student = null, isEditing = false }) 
                                 disabledReason={getDisabledReason()}
                                 howToCorrect={getCorrectionStep()}
                                 onClick={handleSubmit}
-                                className="w-full bg-slate-900 hover:bg-emerald-600 text-white font-black py-5 rounded-2xl transition-all shadow-xl shadow-slate-200 uppercase tracking-widest text-sm flex items-center justify-center gap-2 group"
+                                className="w-full bg-slate-900 hover:bg-blue-700 text-white font-black py-5 rounded-2xl transition-all shadow-xl shadow-slate-200 uppercase tracking-widest text-sm flex items-center justify-center gap-2 group"
                             >
                                 {isEditing ? 'Update Success Story' : 'Publish Success Story'}
                                 <motion.span animate={{ x: [0, 5, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>→</motion.span>

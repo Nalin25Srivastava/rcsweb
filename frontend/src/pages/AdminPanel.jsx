@@ -250,7 +250,7 @@ const AdminPanel = () => {
                 className="bg-slate-900 dark:bg-black text-white flex flex-col relative z-20 shadow-2xl"
             >
                 <div className="p-6 flex items-center gap-3 border-b border-slate-800">
-                    <div className="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-emerald-500/20">
+                    <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-600/20">
                         <ShieldCheck className="w-6 h-6 text-white" />
                     </div>
                     {isSidebarOpen && (
@@ -259,7 +259,7 @@ const AdminPanel = () => {
                             animate={{ opacity: 1 }}
                             className="font-black text-xl tracking-tighter"
                         >
-                            ADMIN<span className="text-emerald-500">PANEL</span>
+                            ADMIN<span className="text-blue-600">PANEL</span>
                         </motion.h1>
                     )}
                 </div>
@@ -274,11 +274,11 @@ const AdminPanel = () => {
                                 onClick={() => setActiveTab(item.id)}
                                 className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-300 group ${
                                     activeTab === item.id 
-                                    ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' 
+                                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20' 
                                     : 'text-slate-400 hover:bg-slate-800/50 hover:text-white'
                                 }`}
                             >
-                                <Icon className={`w-5 h-5 flex-shrink-0 ${isActive ? 'text-white' : 'group-hover:text-emerald-400'}`} />
+                                <Icon className={`w-5 h-5 flex-shrink-0 ${isActive ? 'text-white' : 'group-hover:text-blue-500'}`} />
                                 {isSidebarOpen && (
                                     <span className="font-bold text-sm tracking-wide">{item.label}</span>
                                 )}
@@ -318,17 +318,17 @@ const AdminPanel = () => {
                     </div>
 
                     <div className="flex items-center gap-6">
-                        <button className="relative p-2 text-slate-400 hover:text-emerald-500 transition-colors">
+                        <button className="relative p-2 text-slate-400 hover:text-blue-600 transition-colors">
                             <Bell className="w-6 h-6" />
-                            <span className="absolute top-2 right-2 w-2 h-2 bg-emerald-500 rounded-full border-2 border-white dark:border-slate-900"></span>
+                            <span className="absolute top-2 right-2 w-2 h-2 bg-blue-600 rounded-full border-2 border-white dark:border-slate-900"></span>
                         </button>
                         <div className="h-8 w-px bg-slate-100 dark:bg-slate-800"></div>
                         <div className="flex items-center gap-3">
                             <div className="text-right hidden sm:block">
                                 <p className="text-sm font-black text-slate-900 dark:text-white leading-none mb-1">{user?.name || 'Admin User'}</p>
-                                <p className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">Platform Admin</p>
+                                <p className="text-[10px] font-bold text-blue-600 uppercase tracking-widest">Platform Admin</p>
                             </div>
-                            <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-500/10 rounded-xl flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-black border border-emerald-200 dark:border-emerald-500/20">
+                            <div className="w-10 h-10 bg-blue-100 dark:bg-blue-600/10 rounded-xl flex items-center justify-center text-blue-700 dark:text-blue-500 font-black border border-blue-300 dark:border-blue-600/20">
                                 {user?.name?.charAt(0) || 'A'}
                             </div>
                         </div>
@@ -440,26 +440,26 @@ const DashboardView = ({ jobs = [], students = [], stats = [], onNavigate }) => 
                     </h3>
                     <div className="space-y-4">
                         {(jobs || []).slice(0, 5).map((job, i) => (
-                            <div key={i} className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100 group hover:border-emerald-200 transition-colors">
-                                <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-emerald-500 shadow-sm">
+                            <div key={i} className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100 group hover:border-blue-300 transition-colors">
+                                <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-blue-600 shadow-sm">
                                     <Briefcase className="w-5 h-5" />
                                 </div>
                                 <div className="flex-grow cursor-pointer" onClick={() => onNavigate('jobs')}>
                                     <h4 className="font-black text-slate-900 leading-tight">{job.title}</h4>
                                     <p className="text-xs text-slate-500 font-bold mt-1">{job.location} • {job.salary}</p>
                                 </div>
-                                <ArrowRight className="w-5 h-5 text-slate-300 group-hover:text-emerald-500 transition-all" />
+                                <ArrowRight className="w-5 h-5 text-slate-300 group-hover:text-blue-600 transition-all" />
                             </div>
                         ))}
                     </div>
                 </div>
 
                 <div className="bg-slate-900 text-white p-8 rounded-3xl relative overflow-hidden flex flex-col justify-end">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500 rounded-full blur-[120px] opacity-20 translate-x-1/2 -translate-y-1/2"></div>
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600 rounded-full blur-[120px] opacity-20 translate-x-1/2 -translate-y-1/2"></div>
                     <div className="relative z-10">
                         <h3 className="text-3xl font-black mb-4">Admin Insights</h3>
                         <p className="text-slate-400 font-medium mb-8">The platform is showing a 24% increase in student engagement this month. You have 3 pending carousel updates.</p>
-                        <button className="bg-emerald-500 hover:bg-emerald-600 text-white font-black px-6 py-3 rounded-xl transition-all flex items-center gap-2 uppercase tracking-widest text-xs">
+                        <button className="bg-blue-600 hover:bg-blue-700 text-white font-black px-6 py-3 rounded-xl transition-all flex items-center gap-2 uppercase tracking-widest text-xs">
                             View Full Report <ChevronRight className="w-4 h-4" />
                         </button>
                     </div>
@@ -508,7 +508,7 @@ const JobCountdown = ({ expiresAt, timerActive, onEnd, onExtend, onRestart }) =>
 
     if (!timerActive) {
         return (
-            <span className="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-full text-[10px] font-black uppercase border border-emerald-100 italic">
+            <span className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-[10px] font-black uppercase border border-blue-100 italic">
                 Active
             </span>
         );
@@ -542,7 +542,7 @@ const JobCountdown = ({ expiresAt, timerActive, onEnd, onExtend, onRestart }) =>
             <div className="flex items-center gap-1">
                 <button 
                     onClick={() => onExtend(30)}
-                    className="text-[8px] font-black uppercase tracking-wider text-emerald-600 hover:bg-emerald-500 hover:text-white bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-100 transition-all"
+                    className="text-[8px] font-black uppercase tracking-wider text-blue-700 hover:bg-blue-600 hover:text-white bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100 transition-all"
                     title="Extend by 30 mins"
                 >
                     +30m
@@ -573,7 +573,7 @@ const JobManagementView = ({ jobs = [], onAdd, onEdit, onDelete, onRestart, onEx
                 <h2 className="text-2xl font-black text-slate-900">Manage Job Listings</h2>
                 <button 
                     onClick={onAdd}
-                    className="bg-emerald-500 hover:bg-emerald-600 text-white font-black px-6 py-3 rounded-xl flex items-center gap-2 shadow-lg shadow-emerald-500/20 transition-all uppercase tracking-widest text-xs"
+                    className="bg-blue-600 hover:bg-blue-700 text-white font-black px-6 py-3 rounded-xl flex items-center gap-2 shadow-lg shadow-blue-600/20 transition-all uppercase tracking-widest text-xs"
                 >
                     <Plus className="w-5 h-5" /> Add New Job
                 </button>
@@ -642,7 +642,7 @@ const StudentManagementView = ({ students = [], onAdd, onEdit, onDelete, getImag
                 <h2 className="text-2xl font-black text-slate-900">Manage Placed Students</h2>
                 <button 
                     onClick={onAdd}
-                    className="bg-emerald-500 hover:bg-emerald-600 text-white font-black px-6 py-3 rounded-xl flex items-center gap-2 shadow-lg shadow-emerald-500/20 transition-all uppercase tracking-widest text-xs"
+                    className="bg-blue-600 hover:bg-blue-700 text-white font-black px-6 py-3 rounded-xl flex items-center gap-2 shadow-lg shadow-blue-600/20 transition-all uppercase tracking-widest text-xs"
                 >
                     <Plus className="w-5 h-5" /> Add Student
                 </button>
@@ -650,7 +650,7 @@ const StudentManagementView = ({ students = [], onAdd, onEdit, onDelete, getImag
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {(students || []).map((student, i) => (
-                    <div key={i} className="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm relative group overflow-hidden hover:border-emerald-500 transition-all flex items-center gap-5">
+                    <div key={i} className="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm relative group overflow-hidden hover:border-blue-600 transition-all flex items-center gap-5">
                         <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-10">
                             <button 
                                 onClick={() => onEdit(student)}
@@ -682,7 +682,7 @@ const StudentManagementView = ({ students = [], onAdd, onEdit, onDelete, getImag
                             
                             <div className="mt-3 space-y-1">
                                 <div className="flex items-center gap-2">
-                                    <span className="text-emerald-600 font-black text-xs uppercase tracking-widest bg-emerald-50 px-2 py-0.5 rounded-full">{student.position}</span>
+                                    <span className="text-blue-700 font-black text-xs uppercase tracking-widest bg-blue-50 px-2 py-0.5 rounded-full">{student.position}</span>
                                 </div>
                                 <p className="text-slate-900 font-black text-base">{student.package}</p>
                             </div>
@@ -701,7 +701,7 @@ const StatManagementView = ({ stats = [], onAdd, onEdit, onDelete }) => {
                 <h2 className="text-2xl font-black text-slate-900">Manage Platform Statistics</h2>
                 <button 
                     onClick={onAdd}
-                    className="bg-emerald-500 hover:bg-emerald-600 text-white font-black px-6 py-3 rounded-xl flex items-center gap-2 shadow-lg shadow-emerald-500/20 transition-all uppercase tracking-widest text-xs"
+                    className="bg-blue-600 hover:bg-blue-700 text-white font-black px-6 py-3 rounded-xl flex items-center gap-2 shadow-lg shadow-blue-600/20 transition-all uppercase tracking-widest text-xs"
                 >
                     <Plus className="w-5 h-5" /> Add Stat
                 </button>
@@ -709,9 +709,9 @@ const StatManagementView = ({ stats = [], onAdd, onEdit, onDelete }) => {
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {(stats || []).map((stat, i) => (
-                    <div key={i} className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm group hover:border-emerald-500 transition-all">
+                    <div key={i} className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm group hover:border-blue-600 transition-all">
                         <div className="flex justify-between items-start mb-4">
-                            <div className="p-3 bg-slate-50 text-slate-600 rounded-2xl group-hover:bg-emerald-50 group-hover:text-emerald-600 transition-all">
+                            <div className="p-3 bg-slate-50 text-slate-600 rounded-2xl group-hover:bg-blue-50 group-hover:text-blue-700 transition-all">
                                 <BarChart3 className="w-6 h-6" />
                             </div>
                             <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -745,7 +745,7 @@ const CarouselManagementView = ({ slides = [], onAdd, onDelete, getImageUrl }) =
                 <h2 className="text-2xl font-black text-slate-900">Carousel Slider Management</h2>
                 <button 
                     onClick={onAdd}
-                    className="bg-emerald-500 hover:bg-emerald-600 text-white font-black px-6 py-3 rounded-xl flex items-center gap-2 shadow-lg shadow-emerald-500/20 transition-all uppercase tracking-widest text-sm"
+                    className="bg-blue-600 hover:bg-blue-700 text-white font-black px-6 py-3 rounded-xl flex items-center gap-2 shadow-lg shadow-blue-600/20 transition-all uppercase tracking-widest text-sm"
                 >
                     <Plus className="w-5 h-5" /> Upload Image
                 </button>
@@ -776,7 +776,7 @@ const CarouselManagementView = ({ slides = [], onAdd, onDelete, getImageUrl }) =
                         </div>
                         <div className="p-4 bg-slate-50 flex items-center justify-between">
                             <span className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Slide Order: {slide.order}</span>
-                            <span className="text-[10px] font-black uppercase text-emerald-600 bg-emerald-50 px-2 py-1 rounded border border-emerald-100">Active</span>
+                            <span className="text-[10px] font-black uppercase text-blue-700 bg-blue-50 px-2 py-1 rounded border border-blue-100">Active</span>
                         </div>
                     </div>
                 ))}
@@ -805,7 +805,7 @@ const ServiceManagementView = ({ services = [], onEdit }) => {
                             </div>
                             <button 
                                 onClick={() => onEdit(service)}
-                                className="p-3 bg-slate-900 text-white rounded-xl shadow-lg hover:bg-emerald-500 transition-all transform hover:scale-105"
+                                className="p-3 bg-slate-900 text-white rounded-xl shadow-lg hover:bg-blue-600 transition-all transform hover:scale-105"
                             >
                                 <Pencil className="w-5 h-5" />
                             </button>
@@ -819,7 +819,7 @@ const ServiceManagementView = ({ services = [], onEdit }) => {
                                 <div className={`w-2 h-2 rounded-full ${service.accentColor.replace('text-', 'bg-')}`}></div>
                                 <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Order: {service.order}</span>
                             </div>
-                            <span className="text-[10px] font-black uppercase tracking-widest text-emerald-600 bg-emerald-50 px-2 py-1 rounded">Active</span>
+                            <span className="text-[10px] font-black uppercase tracking-widest text-blue-700 bg-blue-50 px-2 py-1 rounded">Active</span>
                         </div>
                     </div>
                 ))}

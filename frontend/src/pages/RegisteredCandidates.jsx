@@ -88,7 +88,7 @@ const RegisteredCandidates = () => {
         <div className="bg-slate-50 min-h-screen pb-20">
             {/* Admin Header */}
             <div className="bg-slate-900 pt-32 pb-24 px-4 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-emerald-500 rounded-full blur-[150px] opacity-10 -translate-y-1/2 translate-x-1/2"></div>
+                <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-600 rounded-full blur-[150px] opacity-10 -translate-y-1/2 translate-x-1/2"></div>
                 <div className="max-w-7xl mx-auto relative z-10 flex flex-col md:flex-row justify-between items-center gap-8">
                     <motion.div 
                         initial={{ opacity: 0, x: -20 }}
@@ -96,13 +96,13 @@ const RegisteredCandidates = () => {
                         className="text-center md:text-left"
                     >
                         <div className="flex items-center gap-3 justify-center md:justify-start mb-4">
-                            <div className="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                            <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-600/20">
                                 <LayoutDashboard className="w-6 h-6 text-white" />
                             </div>
-                            <span className="text-emerald-400 font-black uppercase tracking-[0.2em] text-xs">Management System</span>
+                            <span className="text-blue-500 font-black uppercase tracking-[0.2em] text-xs">Management System</span>
                         </div>
                         <h1 className="text-5xl md:text-6xl font-black text-white tracking-tighter mb-4">
-                            Registered <span className="text-emerald-400">Hub</span>
+                            Registered <span className="text-blue-500">Hub</span>
                         </h1>
                         <p className="text-slate-400 font-bold text-lg max-w-xl">
                             Oversee current enrollments and discover new candidates from the platform's user records.
@@ -140,12 +140,12 @@ const RegisteredCandidates = () => {
                             placeholder={viewMode === 'registered' ? "Search gallery..." : "Search user records..."} 
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl font-bold text-slate-900 transition-all outline-none"
+                            className="w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl font-bold text-slate-900 transition-all outline-none"
                         />
                     </div>
                     <button 
                         onClick={handleAdd}
-                        className="w-full md:w-auto bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-4 rounded-2xl font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 transition-all"
+                        className="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-2xl font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-blue-600/20 transition-all"
                     >
                         <Plus className="w-6 h-6" /> Add New
                     </button>
@@ -163,7 +163,7 @@ const RegisteredCandidates = () => {
                             exit={{ opacity: 0 }}
                             className="flex flex-col items-center justify-center py-20"
                         >
-                            <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-emerald-500 border-t-transparent"></div>
+                            <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 border-t-transparent"></div>
                             <p className="mt-6 text-slate-500 font-bold uppercase tracking-widest">Updating Records...</p>
                         </motion.div>
                     ) : viewMode === 'registered' ? (
@@ -220,7 +220,7 @@ const RegisteredCandidates = () => {
                                                 <h3 className="text-2xl font-black text-slate-900 tracking-tight leading-tight">
                                                     {candidate.name}
                                                 </h3>
-                                                <div className="flex items-center gap-1.5 mt-1 text-emerald-600">
+                                                <div className="flex items-center gap-1.5 mt-1 text-blue-700">
                                                     <CheckCircle2 className="w-4 h-4" />
                                                     <span className="text-[10px] font-black uppercase tracking-widest">Active Enrollment</span>
                                                 </div>
@@ -239,7 +239,7 @@ const RegisteredCandidates = () => {
                                                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Batch</span>
                                                 <span className="text-slate-900 font-black text-sm uppercase">{candidate.batch}</span>
                                             </div>
-                                            <span className="px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-emerald-50 text-emerald-600">
+                                            <span className="px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-blue-50 text-blue-700">
                                                 {candidate.status}
                                             </span>
                                         </div>
@@ -264,16 +264,16 @@ const RegisteredCandidates = () => {
                                 availableUsers.map((u) => (
                                     <motion.div 
                                         key={u._id}
-                                        className="bg-white p-8 rounded-[3rem] border border-slate-100 shadow-xl shadow-slate-200/40 group hover:border-emerald-200 transition-colors"
+                                        className="bg-white p-8 rounded-[3rem] border border-slate-100 shadow-xl shadow-slate-200/40 group hover:border-blue-300 transition-colors"
                                         whileHover={{ y: -5 }}
                                     >
                                         <div className="flex items-start justify-between mb-6">
-                                            <div className="w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center">
-                                                <Users className="w-8 h-8 text-emerald-500" />
+                                            <div className="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center">
+                                                <Users className="w-8 h-8 text-blue-600" />
                                             </div>
                                             <button 
                                                 onClick={() => handleRegister(u)}
-                                                className="bg-slate-900 text-white px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-emerald-500 transition-colors shadow-lg shadow-slate-900/10"
+                                                className="bg-slate-900 text-white px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-600 transition-colors shadow-lg shadow-slate-900/10"
                                             >
                                                 Select & Register
                                             </button>
@@ -282,8 +282,8 @@ const RegisteredCandidates = () => {
                                         <p className="text-slate-400 font-bold text-sm truncate mb-6">{u.email}</p>
                                         <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
                                             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Status</p>
-                                            <p className="text-emerald-500 font-black text-xs uppercase flex items-center gap-2">
-                                                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                                            <p className="text-blue-600 font-black text-xs uppercase flex items-center gap-2">
+                                                <div className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
                                                 Verified Account
                                             </p>
                                         </div>

@@ -150,7 +150,7 @@ const Login = () => {
         <div className="min-h-screen flex flex-col items-center justify-start py-20 bg-slate-50 dark:bg-slate-950 relative overflow-x-hidden transition-colors duration-300">
 
             {/* Background elements */}
-            <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-emerald-500 rounded-full blur-[120px] opacity-20"></div>
+            <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-blue-600 rounded-full blur-[120px] opacity-20"></div>
             <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-blue-500 rounded-full blur-[120px] opacity-20"></div>
 
             <motion.div
@@ -166,13 +166,13 @@ const Login = () => {
 
                     <div className="relative z-10">
                         <Link to="/" className="text-xl font-bold tracking-tight uppercase flex items-center gap-2">
-                            <span>RCS</span><span className="text-emerald-500">Placement</span>
+                            <span>RCS</span><span className="text-blue-600">Placement</span>
                         </Link>
                     </div>
 
                     <div className="relative z-10">
                         <h2 className="text-4xl font-black mb-4 leading-tight tracking-tight">Step into your next big role.</h2>
-                        <p className="text-emerald-400 font-bold tracking-widest text-sm uppercase">Login to access the portal.</p>
+                        <p className="text-blue-500 font-bold tracking-widest text-sm uppercase">Login to access the portal.</p>
                     </div>
                 </div>
 
@@ -209,13 +209,13 @@ const Login = () => {
                             <div className="space-y-2 group">
                                 <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Email Address</label>
                                 <div className="relative">
-                                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300 group-focus-within:text-emerald-500 transition-colors" />
+                                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300 group-focus-within:text-blue-600 transition-colors" />
                                     <input
                                         type="email"
                                         value={email}
                                         onChange={handleEmailChange}
                                         placeholder="admin@example.com"
-                                        className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-slate-50 dark:border-slate-700 focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-700 rounded-xl py-4 pl-12 pr-4 outline-none transition-all text-slate-900 dark:text-white shadow-sm font-bold"
+                                        className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-slate-50 dark:border-slate-700 focus:border-blue-600 focus:bg-white dark:focus:bg-slate-700 rounded-xl py-4 pl-12 pr-4 outline-none transition-all text-slate-900 dark:text-white shadow-sm font-bold"
                                         required
                                     />
                                 </div>
@@ -224,13 +224,13 @@ const Login = () => {
                             <div className="space-y-2 group">
                                 <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Password</label>
                                 <div className="relative">
-                                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300 group-focus-within:text-emerald-500 transition-colors" />
+                                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300 group-focus-within:text-blue-600 transition-colors" />
                                     <input
                                         type="password"
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                         placeholder="••••••••"
-                                        className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-slate-50 dark:border-slate-700 focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-700 rounded-xl py-4 pl-12 pr-4 outline-none transition-all text-slate-900 dark:text-white shadow-sm font-bold"
+                                        className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-slate-50 dark:border-slate-700 focus:border-blue-600 focus:bg-white dark:focus:bg-slate-700 rounded-xl py-4 pl-12 pr-4 outline-none transition-all text-slate-900 dark:text-white shadow-sm font-bold"
                                         required
                                     />
                                 </div>
@@ -248,7 +248,7 @@ const Login = () => {
                                                 setRole('user');
                                                 setAdminSecret('');
                                             }}
-                                            className="w-4 h-4 text-emerald-600 border-slate-300 focus:ring-emerald-500"
+                                            className="w-4 h-4 text-blue-700 border-slate-300 focus:ring-blue-600"
                                         />
                                         <span className="text-slate-700 dark:text-slate-300 font-bold">User</span>
                                     </label>
@@ -266,7 +266,7 @@ const Login = () => {
                                                     setAdminSecret('');
                                                 }
                                             }}
-                                            className="w-4 h-4 text-emerald-600 border-slate-300 focus:ring-emerald-500"
+                                            className="w-4 h-4 text-blue-700 border-slate-300 focus:ring-blue-600"
                                         />
                                         <span className="text-slate-700 dark:text-slate-300 font-bold">Admin</span>
                                     </label>
@@ -281,9 +281,9 @@ const Login = () => {
                                         exit={{ opacity: 0, height: 0, y: -10 }}
                                         className="space-y-2 group overflow-hidden"
                                     >
-                                        <label className="text-xs font-black text-emerald-600 uppercase tracking-widest ml-1">Admin Verification Code</label>
+                                        <label className="text-xs font-black text-blue-700 uppercase tracking-widest ml-1">Admin Verification Code</label>
                                         <div className="relative">
-                                            <ShieldAlert className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-400 group-focus-within:text-emerald-600 transition-colors" />
+                                            <ShieldAlert className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-500 group-focus-within:text-blue-700 transition-colors" />
                                             <input
                                                 type="password"
                                                 value={adminSecret}
@@ -292,16 +292,16 @@ const Login = () => {
                                                     if (verificationStatus) setVerificationStatus(null);
                                                 }}
                                                 placeholder="Enter admin passkey"
-                                                className={`w-full bg-emerald-50/50 border-2 rounded-xl py-4 pl-12 pr-16 outline-none transition-all text-slate-900 shadow-sm font-bold placeholder:text-emerald-200 ${verificationStatus === 'success' ? 'border-emerald-500 bg-emerald-50' :
+                                                className={`w-full bg-blue-50/50 border-2 rounded-xl py-4 pl-12 pr-16 outline-none transition-all text-slate-900 shadow-sm font-bold placeholder:text-blue-300 ${verificationStatus === 'success' ? 'border-blue-600 bg-blue-50' :
                                                     verificationStatus === 'error' ? 'border-red-500 bg-red-50' :
-                                                        'border-emerald-100 focus:border-emerald-500 focus:bg-white'
+                                                        'border-blue-100 focus:border-blue-600 focus:bg-white'
                                                     }`}
                                                 required
                                             />
                                             <button
                                                 type="button"
                                                 onClick={handleVerifyAdmin}
-                                                className="absolute right-2 top-1/2 -translate-y-1/2 bg-emerald-500 hover:bg-emerald-600 text-white text-[10px] font-black px-3 py-2 rounded-lg transition-all active:scale-95 uppercase tracking-tighter"
+                                                className="absolute right-2 top-1/2 -translate-y-1/2 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-black px-3 py-2 rounded-lg transition-all active:scale-95 uppercase tracking-tighter"
                                             >
                                                 GO
                                             </button>
@@ -311,7 +311,7 @@ const Login = () => {
                                                 <motion.p
                                                     initial={{ opacity: 0, x: -10 }}
                                                     animate={{ opacity: 1, x: 0 }}
-                                                    className={`text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 ml-1 ${verificationStatus === 'success' ? 'text-emerald-600' : 'text-red-600'
+                                                    className={`text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 ml-1 ${verificationStatus === 'success' ? 'text-blue-700' : 'text-red-600'
                                                         }`}
                                                 >
                                                     {verificationStatus === 'success' ? (
@@ -334,7 +334,7 @@ const Login = () => {
                             disabledReason={getDisabledReason()}
                             howToCorrect={getCorrectionStep()}
                             onClick={handleSubmit}
-                            className={`w-full bg-slate-900 hover:bg-emerald-500 text-white font-black py-4 px-6 rounded-xl text-lg shadow-xl shadow-slate-200 transition-all flex items-center justify-center gap-3 uppercase tracking-widest mt-8 ${(isLoading || isAdminUnverified) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            className={`w-full bg-slate-900 hover:bg-blue-600 text-white font-black py-4 px-6 rounded-xl text-lg shadow-xl shadow-slate-200 transition-all flex items-center justify-center gap-3 uppercase tracking-widest mt-8 ${(isLoading || isAdminUnverified) ? 'opacity-50 cursor-not-allowed' : ''}`}
                         >
                             {isLoading ? 'Authenticating...' : 'Sign In'} <ArrowRight className="w-5 h-5" />
                         </SmartButton>
@@ -349,7 +349,7 @@ const Login = () => {
                             <button
                                 type="button"
                                 onClick={() => loginWithGoogle()}
-                                className="w-full max-w-[350px] flex items-center justify-center gap-3 bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 py-3.5 px-6 rounded-full shadow-sm hover:shadow-md hover:border-emerald-500/30 transition-all active:scale-95 group cursor-pointer"
+                                className="w-full max-w-[350px] flex items-center justify-center gap-3 bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 py-3.5 px-6 rounded-full shadow-sm hover:shadow-md hover:border-blue-600/30 transition-all active:scale-95 group cursor-pointer"
                             >
                                 <svg className="w-6 h-6" viewBox="0 0 24 24">
                                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -364,7 +364,7 @@ const Login = () => {
                         <div className="text-center pt-6">
                             <p className="text-slate-500 font-medium">
                                 Don't have an account yet? {' '}
-                                <Link to="/signup" className="text-emerald-600 font-bold hover:underline transition-all">
+                                <Link to="/signup" className="text-blue-700 font-bold hover:underline transition-all">
                                     Create one now
                                 </Link>
                             </p>

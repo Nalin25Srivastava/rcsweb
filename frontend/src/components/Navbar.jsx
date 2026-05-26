@@ -65,14 +65,14 @@ const Navbar = () => {
                                             to={link.href}
                                             className="relative group py-2 whitespace-nowrap"
                                         >
-                                            <span className={`px-2 text-[14px] xl:text-[15px] font-bold transition-colors duration-300 ${isActive ? 'text-[#00c57d]' : 'text-gray-600 dark:text-slate-400 group-hover:text-[#00c57d]'
+                                            <span className={`px-2 text-[14px] xl:text-[15px] font-bold transition-colors duration-300 ${isActive ? 'text-[#2563eb]' : 'text-gray-600 dark:text-slate-400 group-hover:text-[#2563eb]'
                                                 }`}>
                                                 {link.name}
                                             </span>
                                             {isActive && (
                                                 <motion.div
                                                     layoutId="activeNav"
-                                                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#00c57d]"
+                                                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#2563eb]"
                                                     initial={false}
                                                     transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                                                 />
@@ -95,7 +95,7 @@ const Navbar = () => {
                                 <motion.div
                                     animate={{ x: theme === 'light' ? 0 : 28 }}
                                     transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                                    className="z-10 w-5 h-5 rounded-full bg-white dark:bg-emerald-500 shadow-md flex items-center justify-center border border-slate-200 dark:border-emerald-400"
+                                    className="z-10 w-5 h-5 rounded-full bg-white dark:bg-blue-600 shadow-md flex items-center justify-center border border-slate-200 dark:border-blue-500"
                                 >
                                     {theme === 'light' ? <Sun className="w-3 h-3 text-amber-500" /> : <Moon className="w-3 h-3 text-white" />}
                                 </motion.div>
@@ -109,7 +109,7 @@ const Navbar = () => {
                         {user && (user.name || user.email) ? (
                             <div className="flex items-center gap-1.5">
                                 <Link to="/profile" className="flex items-center gap-2 text-gray-700 font-bold hover:bg-slate-50 dark:hover:bg-slate-800 p-1.5 rounded-lg transition-colors cursor-pointer group">
-                                    <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 border border-emerald-200 shadow-sm transition-transform group-hover:scale-110 overflow-hidden">
+                                    <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 border border-blue-300 shadow-sm transition-transform group-hover:scale-110 overflow-hidden">
                                         {user.profilePicture ? (
                                             <img src={user.profilePicture} alt={user.name || 'User'} className="w-full h-full object-cover" />
                                         ) : (
@@ -117,11 +117,11 @@ const Navbar = () => {
                                         )}
                                     </div>
                                     <div className="flex flex-col justify-center">
-                                        <span className="capitalize text-slate-900 dark:text-white leading-none mb-1 text-sm group-hover:text-emerald-600 transition-colors">
+                                        <span className="capitalize text-slate-900 dark:text-white leading-none mb-1 text-sm group-hover:text-blue-700 transition-colors">
                                             {user.name || user.email.split('@')[0]}
                                         </span>
                                         <span className={`text-[9px] uppercase tracking-tighter font-black px-1.5 rounded shadow-sm w-fit ${user.role === 'admin'
-                                            ? 'text-emerald-600 bg-emerald-50'
+                                            ? 'text-blue-700 bg-blue-50'
                                             : 'text-blue-600 bg-blue-50'
                                             }`}>
                                             {user.role === 'admin' ? 'Admin' : 'User'}
@@ -139,13 +139,13 @@ const Navbar = () => {
                             <div className="flex items-center gap-4">
                                 <NavLink
                                     to="/login"
-                                    className={({ isActive }) => `font-bold text-sm transition-colors ${isActive ? 'text-[#00c57d]' : 'text-gray-600 dark:text-slate-400 hover:text-indigo-600'}`}
+                                    className={({ isActive }) => `font-bold text-sm transition-colors ${isActive ? 'text-[#2563eb]' : 'text-gray-600 dark:text-slate-400 hover:text-indigo-600'}`}
                                 >
                                     Login
                                 </NavLink>
                                 <Link
                                     to="/signup"
-                                    className="bg-[#00c57d] hover:bg-[#00ae6e] text-white px-6 py-2 rounded-full text-sm font-bold transition-all transform hover:scale-105 active:scale-95 shadow-md"
+                                    className="bg-[#2563eb] hover:bg-[#1d4ed8] text-white px-6 py-2 rounded-full text-sm font-bold transition-all transform hover:scale-105 active:scale-95 shadow-md"
                                 >
                                     Sign Up
                                 </Link>
@@ -164,13 +164,13 @@ const Navbar = () => {
 
                         {!user && (
                             <div className="flex items-center gap-2 mr-1">
-                                <Link to="/login" className="text-xs font-black text-gray-700 hover:text-[#00c57d] uppercase tracking-wider">Login</Link>
-                                <Link to="/signup" className="text-xs font-black text-white bg-[#00c57d] px-3 py-2 rounded-full shadow-md uppercase tracking-wider">Sign Up</Link>
+                                <Link to="/login" className="text-xs font-black text-gray-700 hover:text-[#2563eb] uppercase tracking-wider">Login</Link>
+                                <Link to="/signup" className="text-xs font-black text-white bg-[#2563eb] px-3 py-2 rounded-full shadow-md uppercase tracking-wider">Sign Up</Link>
                             </div>
                         )}
                         <button
                             onClick={() => setIsOpen(!isOpen)}
-                            className="text-gray-700 hover:text-emerald-500 focus:outline-none p-1 transition-colors"
+                            className="text-gray-700 hover:text-blue-600 focus:outline-none p-1 transition-colors"
                         >
                             {isOpen ? <X className="h-8 w-8" /> : <Menu className="h-8 w-8" />}
                         </button>
@@ -203,7 +203,7 @@ const Navbar = () => {
                                         <NavLink
                                             to={link.href}
                                             onClick={() => setIsOpen(false)}
-                                            className={({ isActive }) => `block px-3 py-3 text-lg font-bold rounded-lg transition-colors capitalize ${isActive ? 'text-[#00c57d] bg-emerald-50' : 'text-gray-600 hover:text-[#00c57d] hover:bg-gray-50'
+                                            className={({ isActive }) => `block px-3 py-3 text-lg font-bold rounded-lg transition-colors capitalize ${isActive ? 'text-[#2563eb] bg-blue-50' : 'text-gray-600 hover:text-[#2563eb] hover:bg-gray-50'
                                                 }`}
                                         >
                                             {link.name}
@@ -214,8 +214,8 @@ const Navbar = () => {
                             <div className="pt-6 mt-4 border-t border-gray-100 flex flex-col space-y-4">
                                 {user && (user.name || user.email) ? (
                                     <div className="flex flex-col gap-4">
-                                        <Link to="/profile" onClick={() => setIsOpen(false)} className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm hover:border-emerald-300 transition-colors cursor-pointer group">
-                                            <div className="w-12 h-12 rounded-2xl bg-emerald-500 flex items-center justify-center text-white shadow-lg shadow-emerald-200 group-hover:scale-105 transition-transform overflow-hidden">
+                                        <Link to="/profile" onClick={() => setIsOpen(false)} className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm hover:border-blue-400 transition-colors cursor-pointer group">
+                                            <div className="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-300 group-hover:scale-105 transition-transform overflow-hidden">
                                                 {user.profilePicture ? (
                                                     <img src={user.profilePicture} alt={user.name || 'User'} className="w-full h-full object-cover" />
                                                 ) : (
@@ -224,11 +224,11 @@ const Navbar = () => {
                                             </div>
                                             <div className="flex-grow">
                                                 <div className="flex items-center gap-2">
-                                                    <p className="text-lg font-black text-slate-900 dark:text-white capitalize leading-none group-hover:text-emerald-500 transition-colors">
+                                                    <p className="text-lg font-black text-slate-900 dark:text-white capitalize leading-none group-hover:text-blue-600 transition-colors">
                                                         {user.name || user.email.split('@')[0]}
                                                     </p>
                                                     <span className={`text-[10px] uppercase font-black px-2 py-0.5 rounded-full ${user.role === 'admin'
-                                                        ? 'bg-emerald-100 text-emerald-700'
+                                                        ? 'bg-blue-100 text-blue-800'
                                                         : 'bg-blue-100 text-blue-700'
                                                         }`}>
                                                         {user.role === 'admin' ? 'Admin' : 'User'}
@@ -251,7 +251,7 @@ const Navbar = () => {
                                         <Link
                                             to="/login"
                                             onClick={() => setIsOpen(false)}
-                                            className="text-center py-3 text-lg font-black text-gray-700 hover:text-[#00c57d] uppercase tracking-widest"
+                                            className="text-center py-3 text-lg font-black text-gray-700 hover:text-[#2563eb] uppercase tracking-widest"
                                         >
                                             Login
                                         </Link>
@@ -259,7 +259,7 @@ const Navbar = () => {
                                             <Link
                                                 to="/signup"
                                                 onClick={() => setIsOpen(false)}
-                                                className="bg-[#00c57d] text-white text-center py-4 rounded-xl text-lg font-black shadow-lg block uppercase tracking-widest"
+                                                className="bg-[#2563eb] text-white text-center py-4 rounded-xl text-lg font-black shadow-lg block uppercase tracking-widest"
                                             >
                                                 Sign Up
                                             </Link>

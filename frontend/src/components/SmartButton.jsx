@@ -36,7 +36,7 @@ const Popup = ({ showPopup, coords, disabledReason, howToCorrect }) => {
                         <p className="text-sm font-bold text-slate-100">{disabledReason || "Required action pending"}</p>
                         {howToCorrect && (
                             <div className="pt-2 mt-2 border-t border-slate-800">
-                                <p className="text-[10px] font-black uppercase tracking-widest text-emerald-400">How to correct:</p>
+                                <p className="text-[10px] font-black uppercase tracking-widest text-blue-500">How to correct:</p>
                                 <p className="text-xs font-medium text-slate-300">{howToCorrect}</p>
                             </div>
                         )}

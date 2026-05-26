@@ -93,7 +93,7 @@ const ServiceEditModal = ({ isOpen, onClose, service }) => {
                     {/* Header */}
                     <div className="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
                         <div className="flex items-center gap-4">
-                            <div className="p-3 bg-emerald-500 text-white rounded-2xl shadow-lg shadow-emerald-200">
+                            <div className="p-3 bg-blue-600 text-white rounded-2xl shadow-lg shadow-blue-300">
                                 <Layout className="w-6 h-6" />
                             </div>
                             <div>
@@ -116,7 +116,7 @@ const ServiceEditModal = ({ isOpen, onClose, service }) => {
                         )}
                         
                         {status.success && (
-                            <div className="p-4 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center gap-3 border border-emerald-100">
+                            <div className="p-4 bg-blue-50 text-blue-700 rounded-2xl flex items-center gap-3 border border-blue-100">
                                 <CheckCircle2 className="w-5 h-5" />
                                 <p className="font-bold">Service updated successfully!</p>
                             </div>
@@ -135,7 +135,7 @@ const ServiceEditModal = ({ isOpen, onClose, service }) => {
                                         value={formData.title}
                                         onChange={handleInputChange}
                                         required
-                                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-4 px-6 outline-none focus:border-emerald-500 focus:bg-white transition-all font-bold text-slate-900"
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-4 px-6 outline-none focus:border-blue-600 focus:bg-white transition-all font-bold text-slate-900"
                                     />
                                 </div>
 
@@ -149,7 +149,7 @@ const ServiceEditModal = ({ isOpen, onClose, service }) => {
                                         value={formData.shortDesc}
                                         onChange={handleInputChange}
                                         required
-                                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-4 px-6 outline-none focus:border-emerald-500 focus:bg-white transition-all font-bold text-slate-900"
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-4 px-6 outline-none focus:border-blue-600 focus:bg-white transition-all font-bold text-slate-900"
                                     />
                                 </div>
 
@@ -163,7 +163,7 @@ const ServiceEditModal = ({ isOpen, onClose, service }) => {
                                         onChange={handleInputChange}
                                         required
                                         rows="4"
-                                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-4 px-6 outline-none focus:border-emerald-500 focus:bg-white transition-all font-bold text-slate-900 resize-none"
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-4 px-6 outline-none focus:border-blue-600 focus:bg-white transition-all font-bold text-slate-900 resize-none"
                                     ></textarea>
                                 </div>
                             </div>
@@ -178,7 +178,7 @@ const ServiceEditModal = ({ isOpen, onClose, service }) => {
                                         <button 
                                             type="button" 
                                             onClick={addFeature}
-                                            className="text-[10px] font-black text-emerald-600 uppercase tracking-widest hover:text-emerald-700"
+                                            className="text-[10px] font-black text-blue-700 uppercase tracking-widest hover:text-blue-800"
                                         >
                                             + Add Feature
                                         </button>
@@ -191,7 +191,7 @@ const ServiceEditModal = ({ isOpen, onClose, service }) => {
                                                     value={feature}
                                                     onChange={(e) => handleFeatureChange(index, e.target.value)}
                                                     placeholder="Enter feature..."
-                                                    className="flex-grow bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 outline-none focus:border-emerald-500 focus:bg-white transition-all font-bold text-slate-900 text-sm"
+                                                    className="flex-grow bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 outline-none focus:border-blue-600 focus:bg-white transition-all font-bold text-slate-900 text-sm"
                                                 />
                                                 <button 
                                                     type="button" 
@@ -212,7 +212,7 @@ const ServiceEditModal = ({ isOpen, onClose, service }) => {
                                             name="iconName" 
                                             value={formData.iconName} 
                                             onChange={handleInputChange}
-                                            className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-4 px-6 outline-none focus:border-emerald-500 font-bold"
+                                            className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-4 px-6 outline-none focus:border-blue-600 font-bold"
                                         >
                                             <option value="GraduationCap">Graduation Cap</option>
                                             <option value="Users">Users</option>
@@ -229,7 +229,7 @@ const ServiceEditModal = ({ isOpen, onClose, service }) => {
                                             name="order"
                                             value={formData.order}
                                             onChange={handleInputChange}
-                                            className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-4 px-6 outline-none focus:border-emerald-500 font-bold"
+                                            className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-4 px-6 outline-none focus:border-blue-600 font-bold"
                                         />
                                     </div>
                                 </div>
@@ -250,7 +250,7 @@ const ServiceEditModal = ({ isOpen, onClose, service }) => {
                             type="submit" 
                             onClick={handleSubmit}
                             disabled={status.loading}
-                            className="px-12 py-4 bg-slate-900 text-white font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-slate-200 hover:bg-emerald-600 transition-all flex items-center gap-3 disabled:opacity-50"
+                            className="px-12 py-4 bg-slate-900 text-white font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-slate-200 hover:bg-blue-700 transition-all flex items-center gap-3 disabled:opacity-50"
                         >
                             {status.loading ? (
                                 <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>

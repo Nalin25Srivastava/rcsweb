@@ -57,7 +57,7 @@ const Services = () => {
         return (
             <div className="min-h-screen flex items-center justify-center bg-slate-900 dark:bg-slate-950 text-white transition-colors duration-300">
                 <div className="flex flex-col items-center gap-6">
-                    <div className="w-16 h-16 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin"></div>
+                    <div className="w-16 h-16 border-4 border-blue-600/20 border-t-blue-600 rounded-full animate-spin"></div>
                     <p className="font-black uppercase tracking-[0.4em] text-sm animate-pulse">Initializing Excellence</p>
                 </div>
             </div>
@@ -73,7 +73,7 @@ const Services = () => {
                     </div>
                     <h2 className="text-3xl font-black text-slate-900 dark:text-white mb-4">Connection Failed</h2>
                     <p className="text-slate-500 dark:text-slate-400 font-medium mb-8">{message}</p>
-                    <button onClick={() => dispatch(fetchServices())} className="px-8 py-4 bg-slate-900 dark:bg-emerald-600 text-white font-black uppercase tracking-widest rounded-2xl">Retry Connection</button>
+                    <button onClick={() => dispatch(fetchServices())} className="px-8 py-4 bg-slate-900 dark:bg-blue-700 text-white font-black uppercase tracking-widest rounded-2xl">Retry Connection</button>
                 </div>
             </div>
         );
@@ -94,12 +94,12 @@ const Services = () => {
                     transition={{ duration: 1 }}
                 >
                     <h1 className="text-4xl md:text-6xl font-black text-white tracking-tighter uppercase">
-                        Our <span className="text-emerald-500">Excellence</span>
+                        Our <span className="text-blue-600">Excellence</span>
                     </h1>
                     <p className="text-slate-400 font-bold uppercase tracking-[0.3em] mt-4 text-xs md:text-sm">
                         Strategic Human Capital Solutions
                     </p>
-                    <div className="w-20 h-1.5 bg-emerald-500 mx-auto mt-8 rounded-full"></div>
+                    <div className="w-20 h-1.5 bg-blue-600 mx-auto mt-8 rounded-full"></div>
                 </motion.div>
             </div>
 
@@ -114,7 +114,7 @@ const Services = () => {
                                 onClick={() => setActiveTabId(service.id)}
                                 className={`group relative p-6 rounded-3xl transition-all duration-500 text-left overflow-hidden border-2 flex flex-col items-center justify-center text-center ${
                                     isActive 
-                                    ? `${service.borderColor} bg-white dark:bg-slate-800 shadow-2xl shadow-slate-200 dark:shadow-none ring-4 ring-emerald-500/5` 
+                                    ? `${service.borderColor} bg-white dark:bg-slate-800 shadow-2xl shadow-slate-200 dark:shadow-none ring-4 ring-blue-600/5` 
                                     : 'border-transparent bg-slate-100/50 dark:bg-slate-900/50 hover:bg-white dark:hover:bg-slate-800 hover:border-slate-200 dark:hover:border-slate-700'
                                 }`}
                             >
@@ -129,7 +129,7 @@ const Services = () => {
                                 {isActive && (
                                     <motion.div 
                                         layoutId="activeTab"
-                                        className="absolute bottom-0 left-0 right-0 h-1.5 bg-emerald-500"
+                                        className="absolute bottom-0 left-0 right-0 h-1.5 bg-blue-600"
                                     />
                                 )}
                             </button>
@@ -198,10 +198,10 @@ const Services = () => {
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
                                 onClick={() => window.location.href = '/contact'}
-                                className={`inline-flex items-center justify-between px-8 py-5 rounded-2xl bg-slate-900 dark:bg-emerald-600 text-white font-black uppercase tracking-widest group shadow-xl hover:shadow-2xl transition-all`}
+                                className={`inline-flex items-center justify-between px-8 py-5 rounded-2xl bg-slate-900 dark:bg-blue-700 text-white font-black uppercase tracking-widest group shadow-xl hover:shadow-2xl transition-all`}
                             >
                                 <span>Get Started with {activeService.title}</span>
-                                <ChevronRight className="w-6 h-6 text-emerald-400 dark:text-white group-hover:translate-x-1 transition-transform" />
+                                <ChevronRight className="w-6 h-6 text-blue-500 dark:text-white group-hover:translate-x-1 transition-transform" />
                             </motion.button>
                         </div>
                     </motion.div>
@@ -211,7 +211,7 @@ const Services = () => {
             {/* Bottom CTA */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="p-12 bg-slate-900 dark:bg-slate-800 rounded-[4rem] border border-slate-800 dark:border-slate-700 shadow-2xl relative overflow-hidden text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-8">
-                    <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-emerald-500 opacity-10 rounded-full blur-[100px]"></div>
+                    <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-blue-600 opacity-10 rounded-full blur-[100px]"></div>
                     <div className="relative z-10 max-w-2xl">
                         <h2 className="text-3xl font-black text-white mb-4 tracking-tight">Not sure which service fits?</h2>
                         <p className="text-slate-400 font-medium text-lg leading-relaxed">
@@ -220,7 +220,7 @@ const Services = () => {
                     </div>
                     <a 
                         href="/contact" 
-                        className="relative z-10 shrink-0 px-10 py-5 bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-black uppercase tracking-widest rounded-3xl transition-all shadow-xl shadow-emerald-500/20 active:scale-95"
+                        className="relative z-10 shrink-0 px-10 py-5 bg-blue-600 hover:bg-blue-500 text-slate-900 font-black uppercase tracking-widest rounded-3xl transition-all shadow-xl shadow-blue-600/20 active:scale-95"
                     >
                         Schedule Discovery Call
                     </a>

@@ -42,7 +42,7 @@ const Carousel = () => {
     if (isLoading) {
         return (
             <div className="h-screen w-full bg-slate-900 flex items-center justify-center">
-                <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-emerald-500 border-t-transparent"></div>
+                <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 border-t-transparent"></div>
             </div>
         );
     }
@@ -82,7 +82,7 @@ const Carousel = () => {
                         {slides[currentIndex].subtitle}
                     </p>
                     <Link to="/services">
-                        <button className="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-4 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-xl uppercase tracking-widest text-sm">
+                        <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-xl uppercase tracking-widest text-sm">
                             Explore Our Services
                         </button>
                     </Link>
@@ -106,7 +106,7 @@ const Carousel = () => {
                         key={slideIndex}
                         onClick={() => setCurrentIndex(slideIndex)}
                         className={`cursor-pointer w-3 h-3 rounded-full transition-all duration-300 ${
-                            currentIndex === slideIndex ? 'bg-emerald-500 w-8' : 'bg-white/50'
+                            currentIndex === slideIndex ? 'bg-blue-600 w-8' : 'bg-white/50'
                         }`}
                     ></div>
                 ))}

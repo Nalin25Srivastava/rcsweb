@@ -16,9 +16,9 @@ const About = () => {
                     transition={{ duration: 1, ease: "easeOut" }}
                 >
                     <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white mt-4 tracking-tighter">
-                        About <span className="text-emerald-500">RCS</span>
+                        About <span className="text-blue-600">RCS</span>
                     </h1>
-                    <div className="w-24 h-2 bg-emerald-500 mx-auto mt-6 rounded-full self-center"></div>
+                    <div className="w-24 h-2 bg-blue-600 mx-auto mt-6 rounded-full self-center"></div>
                 </motion.div>
             </div>
 
@@ -32,7 +32,7 @@ const About = () => {
                         viewport={{ once: true }}
                         transition={{ duration: 0.8 }}
                     >
-                        <h2 className="text-sm font-black text-emerald-500 uppercase tracking-widest mb-3">Our Core Philosophy</h2>
+                        <h2 className="text-sm font-black text-blue-600 uppercase tracking-widest mb-3">Our Core Philosophy</h2>
                         <h3 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-800 dark:text-white leading-tight mb-6">
                             Redefining the <br />Recruitment Process.
                         </h3>
@@ -57,7 +57,7 @@ const About = () => {
                                     transition={{ delay: index * 0.1 }}
                                     className="flex items-center gap-3 text-slate-800 dark:text-slate-200 font-bold bg-white dark:bg-slate-900 p-4 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800"
                                 >
-                                    <IoCheckmarkCircle className="text-emerald-500 w-6 h-6 flex-shrink-0" />
+                                    <IoCheckmarkCircle className="text-blue-600 w-6 h-6 flex-shrink-0" />
                                     <span>{item}</span>
                                 </motion.div>
                             ))}
@@ -71,7 +71,7 @@ const About = () => {
                         viewport={{ once: true }}
                         transition={{ duration: 0.8 }}
                     >
-                        <div className="absolute inset-0 bg-emerald-500 rounded-3xl blur-3xl opacity-20 transform rotate-3"></div>
+                        <div className="absolute inset-0 bg-blue-600 rounded-3xl blur-3xl opacity-20 transform rotate-3"></div>
                         <div className="bg-white dark:bg-slate-900 p-4 rounded-3xl shadow-2xl relative border border-white dark:border-slate-800">
                             <img 
                                 src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&q=80&w=1000" 
@@ -80,7 +80,7 @@ const About = () => {
                             />
                             
                             <div className="absolute -bottom-8 -left-8 bg-slate-900 text-white p-8 rounded-2xl shadow-xl">
-                                <div className="text-5xl font-black text-emerald-400 mb-1">10+</div>
+                                <div className="text-5xl font-black text-blue-500 mb-1">10+</div>
                                 <div className="text-sm font-bold uppercase tracking-widest text-slate-300">Years of<br/>Excellence</div>
                             </div>
                         </div>
@@ -93,12 +93,12 @@ const About = () => {
             <div className="bg-slate-900 py-24 px-4 sm:px-6 lg:px-8 mt-20 relative overflow-hidden">
                 <div className="max-w-7xl mx-auto relative z-10 grid md:grid-cols-2 gap-12 text-center md:text-left">
                     <motion.div 
-                        className="bg-slate-800/50 backdrop-blur-md p-10 rounded-3xl border border-slate-700 hover:border-emerald-500/50 transition-colors"
+                        className="bg-slate-800/50 backdrop-blur-md p-10 rounded-3xl border border-slate-700 hover:border-blue-600/50 transition-colors"
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                     >
-                        <div className="w-16 h-16 bg-emerald-500/10 text-emerald-400 rounded-2xl flex items-center justify-center mb-6 mx-auto md:mx-0">
+                        <div className="w-16 h-16 bg-blue-600/10 text-blue-500 rounded-2xl flex items-center justify-center mb-6 mx-auto md:mx-0">
                             <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                         </div>
                         <h3 className="text-3xl font-black text-white mb-4">Our Mission</h3>

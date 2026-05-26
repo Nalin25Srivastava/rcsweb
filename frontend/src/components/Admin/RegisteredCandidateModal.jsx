@@ -151,10 +151,10 @@ const RegisteredCandidateModal = ({ isOpen, onClose, candidate = null, isEditing
                                     className="relative cursor-pointer"
                                     onClick={() => setIsUserListOpen(!isUserListOpen)}
                                 >
-                                    <div className="w-full pl-12 pr-4 py-4 bg-emerald-50 border-2 border-emerald-100 rounded-2xl font-bold text-slate-900 flex items-center">
-                                        <Search className="absolute left-4 w-5 h-5 text-emerald-500" />
+                                    <div className="w-full pl-12 pr-4 py-4 bg-blue-50 border-2 border-blue-100 rounded-2xl font-bold text-slate-900 flex items-center">
+                                        <Search className="absolute left-4 w-5 h-5 text-blue-600" />
                                         {formData.name ? `${formData.name} (${formData.email})` : 'Search & Select from Fetched Records...'}
-                                        <List className="ml-auto w-5 h-5 text-emerald-300" />
+                                        <List className="ml-auto w-5 h-5 text-blue-400" />
                                     </div>
                                 </div>
 
@@ -172,7 +172,7 @@ const RegisteredCandidateModal = ({ isOpen, onClose, candidate = null, isEditing
                                                 value={searchTerm}
                                                 onChange={(e) => setSearchTerm(e.target.value)}
                                                 onClick={(e) => e.stopPropagation()}
-                                                className="w-full px-4 py-2 rounded-xl text-sm border-none focus:ring-2 focus:ring-emerald-500/20"
+                                                className="w-full px-4 py-2 rounded-xl text-sm border-none focus:ring-2 focus:ring-blue-600/20"
                                             />
                                         </div>
                                         {filteredUsers.length === 0 ? (
@@ -182,7 +182,7 @@ const RegisteredCandidateModal = ({ isOpen, onClose, candidate = null, isEditing
                                                 <div 
                                                     key={u._id}
                                                     onClick={() => handleSelectUser(u)}
-                                                    className="px-4 py-3 hover:bg-emerald-50 cursor-pointer border-b border-slate-50 flex flex-col"
+                                                    className="px-4 py-3 hover:bg-blue-50 cursor-pointer border-b border-slate-50 flex flex-col"
                                                 >
                                                     <span className="font-black text-slate-800 text-sm">{u.name}</span>
                                                     <span className="text-slate-400 text-xs font-bold">{u.email}</span>
@@ -202,7 +202,7 @@ const RegisteredCandidateModal = ({ isOpen, onClose, candidate = null, isEditing
                                     onChange={(e) => setFormData({...formData, name: e.target.value})} 
                                     placeholder="Confirm Name" 
                                     required 
-                                    className="w-full px-4 py-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl font-bold text-slate-900 outline-none"
+                                    className="w-full px-4 py-4 bg-slate-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl font-bold text-slate-900 outline-none"
                                 />
                             </div>
                             <div>
@@ -212,7 +212,7 @@ const RegisteredCandidateModal = ({ isOpen, onClose, candidate = null, isEditing
                                     onChange={(e) => setFormData({...formData, email: e.target.value})} 
                                     placeholder="Confirm Email" 
                                     required 
-                                    className="w-full px-4 py-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl font-bold text-slate-900 outline-none"
+                                    className="w-full px-4 py-4 bg-slate-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl font-bold text-slate-900 outline-none"
                                 />
                             </div>
                         </div>
@@ -224,7 +224,7 @@ const RegisteredCandidateModal = ({ isOpen, onClose, candidate = null, isEditing
                                     value={formData.phone} 
                                     onChange={(e) => setFormData({...formData, phone: e.target.value})} 
                                     placeholder="e.g. +91 9999999999" 
-                                    className="w-full px-4 py-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl font-bold text-slate-900 outline-none"
+                                    className="w-full px-4 py-4 bg-slate-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl font-bold text-slate-900 outline-none"
                                 />
                             </div>
                             <div>
@@ -234,7 +234,7 @@ const RegisteredCandidateModal = ({ isOpen, onClose, candidate = null, isEditing
                                     onChange={(e) => setFormData({...formData, course: e.target.value})} 
                                     placeholder="e.g. Full Stack Web Development" 
                                     required
-                                    className="w-full px-4 py-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl font-bold text-slate-900 outline-none"
+                                    className="w-full px-4 py-4 bg-slate-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl font-bold text-slate-900 outline-none"
                                 />
                             </div>
                         </div>
@@ -255,7 +255,7 @@ const RegisteredCandidateModal = ({ isOpen, onClose, candidate = null, isEditing
                                     )}
                                     {isUploading && (
                                         <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center">
-                                            <Loader2 className="w-6 h-6 text-emerald-500 animate-spin" />
+                                            <Loader2 className="w-6 h-6 text-blue-600 animate-spin" />
                                         </div>
                                     )}
                                 </div>
@@ -275,15 +275,15 @@ const RegisteredCandidateModal = ({ isOpen, onClose, candidate = null, isEditing
                                             disabledReason="Upload in progress"
                                             howToCorrect="Please wait for the current file to finish processing before selecting a new one."
                                             onClick={() => fileInputRef.current?.click()}
-                                            className="flex-1 px-4 py-3 bg-white border-2 border-slate-100 hover:border-emerald-500 rounded-xl text-[10px] font-bold text-slate-700 transition-all flex items-center justify-center gap-2 shadow-sm"
+                                            className="flex-1 px-4 py-3 bg-white border-2 border-slate-100 hover:border-blue-600 rounded-xl text-[10px] font-bold text-slate-700 transition-all flex items-center justify-center gap-2 shadow-sm"
                                         >
-                                            <Upload className="w-4 h-4 text-emerald-500" />
+                                            <Upload className="w-4 h-4 text-blue-600" />
                                             {isUploading ? 'Processing...' : 'Upload Media'}
                                         </SmartButton>
                                     </div>
                                     <div className="relative">
                                         <input 
-                                            className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:border-emerald-500 focus:bg-white transition-all outline-none text-[10px] font-medium text-slate-600 placeholder:text-slate-300"
+                                            className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:border-blue-600 focus:bg-white transition-all outline-none text-[10px] font-medium text-slate-600 placeholder:text-slate-300"
                                             placeholder="Or enter media URL"
                                             value={formData.image}
                                             onChange={(e) => setFormData({...formData, image: e.target.value})}
@@ -302,7 +302,7 @@ const RegisteredCandidateModal = ({ isOpen, onClose, candidate = null, isEditing
                                     onChange={(e) => setFormData({...formData, batch: e.target.value})} 
                                     placeholder="e.g. BATCH-2024-C" 
                                     required
-                                    className="w-full px-4 py-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl font-bold text-slate-900 outline-none"
+                                    className="w-full px-4 py-4 bg-slate-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl font-bold text-slate-900 outline-none"
                                 />
                             </div>
                             <div>
@@ -310,7 +310,7 @@ const RegisteredCandidateModal = ({ isOpen, onClose, candidate = null, isEditing
                                 <select 
                                     value={formData.status} 
                                     onChange={(e) => setFormData({...formData, status: e.target.value})} 
-                                    className="w-full px-4 py-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl font-bold text-slate-900 outline-none appearance-none"
+                                    className="w-full px-4 py-4 bg-slate-50 border-2 border-transparent focus:border-blue-600 focus:bg-white rounded-2xl font-bold text-slate-900 outline-none appearance-none"
                                 >
                                     <option value="Active">Active Participant</option>
                                     <option value="Completed">Training Completed</option>
@@ -333,7 +333,7 @@ const RegisteredCandidateModal = ({ isOpen, onClose, candidate = null, isEditing
                                 disabledReason="No candidate selected"
                                 howToCorrect="Please select a candidate from the 'Registered Candidates List' search bar above before confirming."
                                 onClick={handleSubmit}
-                                className="flex-[2] bg-slate-900 hover:bg-emerald-500 text-white font-black py-4 px-4 rounded-2xl shadow-xl transition-colors uppercase tracking-widest text-xs disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="flex-[2] bg-slate-900 hover:bg-blue-600 text-white font-black py-4 px-4 rounded-2xl shadow-xl transition-colors uppercase tracking-widest text-xs disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 {isEditing ? 'Update Records' : 'Confirm Registration'}
                             </SmartButton>

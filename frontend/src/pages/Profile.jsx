@@ -54,7 +54,7 @@ const Profile = () => {
 
     if (!profile) return (
         <div className="min-h-screen pt-24 flex items-center justify-center dark:bg-slate-950">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-500"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
         </div>
     );
 
@@ -72,7 +72,7 @@ const Profile = () => {
                     animate={{ opacity: 1, y: 0 }}
                     className="bg-white dark:bg-slate-900 rounded-3xl p-8 shadow-sm border border-slate-200 dark:border-slate-800 mb-8 flex flex-col md:flex-row items-center gap-8"
                 >
-                    <div className="w-32 h-32 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 border-4 border-emerald-50 dark:border-slate-800 shadow-inner flex-shrink-0">
+                    <div className="w-32 h-32 rounded-full bg-blue-100 dark:bg-blue-950/30 flex items-center justify-center text-blue-700 dark:text-blue-500 border-4 border-blue-50 dark:border-slate-800 shadow-inner flex-shrink-0">
                         <User className="w-16 h-16" />
                     </div>
                     <div className="text-center md:text-left flex-grow">
@@ -81,7 +81,7 @@ const Profile = () => {
                             <Mail className="w-4 h-4" /> {profile.email}
                         </p>
                         <div className="mt-4 flex flex-wrap justify-center md:justify-start gap-3">
-                            <span className={`px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest ${isAdmin ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400' : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'}`}>
+                            <span className={`px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest ${isAdmin ? 'bg-blue-100 text-blue-800 dark:bg-blue-950/30 dark:text-blue-500' : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'}`}>
                                 {isAdmin ? 'Admin' : 'User'} Account
                             </span>
                             {profile.isPaid && (
@@ -94,7 +94,7 @@ const Profile = () => {
                     <div className="flex-shrink-0">
                         <button 
                             onClick={() => setIsEditing(!isEditing)}
-                            className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all shadow-sm ${isEditing ? 'bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300' : 'bg-emerald-500 text-white hover:bg-emerald-600 hover:shadow-md'}`}
+                            className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all shadow-sm ${isEditing ? 'bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300' : 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-md'}`}
                         >
                             {isEditing ? <><X className="w-4 h-4" /> Cancel</> : <><Edit3 className="w-4 h-4" /> Edit Profile</>}
                         </button>
@@ -111,7 +111,7 @@ const Profile = () => {
                         className="lg:col-span-2 bg-white dark:bg-slate-900 rounded-3xl p-8 shadow-sm border border-slate-200 dark:border-slate-800"
                     >
                         <h2 className="text-xl font-black text-slate-900 dark:text-white mb-6 flex items-center gap-2">
-                            <FileText className="w-5 h-5 text-emerald-500" /> 
+                            <FileText className="w-5 h-5 text-blue-600" /> 
                             {isEditing ? 'Edit Information' : 'Personal Information'}
                         </h2>
 
@@ -126,7 +126,7 @@ const Profile = () => {
                                         disabled={!isEditing}
                                         value={formData.name} 
                                         onChange={handleChange}
-                                        className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 disabled:opacity-70 font-medium" 
+                                        className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-70 font-medium" 
                                     />
                                 </div>
                                 <div>
@@ -142,7 +142,7 @@ const Profile = () => {
                                             value={formData.mobileNo} 
                                             onChange={handleChange}
                                             placeholder="Not provided"
-                                            className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl pl-10 pr-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 disabled:opacity-70 font-medium" 
+                                            className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl pl-10 pr-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-70 font-medium" 
                                         />
                                     </div>
                                 </div>
@@ -163,7 +163,7 @@ const Profile = () => {
                                                     value={formData.qualification} 
                                                     onChange={handleChange}
                                                     placeholder="e.g. B.Tech, MCA"
-                                                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl pl-10 pr-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 disabled:opacity-70 font-medium" 
+                                                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl pl-10 pr-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-70 font-medium" 
                                                 />
                                             </div>
                                         </div>
@@ -180,7 +180,7 @@ const Profile = () => {
                                                     value={formData.age} 
                                                     onChange={handleChange}
                                                     placeholder="Years"
-                                                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl pl-10 pr-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 disabled:opacity-70 font-medium" 
+                                                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl pl-10 pr-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-70 font-medium" 
                                                 />
                                             </div>
                                         </div>
@@ -191,7 +191,7 @@ const Profile = () => {
                                                 disabled={!isEditing}
                                                 value={formData.gender} 
                                                 onChange={handleChange}
-                                                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 disabled:opacity-70 font-medium"
+                                                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-70 font-medium"
                                             >
                                                 <option value="">Select Gender</option>
                                                 <option value="Male">Male</option>
@@ -212,7 +212,7 @@ const Profile = () => {
                                                     value={formData.experience} 
                                                     onChange={handleChange}
                                                     placeholder="e.g. 2 Years"
-                                                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl pl-10 pr-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 disabled:opacity-70 font-medium" 
+                                                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl pl-10 pr-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-70 font-medium" 
                                                 />
                                             </div>
                                         </div>
@@ -225,7 +225,7 @@ const Profile = () => {
                                                 value={formData.skills} 
                                                 onChange={handleChange}
                                                 placeholder="e.g. React, Node.js, Python"
-                                                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 disabled:opacity-70 font-medium" 
+                                                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-70 font-medium" 
                                             />
                                         </div>
                                         <div className="md:col-span-2">
@@ -241,7 +241,7 @@ const Profile = () => {
                                                     onChange={handleChange}
                                                     rows="3"
                                                     placeholder="Full Address"
-                                                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl pl-10 pr-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 disabled:opacity-70 font-medium resize-none" 
+                                                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl pl-10 pr-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-70 font-medium resize-none" 
                                                 />
                                             </div>
                                         </div>
@@ -260,7 +260,7 @@ const Profile = () => {
                                         <button 
                                             type="submit"
                                             disabled={isLoading}
-                                            className="flex items-center gap-2 bg-[#00c57d] text-white px-8 py-3 rounded-xl font-bold shadow-md shadow-emerald-500/20 hover:bg-[#00ae6e] transition-colors disabled:opacity-70"
+                                            className="flex items-center gap-2 bg-[#2563eb] text-white px-8 py-3 rounded-xl font-bold shadow-md shadow-blue-600/20 hover:bg-[#1d4ed8] transition-colors disabled:opacity-70"
                                         >
                                             {isLoading ? <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" /> : <Save className="w-5 h-5" />}
                                             Save Changes
@@ -313,7 +313,7 @@ const Profile = () => {
                                                     <span className="text-xs text-slate-400">{new Date(log.createdAt).toLocaleDateString()}</span>
                                                 </div>
                                                 <div className="flex items-center gap-2 mb-1">
-                                                    <span className={`text-[9px] uppercase font-black tracking-widest px-1.5 rounded ${log.action === 'CREATE' ? 'bg-emerald-100 text-emerald-700' : log.action === 'DELETE' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'}`}>
+                                                    <span className={`text-[9px] uppercase font-black tracking-widest px-1.5 rounded ${log.action === 'CREATE' ? 'bg-blue-100 text-blue-800' : log.action === 'DELETE' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'}`}>
                                                         {log.action}
                                                     </span>
                                                     <span className="text-xs font-medium text-slate-500 dark:text-slate-400">{log.entityType}</span>

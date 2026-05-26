@@ -105,7 +105,7 @@ const JobModal = ({ isOpen, onClose, job = null, isEditing = false }) => {
                     {/* Header */}
                     <div className="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50">
                         <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 bg-emerald-500 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                            <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-600/20">
                                 <Briefcase className="w-6 h-6 text-white" />
                             </div>
                             <div>
@@ -123,7 +123,7 @@ const JobModal = ({ isOpen, onClose, job = null, isEditing = false }) => {
                     <form onSubmit={handleSubmit} className="p-10 space-y-8 overflow-y-auto max-h-[70vh] custom-scrollbar">
                         {/* Section 1: Basic Info */}
                         <div className="space-y-6">
-                            <h3 className="text-sm font-black text-emerald-600 uppercase tracking-[0.2em] flex items-center gap-2">
+                            <h3 className="text-sm font-black text-blue-700 uppercase tracking-[0.2em] flex items-center gap-2">
                                 <FileText className="w-4 h-4" /> Basic Information
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -132,7 +132,7 @@ const JobModal = ({ isOpen, onClose, job = null, isEditing = false }) => {
                                     <div className="relative">
                                         <Briefcase className="absolute left-4 top-4 w-4 h-4 text-slate-300" />
                                         <input 
-                                            className="w-full pl-12 pr-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-emerald-500 focus:bg-white transition-all outline-none font-bold text-slate-700"
+                                            className="w-full pl-12 pr-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-blue-600 focus:bg-white transition-all outline-none font-bold text-slate-700"
                                             placeholder="e.g. Software Engineer"
                                             value={formData.title}
                                             onChange={(e) => setFormData({...formData, title: e.target.value})}
@@ -143,7 +143,7 @@ const JobModal = ({ isOpen, onClose, job = null, isEditing = false }) => {
                                 <div className="space-y-2">
                                     <label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Company Name</label>
                                     <input 
-                                        className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-emerald-500 focus:bg-white transition-all outline-none font-bold text-slate-700"
+                                        className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-blue-600 focus:bg-white transition-all outline-none font-bold text-slate-700"
                                         placeholder="Company Name"
                                         value={formData.companyName}
                                         onChange={(e) => setFormData({...formData, companyName: e.target.value})}
@@ -155,7 +155,7 @@ const JobModal = ({ isOpen, onClose, job = null, isEditing = false }) => {
 
                         {/* Section 2: Details */}
                         <div className="space-y-6">
-                            <h3 className="text-sm font-black text-emerald-600 uppercase tracking-[0.2em] flex items-center gap-2">
+                            <h3 className="text-sm font-black text-blue-700 uppercase tracking-[0.2em] flex items-center gap-2">
                                 <MapPin className="w-4 h-4" /> Location & Compensation
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -164,7 +164,7 @@ const JobModal = ({ isOpen, onClose, job = null, isEditing = false }) => {
                                     <div className="relative">
                                         <MapPin className="absolute left-4 top-4 w-4 h-4 text-slate-300" />
                                         <input 
-                                            className="w-full pl-12 pr-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-emerald-500 focus:bg-white transition-all outline-none font-bold text-slate-700"
+                                            className="w-full pl-12 pr-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-blue-600 focus:bg-white transition-all outline-none font-bold text-slate-700"
                                             placeholder="e.g. Remote, New Delhi"
                                             value={formData.location}
                                             onChange={(e) => setFormData({...formData, location: e.target.value})}
@@ -177,7 +177,7 @@ const JobModal = ({ isOpen, onClose, job = null, isEditing = false }) => {
                                     <div className="relative">
                                         <DollarSign className="absolute left-4 top-4 w-4 h-4 text-slate-300" />
                                         <input 
-                                            className="w-full pl-12 pr-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-emerald-500 focus:bg-white transition-all outline-none font-bold text-slate-700"
+                                            className="w-full pl-12 pr-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-blue-600 focus:bg-white transition-all outline-none font-bold text-slate-700"
                                             placeholder="e.g. 5-8 LPA"
                                             value={formData.salary}
                                             onChange={(e) => setFormData({...formData, salary: e.target.value})}
@@ -190,14 +190,14 @@ const JobModal = ({ isOpen, onClose, job = null, isEditing = false }) => {
 
                         {/* Section 3: Requirements */}
                         <div className="space-y-6">
-                            <h3 className="text-sm font-black text-emerald-600 uppercase tracking-[0.2em] flex items-center gap-2">
+                            <h3 className="text-sm font-black text-blue-700 uppercase tracking-[0.2em] flex items-center gap-2">
                                 <GraduationCap className="w-4 h-4" /> Requirements
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
                                     <label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Qualification</label>
                                     <input 
-                                        className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-emerald-500 focus:bg-white transition-all outline-none font-bold text-slate-700"
+                                        className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-blue-600 focus:bg-white transition-all outline-none font-bold text-slate-700"
                                         placeholder="e.g. B.Tech, MBA"
                                         value={formData.qualification}
                                         onChange={(e) => setFormData({...formData, qualification: e.target.value})}
@@ -206,7 +206,7 @@ const JobModal = ({ isOpen, onClose, job = null, isEditing = false }) => {
                                 <div className="space-y-2">
                                     <label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Age Limit</label>
                                     <input 
-                                        className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-emerald-500 focus:bg-white transition-all outline-none font-bold text-slate-700"
+                                        className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-blue-600 focus:bg-white transition-all outline-none font-bold text-slate-700"
                                         placeholder="e.g. 18-35"
                                         value={formData.ageLimit}
                                         onChange={(e) => setFormData({...formData, ageLimit: e.target.value})}
@@ -217,7 +217,7 @@ const JobModal = ({ isOpen, onClose, job = null, isEditing = false }) => {
 
                         {/* Section 4: Contact */}
                         <div className="space-y-6">
-                            <h3 className="text-sm font-black text-emerald-600 uppercase tracking-[0.2em] flex items-center gap-2">
+                            <h3 className="text-sm font-black text-blue-700 uppercase tracking-[0.2em] flex items-center gap-2">
                                 <Mail className="w-4 h-4" /> Contact Information
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -225,7 +225,7 @@ const JobModal = ({ isOpen, onClose, job = null, isEditing = false }) => {
                                     <label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Contact Email</label>
                                     <input 
                                         type="email"
-                                        className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-emerald-500 focus:bg-white transition-all outline-none font-bold text-slate-700"
+                                        className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-blue-600 focus:bg-white transition-all outline-none font-bold text-slate-700"
                                         placeholder="hr@company.com"
                                         value={formData.email}
                                         onChange={(e) => setFormData({...formData, email: e.target.value})}
@@ -235,7 +235,7 @@ const JobModal = ({ isOpen, onClose, job = null, isEditing = false }) => {
                                 <div className="space-y-2">
                                     <label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Phone Numbers</label>
                                     <input 
-                                        className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-emerald-500 focus:bg-white transition-all outline-none font-bold text-slate-700"
+                                        className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-blue-600 focus:bg-white transition-all outline-none font-bold text-slate-700"
                                         placeholder="Comma separated"
                                         value={formData.contactNumbers}
                                         onChange={(e) => setFormData({...formData, contactNumbers: e.target.value})}
@@ -248,7 +248,7 @@ const JobModal = ({ isOpen, onClose, job = null, isEditing = false }) => {
                         <div className="space-y-2">
                             <label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Job Profile Tags</label>
                             <input 
-                                className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-emerald-500 focus:bg-white transition-all outline-none font-bold text-slate-700"
+                                className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-blue-600 focus:bg-white transition-all outline-none font-bold text-slate-700"
                                 placeholder="e.g. Mechanical, Kota, Urgent (Comma separated)"
                                 value={formData.profiles}
                                 onChange={(e) => setFormData({...formData, profiles: e.target.value})}
@@ -259,7 +259,7 @@ const JobModal = ({ isOpen, onClose, job = null, isEditing = false }) => {
                         <div className="space-y-2">
                             <label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Job Description (Optional)</label>
                             <textarea 
-                                className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-emerald-500 focus:bg-white transition-all outline-none font-bold text-slate-700 min-h-[150px]"
+                                className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-blue-600 focus:bg-white transition-all outline-none font-bold text-slate-700 min-h-[150px]"
                                 placeholder="Describe the job role and responsibilities..."
                                 value={formData.description}
                                 onChange={(e) => setFormData({...formData, description: e.target.value})}
@@ -282,7 +282,7 @@ const JobModal = ({ isOpen, onClose, job = null, isEditing = false }) => {
                                         checked={formData.timerActive}
                                         onChange={(e) => setFormData({...formData, timerActive: e.target.checked})}
                                     />
-                                    <div className="w-12 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500"></div>
+                                    <div className="w-12 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
                                 </label>
                             </div>
 
@@ -297,7 +297,7 @@ const JobModal = ({ isOpen, onClose, job = null, isEditing = false }) => {
                                         <input 
                                             type="number"
                                             min="31"
-                                            className="w-full px-5 py-3.5 bg-white border border-slate-200 rounded-xl focus:border-emerald-500 transition-all outline-none font-bold text-slate-700 text-sm shadow-sm"
+                                            className="w-full px-5 py-3.5 bg-white border border-slate-200 rounded-xl focus:border-blue-600 transition-all outline-none font-bold text-slate-700 text-sm shadow-sm"
                                             placeholder="Minimum 31 minutes"
                                             value={formData.durationMinutes}
                                             onChange={(e) => setFormData({...formData, durationMinutes: Math.max(1, parseInt(e.target.value) || 0)})}
@@ -316,13 +316,13 @@ const JobModal = ({ isOpen, onClose, job = null, isEditing = false }) => {
                         {/* Section 7: Custom Fields */}
                         <div className="space-y-6">
                             <div className="flex justify-between items-center">
-                                <h3 className="text-sm font-black text-emerald-600 uppercase tracking-[0.2em] flex items-center gap-2">
+                                <h3 className="text-sm font-black text-blue-700 uppercase tracking-[0.2em] flex items-center gap-2">
                                     <Plus className="w-4 h-4" /> Custom Fields
                                 </h3>
                                 <button 
                                     type="button"
                                     onClick={addCustomField}
-                                    className="text-[10px] font-black text-emerald-600 uppercase tracking-widest flex items-center gap-1 hover:text-emerald-700 transition-colors"
+                                    className="text-[10px] font-black text-blue-700 uppercase tracking-widest flex items-center gap-1 hover:text-blue-800 transition-colors"
                                 >
                                     <Plus className="w-3 h-3" /> Add Field
                                 </button>
@@ -334,7 +334,7 @@ const JobModal = ({ isOpen, onClose, job = null, isEditing = false }) => {
                                         <div className="md:col-span-3 space-y-2">
                                             <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Field Name</label>
                                             <input 
-                                                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:border-emerald-500 transition-all outline-none font-bold text-slate-700 text-sm"
+                                                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:border-blue-600 transition-all outline-none font-bold text-slate-700 text-sm"
                                                 placeholder="e.g. Experience"
                                                 value={field.label}
                                                 onChange={(e) => handleCustomFieldChange(index, 'label', e.target.value)}
@@ -343,7 +343,7 @@ const JobModal = ({ isOpen, onClose, job = null, isEditing = false }) => {
                                         <div className="md:col-span-3 space-y-2">
                                             <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Value</label>
                                             <input 
-                                                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:border-emerald-500 transition-all outline-none font-bold text-slate-700 text-sm"
+                                                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:border-blue-600 transition-all outline-none font-bold text-slate-700 text-sm"
                                                 placeholder="e.g. 2+ Years"
                                                 value={field.value}
                                                 onChange={(e) => handleCustomFieldChange(index, 'value', e.target.value)}
@@ -370,7 +370,7 @@ const JobModal = ({ isOpen, onClose, job = null, isEditing = false }) => {
                         <div className="pt-4">
                             <button 
                                 type="submit"
-                                className="w-full bg-slate-900 hover:bg-emerald-600 text-white font-black py-6 rounded-3xl transition-all shadow-2xl shadow-slate-200 uppercase tracking-widest text-sm flex items-center justify-center gap-3 group"
+                                className="w-full bg-slate-900 hover:bg-blue-700 text-white font-black py-6 rounded-3xl transition-all shadow-2xl shadow-slate-200 uppercase tracking-widest text-sm flex items-center justify-center gap-3 group"
                             >
                                 <CheckCircle2 className="w-5 h-5 group-hover:scale-125 transition-transform" />
                                 {isEditing ? 'Update Job Posting' : 'Publish Job Listing'}

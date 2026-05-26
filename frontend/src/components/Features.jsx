@@ -13,7 +13,7 @@ const Features = () => {
             title: 'Advanced Security',
             description: 'Protect your data with multi-layer encryption and proactive threat monitoring.',
             icon: <Shield className="h-8 w-8" />,
-            color: 'bg-emerald-50 text-emerald-600',
+            color: 'bg-blue-50 text-blue-700',
         },
         {
             title: 'Instant Delivery',

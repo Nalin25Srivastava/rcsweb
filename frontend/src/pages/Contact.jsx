@@ -64,7 +64,7 @@ const Contact = () => {
                     className="relative z-10 text-center max-w-3xl mx-auto"
                 >
                     <h1 className="text-5xl md:text-7xl font-black text-white tracking-tighter mb-6">
-                        Let's Talk <span className="text-emerald-400">Business.</span>
+                        Let's Talk <span className="text-blue-500">Business.</span>
                     </h1>
                     <p className="text-slate-300 text-lg md:text-xl font-medium leading-relaxed mb-8">
                         Whether you are an enterprise looking for talent, or a candidate seeking your next big leap, our execution team is ready.
@@ -83,7 +83,7 @@ const Contact = () => {
                             <h2 className="text-3xl font-black text-slate-900 dark:text-white mb-8 tracking-tight">Support Network</h2>
                             <div className="space-y-8">
                                 <motion.div whileHover={{ x: 10 }} className="flex gap-6 group">
-                                    <div className="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-white transition-colors flex-shrink-0">
+                                    <div className="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors flex-shrink-0">
                                         <MapPin className="w-6 h-6" />
                                     </div>
                                     <div>
@@ -121,12 +121,12 @@ const Contact = () => {
                         </div>
 
                         <div className="p-8 bg-slate-900 rounded-3xl relative overflow-hidden border border-slate-800 shadow-2xl">
-                            <div className="absolute -right-4 -bottom-4 w-32 h-32 bg-emerald-500 opacity-20 rounded-full blur-2xl"></div>
+                            <div className="absolute -right-4 -bottom-4 w-32 h-32 bg-blue-600 opacity-20 rounded-full blur-2xl"></div>
                             <h3 className="text-white font-black text-xl mb-3">Enterprise Dedicated?</h3>
                             <p className="text-slate-400 font-medium text-sm leading-relaxed mb-6">
                                 Connect directly with our enterprise lead management team for bulk hiring.
                             </p>
-                            <a href="mailto:enterprise@rcsweb.com" className="text-emerald-400 font-bold uppercase tracking-widest text-sm flex items-center gap-2 hover:text-white transition-colors">
+                            <a href="mailto:enterprise@rcsweb.com" className="text-blue-500 font-bold uppercase tracking-widest text-sm flex items-center gap-2 hover:text-white transition-colors">
                                 enterprise@rcsweb.com <span className="text-lg">→</span>
                             </a>
                         </div>
@@ -136,7 +136,7 @@ const Contact = () => {
                     <div className="lg:col-span-2">
                         <form onSubmit={handleSubmit} className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-8 md:p-12 shadow-2xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-800">
                             
-                            <h2 className="text-3xl font-black text-slate-900 dark:text-white mb-8 tracking-tight">Send a <span className="text-emerald-500">Message</span></h2>
+                            <h2 className="text-3xl font-black text-slate-900 dark:text-white mb-8 tracking-tight">Send a <span className="text-blue-600">Message</span></h2>
 
                             <AnimatePresence>
                                 {(isSuccess || isError || formError) && (
@@ -144,9 +144,9 @@ const Contact = () => {
                                         initial={{ opacity: 0, height: 0 }}
                                         animate={{ opacity: 1, height: 'auto', marginBottom: 32 }}
                                         exit={{ opacity: 0, height: 0, marginBottom: 0 }}
-                                        className={`px-6 py-4 rounded-xl flex items-center gap-4 ${isSuccess && !formError ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700'}`}
+                                        className={`px-6 py-4 rounded-xl flex items-center gap-4 ${isSuccess && !formError ? 'bg-blue-50 text-blue-800' : 'bg-red-50 text-red-700'}`}
                                     >
-                                        <div className={`p-2 rounded-lg ${isSuccess && !formError ? 'bg-emerald-100' : 'bg-red-100'}`}>
+                                        <div className={`p-2 rounded-lg ${isSuccess && !formError ? 'bg-blue-100' : 'bg-red-100'}`}>
                                             {isSuccess && !formError ? <CheckCircle2 className="w-5 h-5" /> : <AlertCircle className="w-5 h-5" />}
                                         </div>
                                         <div className="flex flex-col flex-grow">
@@ -166,7 +166,7 @@ const Contact = () => {
                                         value={formData.fullName}
                                         onChange={(e) => handleInputChange(e, 'fullName')}
                                         required
-                                        className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-700 rounded-xl py-4 px-5 outline-none transition-all text-slate-900 dark:text-white font-bold shadow-sm"
+                                        className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-blue-600 focus:bg-white dark:focus:bg-slate-700 rounded-xl py-4 px-5 outline-none transition-all text-slate-900 dark:text-white font-bold shadow-sm"
                                     />
                                 </div>
                                 <div className="space-y-2">
@@ -177,7 +177,7 @@ const Contact = () => {
                                         value={formData.phone}
                                         onChange={(e) => handleInputChange(e, 'phone')}
                                         required
-                                        className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-700 rounded-xl py-4 px-5 outline-none transition-all text-slate-900 dark:text-white font-bold shadow-sm"
+                                        className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-blue-600 focus:bg-white dark:focus:bg-slate-700 rounded-xl py-4 px-5 outline-none transition-all text-slate-900 dark:text-white font-bold shadow-sm"
                                     />
                                 </div>
                                 <div className="space-y-2 md:col-span-2">
@@ -188,7 +188,7 @@ const Contact = () => {
                                         value={formData.email}
                                         onChange={(e) => handleInputChange(e, 'email')}
                                         required
-                                        className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-700 rounded-xl py-4 px-5 outline-none transition-all text-slate-900 dark:text-white font-bold shadow-sm"
+                                        className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-blue-600 focus:bg-white dark:focus:bg-slate-700 rounded-xl py-4 px-5 outline-none transition-all text-slate-900 dark:text-white font-bold shadow-sm"
                                     />
                                 </div>
                                 <div className="space-y-2 md:col-span-2">
@@ -199,7 +199,7 @@ const Contact = () => {
                                         value={formData.subject}
                                         onChange={(e) => handleInputChange(e, 'subject')}
                                         required
-                                        className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-700 rounded-xl py-4 px-5 outline-none transition-all text-slate-900 dark:text-white font-bold shadow-sm"
+                                        className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-blue-600 focus:bg-white dark:focus:bg-slate-700 rounded-xl py-4 px-5 outline-none transition-all text-slate-900 dark:text-white font-bold shadow-sm"
                                     />
                                 </div>
                                 <div className="space-y-2 md:col-span-2">
@@ -210,7 +210,7 @@ const Contact = () => {
                                         onChange={(e) => handleInputChange(e, 'message')}
                                         required
                                         rows="4"
-                                        className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-700 rounded-xl py-4 px-5 outline-none transition-all text-slate-900 dark:text-white font-bold shadow-sm resize-none"
+                                        className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-blue-600 focus:bg-white dark:focus:bg-slate-700 rounded-xl py-4 px-5 outline-none transition-all text-slate-900 dark:text-white font-bold shadow-sm resize-none"
                                     ></textarea>
                                 </div>
                             </div>
@@ -222,7 +222,7 @@ const Contact = () => {
                                 disabledReason={getDisabledReason()}
                                 howToCorrect={getCorrectionStep()}
                                 onClick={handleSubmit}
-                                className={`w-full bg-slate-900 dark:bg-emerald-600 hover:bg-emerald-500 text-white font-black py-5 rounded-2xl text-lg shadow-2xl shadow-slate-200/50 dark:shadow-none transition-all duration-500 cursor-pointer uppercase flex items-center justify-center gap-4 tracking-[0.2em] group overflow-hidden ${isLoading || isSuccess ? 'pointer-events-none' : ''}`}
+                                className={`w-full bg-slate-900 dark:bg-blue-700 hover:bg-blue-600 text-white font-black py-5 rounded-2xl text-lg shadow-2xl shadow-slate-200/50 dark:shadow-none transition-all duration-500 cursor-pointer uppercase flex items-center justify-center gap-4 tracking-[0.2em] group overflow-hidden ${isLoading || isSuccess ? 'pointer-events-none' : ''}`}
                             >
                                 <AnimatePresence mode="wait">
                                     {isSuccess ? (
@@ -230,7 +230,7 @@ const Contact = () => {
                                             key="success"
                                             initial={{ y: 20, opacity: 0 }}
                                             animate={{ y: 0, opacity: 1 }}
-                                            className="flex items-center gap-3 text-emerald-400"
+                                            className="flex items-center gap-3 text-blue-500"
                                         >
                                             <CheckCircle2 className="w-7 h-7" />
                                             <span>Message Sent</span>
