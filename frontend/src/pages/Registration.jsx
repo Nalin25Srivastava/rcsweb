@@ -328,19 +328,20 @@ const Registration = () => {
                                 
                                 <div className="flex flex-col md:flex-row gap-8 items-center justify-center bg-white dark:bg-slate-900 p-6 rounded-xl shadow-sm mb-6">
                                     <div className="text-center space-y-3">
-                                        <div className="bg-white p-3 rounded-xl border-4 border-slate-900 inline-block">
+                                        <div className="bg-white p-3 rounded-xl border-4 border-slate-900 inline-block text-center">
+                                            <p className="text-sm font-black text-slate-800 tracking-widest mb-2 border-b-2 border-slate-100 pb-1">NALIN SRIVASTAVA</p>
                                             {/* Cropped Static QR Code provided by user, falls back to dynamic API if missing */}
                                             <img 
                                                 src="/payment-qr-cropped.jpg" 
                                                 alt="PhonePe QR Code for Nalin Srivastava" 
-                                                className="w-56 h-auto object-contain"
+                                                className="w-56 h-auto object-contain mx-auto"
                                                 onError={(e) => {
                                                     e.target.onerror = null;
                                                     e.target.src = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=upi://pay?pa=9950962509@ybl%26pn=NALIN%20SRIVASTAVA%26am=1000%26cu=INR";
                                                 }}
                                             />
                                         </div>
-                                        <p className="text-xs font-black text-slate-500 uppercase tracking-widest">Scan to Pay via PhonePe/GPay</p>
+                                        <p className="text-xs font-black text-slate-500 uppercase tracking-widest mt-2">Scan to Pay via PhonePe/GPay</p>
                                     </div>
                                     <div className="space-y-4 w-full max-w-sm">
                                         <div>
