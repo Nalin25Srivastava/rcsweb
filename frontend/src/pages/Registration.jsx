@@ -376,12 +376,12 @@ const Registration = () => {
 
                             {/* File Upload */}
                             <div className="space-y-2 mt-6">
-                                <label className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">Profile / Documents (All Formats)</label>
+                                <label className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">Profile / Resume Document</label>
                                 <div className="relative">
                                     <input
                                         type="file"
                                         onChange={handleFileChange}
-                                        accept="*/*"
+                                        accept=".pdf,.doc,.docx,.txt,.rtf"
                                         id="file-upload"
                                         className="hidden"
                                     />
@@ -395,9 +395,9 @@ const Registration = () => {
                                             </div>
                                             <div>
                                                 <p className="font-black text-slate-900 dark:text-white text-sm">
-                                                    {file ? file.name : 'Upload Profile'}
+                                                    {file ? file.name : 'Upload Resume'}
                                                 </p>
-                                                <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mt-1">Select your resume or document</p>
+                                                <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mt-1">Accepts PDF, DOC, DOCX, TXT, RTF</p>
                                             </div>
                                         </div>
                                         {file && <CheckCircle className="w-6 h-6 text-blue-600" />}

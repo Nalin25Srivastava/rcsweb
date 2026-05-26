@@ -44,15 +44,15 @@ const storage = multer.diskStorage({
 const upload = multer({
     storage: storage,
     fileFilter: (req, file, cb) => {
-        // Allow images, videos, and common documents
-        const filetypes = /jpeg|jpg|png|webp|gif|svg|mp4|webm|ogg|pdf|doc|docx|txt|xls|xlsx|ppt|pptx|zip|rar/;
+        // Allow only standard resume document formats
+        const filetypes = /pdf|doc|docx|txt|rtf/;
         const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
         const mimetype = filetypes.test(file.mimetype);
 
         if (extname || mimetype) {
             return cb(null, true);
         } else {
-            cb(new Error('File format not supported! Please upload images, videos, or documents.'));
+            cb(new Error('Invalid file type! Please upload a valid resume document (PDF, DOC, DOCX, TXT, RTF).'));
         }
     }
 }).single('resume');
