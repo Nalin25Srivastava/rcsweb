@@ -333,7 +333,7 @@ const Registration = () => {
                                             <img 
                                                 src="/payment-qr-cropped.jpg" 
                                                 alt="PhonePe QR Code for Nalin Srivastava" 
-                                                className="w-40 h-auto object-contain"
+                                                className="w-56 h-auto object-contain"
                                                 onError={(e) => {
                                                     e.target.onerror = null;
                                                     e.target.src = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=upi://pay?pa=9950962509@ybl%26pn=NALIN%20SRIVASTAVA%26am=1000%26cu=INR";
