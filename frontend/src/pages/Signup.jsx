@@ -117,6 +117,11 @@ const Signup = () => {
         const resultAction = await dispatch(signup({ name, email, password, role, adminSecret, mobileNo }));
         
         if (signup.fulfilled.match(resultAction)) {
+            setName('');
+            setEmail('');
+            setPassword('');
+            setMobileNo('');
+            setAdminSecret('');
             navigate('/');
         }
     };

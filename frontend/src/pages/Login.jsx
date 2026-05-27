@@ -47,6 +47,10 @@ const Login = () => {
             if (action.payload && typeof action.payload === 'object' && action.payload.requiresPayment) {
                 // setUnpaidEmail(action.payload.email); // Keeping the logic but removing unused state if needed
             }
+        } else if (login.fulfilled.match(action)) {
+            setEmail('');
+            setPassword('');
+            setAdminSecret('');
         }
     }, [dispatch, email, password, role, adminSecret, verificationStatus, isVIPEmail]);
 

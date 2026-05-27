@@ -37,7 +37,11 @@ const Contact = () => {
             return;
         }
         setLastSubmitted(formData);
-        dispatch(submitContact(formData));
+        dispatch(submitContact(formData)).unwrap().then(() => {
+            setFormData({ fullName: '', phone: '', email: '', subject: '', message: '' });
+        }).catch((err) => {
+            console.error('Failed to submit contact:', err);
+        });
     };
 
 
