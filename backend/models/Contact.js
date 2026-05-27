@@ -27,7 +27,8 @@ const contactSchema = new mongoose.Schema({
         required: [true, 'Please add a message']
     }
 }, {
-    timestamps: true
+    timestamps: true,
+    collection: 'messages'
 });
 
 module.exports = mongoose.model('Contact', contactSchema);
