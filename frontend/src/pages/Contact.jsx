@@ -13,7 +13,9 @@ const Contact = () => {
     const { isLoading, isSuccess, isError, message } = useSelector((state) => state.contacts);
 
     useEffect(() => {
-
+        if (isSuccess) {
+            setFormData({ fullName: '', phone: '', email: '', subject: '', message: '' });
+        }
         const timer = setTimeout(() => {
             if (isSuccess || isError) dispatch(reset());
         }, 8000); // Increased time to allow user to click manual button if needed
