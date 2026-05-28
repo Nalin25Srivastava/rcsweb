@@ -107,6 +107,12 @@ const RegisteredCandidateModal = ({ isOpen, onClose, candidate = null, isEditing
 
     const handleSubmit = async (e) => {
         if (e) e.preventDefault();
+        
+        const actionText = isEditing ? "update this candidate's details" : "register this new candidate";
+        if (!window.confirm(`Are you sure you want to ${actionText}?`)) {
+            return;
+        }
+
         try {
             if (isEditing) {
                 await dispatch(updateRegisteredCandidate({ id: candidate._id, candidateData: formData })).unwrap();

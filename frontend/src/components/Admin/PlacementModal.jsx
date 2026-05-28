@@ -80,6 +80,12 @@ const PlacementModal = ({ isOpen, onClose, student = null, isEditing = false }) 
 
     const handleSubmit = (e) => {
         if (e) e.preventDefault();
+        
+        const actionText = isEditing ? "update this success story" : "publish this new success story";
+        if (!window.confirm(`Are you sure you want to ${actionText}?`)) {
+            return;
+        }
+
         if (isEditing && student?._id) {
             dispatch(updatePlacedStudent({ id: student._id, studentData: formData }));
         } else {
