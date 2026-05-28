@@ -54,6 +54,7 @@ const registerUser = async (req, res) => {
                 email: user.email,
                 role: user.role,
                 profilePicture: user.profilePicture,
+                mobileNo: user.mobileNo,
                 isPaid: user.role === 'admin' ? true : user.isPaid,
                 token: generateToken(user._id)
             });
@@ -102,6 +103,7 @@ const loginUser = async (req, res) => {
                 email: user.email,
                 role: user.role,
                 profilePicture: user.profilePicture,
+                mobileNo: user.mobileNo,
                 isPaid: user.role === 'admin' ? true : user.isPaid,
                 message: 'Login successful',
                 token: generateToken(user._id)
@@ -210,6 +212,7 @@ const googleLogin = async (req, res) => {
             email: user.email,
             role: user.role,
             profilePicture: user.profilePicture,
+            mobileNo: user.mobileNo,
             isPaid: user.role === 'admin' ? true : user.isPaid,
             message: 'Login successful',
             token: generateToken(user._id),
