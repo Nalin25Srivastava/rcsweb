@@ -857,15 +857,15 @@ const SettingsManagementView = ({ settings, onSave }) => {
         if (settings) {
             setFormData({
                 contact: {
-                    address: settings.contact?.address || '',
-                    phoneNumbers: settings.contact?.phoneNumbers || '',
-                    email: settings.contact?.email || '',
-                    enterpriseEmail: settings.contact?.enterpriseEmail || ''
+                    address: settings.contact?.address || 'Building No. 645, Behind Allahabad Bank, In front of Gumanpura Thana, Aerodrome Circle, Kota, Rajasthan - 324001',
+                    phoneNumbers: settings.contact?.phoneNumbers || '+91 8104083002, +91 9783945080, +91 8209635081\nMon-Sat, 10am to 5pm IST',
+                    email: settings.contact?.email || 'r.c.sindiaconcept@gmail.com',
+                    enterpriseEmail: settings.contact?.enterpriseEmail || 'enterprise@rcsweb.com'
                 },
                 about: {
-                    corePhilosophy: settings.about?.corePhilosophy || '',
-                    mission: settings.about?.mission || '',
-                    vision: settings.about?.vision || ''
+                    corePhilosophy: settings.about?.corePhilosophy || "Recruitment & Consulting Services (RCS) is a premiere professional services firm focused exclusively on creating powerful synergies between top-tier talent and industry-leading organizations.\n\nWith over a decade of excellence in the staffing sector, we've developed proprietary methodologies for screening, mapping, and placing candidates globally. We don't just fill vacancies—we build high-performing teams infrastructure.",
+                    mission: settings.about?.mission || "To empower enterprises by delivering unparalleled human capital solutions, and to transform candidate careers by unlocking access to premium organizational environments.",
+                    vision: settings.about?.vision || "To be the global benchmark in recruiting ecosystems where technology, psychology, and organizational strategy converge to create perfect professional alignments."
                 }
             });
         }
@@ -883,7 +883,9 @@ const SettingsManagementView = ({ settings, onSave }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSave(formData);
+        if (window.confirm("Are you sure you want to apply these changes to the live website?")) {
+            onSave(formData);
+        }
     };
 
     return (
