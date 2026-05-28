@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fetchProfile, updateProfile, fetchAuditLogs } from '../store/slices/authSlice';
-import { User, Mail, Phone, MapPin, Briefcase, GraduationCap, Calendar, Activity, Edit3, Save, History, FileText } from 'lucide-react';
+import { User, Mail, Phone, MapPin, Briefcase, GraduationCap, Calendar, Activity, Edit3, Save, History, FileText, X } from 'lucide-react';
 
 const Profile = () => {
     const dispatch = useDispatch();
