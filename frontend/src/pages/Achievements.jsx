@@ -6,7 +6,7 @@ const Achievements = () => {
     const stats = [
         { icon: <Users className="w-8 h-8" />, label: 'Students Placed', value: '15,000+', color: 'bg-blue-500' },
         { icon: <Building className="w-8 h-8" />, label: 'Corporate Partners', value: '850+', color: 'bg-blue-600' },
-        { icon: <Trophy className="w-8 h-8" />, label: 'Years of Excellence', value: '16+', color: 'bg-amber-500' },
+        { icon: <Trophy className="w-8 h-8" />, label: 'Years of Excellence', value: '17+', color: 'bg-amber-500' },
         { icon: <Target className="w-8 h-8" />, label: 'Selection Rate', value: '94%', color: 'bg-indigo-500' },
     ];
 
@@ -30,7 +30,7 @@ const Achievements = () => {
             icon: <TrendingUp className="w-6 h-6 text-blue-600" />
         },
         {
-            year: '2010',
+            year: '2009',
             title: 'Foundation of RCS',
             description: 'RCS Placement Kota was founded with a mission to bridge the gap between talent and opportunity.',
             icon: <CheckCircle2 className="w-6 h-6 text-indigo-500" />
