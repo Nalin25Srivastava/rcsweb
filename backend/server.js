@@ -163,6 +163,7 @@ app.use('/api/webhooks', require('./routes/webhookRoutes'));
 app.use('/api/carousel', require('./routes/carouselRoutes'));
 app.use('/api/stats', require('./routes/statRoutes'));
 app.use('/api/services', require('./routes/serviceRoutes'));
+app.use('/api/settings', require('./routes/settingsRoutes'));
 
 app.get('/api/health', (req, res) => {
     const dbState = mongoose.connection.readyState;

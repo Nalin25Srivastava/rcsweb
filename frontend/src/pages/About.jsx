@@ -1,8 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { IoCheckmarkCircle } from 'react-icons/io5';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchSettings } from '../store/slices/settingsSlice';
 
 const About = () => {
+    const dispatch = useDispatch();
+    const { settings } = useSelector((state) => state.settings);
+
+    useEffect(() => {
+        dispatch(fetchSettings());
+    }, [dispatch]);
+
     return (
         <div className="bg-slate-50 dark:bg-slate-950 min-h-screen transition-colors duration-300">
             {/* Header Banner */}
@@ -36,12 +45,24 @@ const About = () => {
                         <h3 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-800 dark:text-white leading-tight mb-6">
                             Redefining the <br />Recruitment Process.
                         </h3>
-                        <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed font-medium mb-6">
-                            Recruitment & Consulting Services (RCS) is a premiere professional services firm focused exclusively on creating powerful synergies between top-tier talent and industry-leading organizations.
-                        </p>
-                        <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
-                            With over a decade of excellence in the staffing sector, we've developed proprietary methodologies for screening, mapping, and placing candidates globally. We don't just fill vacancies—we build high-performing teams infrastructure.
-                        </p>
+                        {settings?.about?.corePhilosophy ? (
+                            settings.about.corePhilosophy.split('\n').map((paragraph, idx) => (
+                                paragraph.trim() && (
+                                    <p key={idx} className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed font-medium mb-6">
+                                        {paragraph}
+                                    </p>
+                                )
+                            ))
+                        ) : (
+                            <>
+                                <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed font-medium mb-6">
+                                    Recruitment & Consulting Services (RCS) is a premiere professional services firm focused exclusively on creating powerful synergies between top-tier talent and industry-leading organizations.
+                                </p>
+                                <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed font-medium mb-6">
+                                    With over a decade of excellence in the staffing sector, we've developed proprietary methodologies for screening, mapping, and placing candidates globally. We don't just fill vacancies—we build high-performing teams infrastructure.
+                                </p>
+                            </>
+                        )}
 
                         <div className="mt-8 space-y-4">
                             {[
@@ -103,7 +124,7 @@ const About = () => {
                         </div>
                         <h3 className="text-3xl font-black text-white mb-4">Our Mission</h3>
                         <p className="text-slate-300 font-medium leading-relaxed">
-                            To empower enterprises by delivering unparalleled human capital solutions, and to transform candidate careers by unlocking access to premium organizational environments.
+                            {settings?.about?.mission || "To empower enterprises by delivering unparalleled human capital solutions, and to transform candidate careers by unlocking access to premium organizational environments."}
                         </p>
                     </motion.div>
 
@@ -119,7 +140,7 @@ const About = () => {
                         </div>
                         <h3 className="text-3xl font-black text-white mb-4">Our Vision</h3>
                         <p className="text-slate-300 font-medium leading-relaxed">
-                            To be the global benchmark in recruiting ecosystems where technology, psychology, and organizational strategy converge to create perfect professional alignments.
+                            {settings?.about?.vision || "To be the global benchmark in recruiting ecosystems where technology, psychology, and organizational strategy converge to create perfect professional alignments."}
                         </p>
                     </motion.div>
                 </div>

@@ -8,6 +8,7 @@ import placedStudentsReducer from './slices/placedStudentsSlice';
 import carouselReducer from './slices/carouselSlice';
 import statsReducer from './slices/statsSlice';
 import servicesReducer from './slices/servicesSlice';
+import settingsReducer from './slices/settingsSlice';
 
 export const store = configureStore({
     reducer: {
@@ -19,6 +20,7 @@ export const store = configureStore({
         placedStudents: placedStudentsReducer,
         carousel: carouselReducer,
         stats: statsReducer,
-        services: servicesReducer
+        services: servicesReducer,
+        settings: settingsReducer
     }
 });

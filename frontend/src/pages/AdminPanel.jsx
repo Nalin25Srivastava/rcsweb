@@ -28,6 +28,7 @@ import { fetchPlacedStudents, deletePlacedStudent } from '../store/slices/placed
 import { fetchStats, deleteStat } from '../store/slices/statsSlice';
 import { fetchSlides, deleteSlide } from '../store/slices/carouselSlice';
 import { fetchServices } from '../store/slices/servicesSlice';
+import { fetchSettings, updateSettings } from '../store/slices/settingsSlice';
 import { logout, fetchUsers } from '../store/slices/authSlice';
 import PlacementModal from '../components/Admin/PlacementModal';
 import JobModal from '../components/Admin/JobModal';
@@ -43,6 +44,7 @@ const AdminPanel = () => {
     const { placedStudents } = useSelector((state) => state.placedStudents);
     const { stats } = useSelector((state) => state.stats);
     const { services } = useSelector((state) => state.services);
+    const { settings } = useSelector((state) => state.settings);
 
     const [activeTab, setActiveTab] = useState('dashboard');
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -151,6 +153,7 @@ const AdminPanel = () => {
         dispatch(fetchSlides());
         dispatch(fetchUsers());
         dispatch(fetchServices());
+        dispatch(fetchSettings());
     }, [dispatch]);
 
     const getImageUrl = (image) => {
@@ -229,6 +232,13 @@ const AdminPanel = () => {
                         onAdd={() => setIsCarouselModalOpen(true)}
                         onDelete={handleDeleteSlide}
                         getImageUrl={getImageUrl}
+                    />
+                );
+            case 'settings':
+                return (
+                    <SettingsManagementView 
+                        settings={settings} 
+                        onSave={(data) => dispatch(updateSettings(data))} 
                     />
                 );
             default:
@@ -825,6 +835,152 @@ const ServiceManagementView = ({ services = [], onEdit }) => {
                 ))}
             </div>
         </div>
+    );
+};
+
+const SettingsManagementView = ({ settings, onSave }) => {
+    const [formData, setFormData] = useState({
+        contact: {
+            address: '',
+            phoneNumbers: '',
+            email: '',
+            enterpriseEmail: ''
+        },
+        about: {
+            corePhilosophy: '',
+            mission: '',
+            vision: ''
+        }
+    });
+
+    useEffect(() => {
+        if (settings) {
+            setFormData({
+                contact: {
+                    address: settings.contact?.address || '',
+                    phoneNumbers: settings.contact?.phoneNumbers || '',
+                    email: settings.contact?.email || '',
+                    enterpriseEmail: settings.contact?.enterpriseEmail || ''
+                },
+                about: {
+                    corePhilosophy: settings.about?.corePhilosophy || '',
+                    mission: settings.about?.mission || '',
+                    vision: settings.about?.vision || ''
+                }
+            });
+        }
+    }, [settings]);
+
+    const handleChange = (section, field, value) => {
+        setFormData((prev) => ({
+            ...prev,
+            [section]: {
+                ...prev[section],
+                [field]: value
+            }
+        }));
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        onSave(formData);
+    };
+
+    return (
+        <form onSubmit={handleSubmit} className="space-y-8">
+            <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-black text-slate-900">Site Settings Management</h2>
+                <button 
+                    type="submit"
+                    className="bg-blue-600 hover:bg-blue-700 text-white font-black px-6 py-3 rounded-xl flex items-center gap-2 shadow-lg shadow-blue-600/20 transition-all uppercase tracking-widest text-xs"
+                >
+                    Save Changes
+                </button>
+            </div>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Contact Settings */}
+                <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm">
+                    <h3 className="text-xl font-black text-slate-900 mb-6 flex items-center gap-2">
+                        Contact Information
+                    </h3>
+                    <div className="space-y-4">
+                        <div>
+                            <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Address</label>
+                            <textarea
+                                value={formData.contact.address}
+                                onChange={(e) => handleChange('contact', 'address', e.target.value)}
+                                className="w-full bg-slate-50 border border-slate-200 focus:border-blue-600 rounded-xl py-3 px-4 outline-none transition-all text-slate-900 font-bold"
+                                rows="3"
+                            ></textarea>
+                        </div>
+                        <div>
+                            <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Phone Numbers</label>
+                            <textarea
+                                value={formData.contact.phoneNumbers}
+                                onChange={(e) => handleChange('contact', 'phoneNumbers', e.target.value)}
+                                className="w-full bg-slate-50 border border-slate-200 focus:border-blue-600 rounded-xl py-3 px-4 outline-none transition-all text-slate-900 font-bold"
+                                rows="2"
+                            ></textarea>
+                        </div>
+                        <div>
+                            <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Email</label>
+                            <input
+                                type="email"
+                                value={formData.contact.email}
+                                onChange={(e) => handleChange('contact', 'email', e.target.value)}
+                                className="w-full bg-slate-50 border border-slate-200 focus:border-blue-600 rounded-xl py-3 px-4 outline-none transition-all text-slate-900 font-bold"
+                            />
+                        </div>
+                        <div>
+                            <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Enterprise Email</label>
+                            <input
+                                type="email"
+                                value={formData.contact.enterpriseEmail}
+                                onChange={(e) => handleChange('contact', 'enterpriseEmail', e.target.value)}
+                                className="w-full bg-slate-50 border border-slate-200 focus:border-blue-600 rounded-xl py-3 px-4 outline-none transition-all text-slate-900 font-bold"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                {/* About Settings */}
+                <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm">
+                    <h3 className="text-xl font-black text-slate-900 mb-6 flex items-center gap-2">
+                        About Us Content
+                    </h3>
+                    <div className="space-y-4">
+                        <div>
+                            <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Core Philosophy</label>
+                            <textarea
+                                value={formData.about.corePhilosophy}
+                                onChange={(e) => handleChange('about', 'corePhilosophy', e.target.value)}
+                                className="w-full bg-slate-50 border border-slate-200 focus:border-blue-600 rounded-xl py-3 px-4 outline-none transition-all text-slate-900 font-bold"
+                                rows="5"
+                            ></textarea>
+                        </div>
+                        <div>
+                            <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Mission</label>
+                            <textarea
+                                value={formData.about.mission}
+                                onChange={(e) => handleChange('about', 'mission', e.target.value)}
+                                className="w-full bg-slate-50 border border-slate-200 focus:border-blue-600 rounded-xl py-3 px-4 outline-none transition-all text-slate-900 font-bold"
+                                rows="3"
+                            ></textarea>
+                        </div>
+                        <div>
+                            <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Vision</label>
+                            <textarea
+                                value={formData.about.vision}
+                                onChange={(e) => handleChange('about', 'vision', e.target.value)}
+                                className="w-full bg-slate-50 border border-slate-200 focus:border-blue-600 rounded-xl py-3 px-4 outline-none transition-all text-slate-900 font-bold"
+                                rows="3"
+                            ></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
     );
 };
 

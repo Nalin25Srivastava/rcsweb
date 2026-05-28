@@ -3,6 +3,7 @@ import { Send, CheckCircle2, AlertCircle, MapPin, Phone, Mail } from 'lucide-rea
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
 import { submitContact, reset } from '../store/slices/contactsSlice';
+import { fetchSettings } from '../store/slices/settingsSlice';
 import SmartButton from '../components/SmartButton';
 
 const Contact = () => {
@@ -11,6 +12,11 @@ const Contact = () => {
     const [lastSubmitted, setLastSubmitted] = useState(null);
     const dispatch = useDispatch();
     const { isLoading, isSuccess, isError, message } = useSelector((state) => state.contacts);
+    const { settings } = useSelector((state) => state.settings);
+
+    useEffect(() => {
+        dispatch(fetchSettings());
+    }, [dispatch]);
 
     useEffect(() => {
         if (isSuccess) {
@@ -94,7 +100,7 @@ const Contact = () => {
                                     </div>
                                     <div>
                                         <h3 className="font-bold text-slate-900 dark:text-white text-lg mb-1">Headquarters</h3>
-                                        <p className="text-slate-500 dark:text-slate-400 font-medium whitespace-pre-line text-sm">Building No. 645, Behind Allahabad Bank,<br/>In front of Gumanpura Thana, Aerodrome Circle,<br/>Kota, Rajasthan - 324001</p>
+                                        <p className="text-slate-500 dark:text-slate-400 font-medium whitespace-pre-line text-sm">{settings?.contact?.address || "Building No. 645, Behind Allahabad Bank,\nIn front of Gumanpura Thana, Aerodrome Circle,\nKota, Rajasthan - 324001"}</p>
                                     </div>
                                 </motion.div>
 
@@ -104,10 +110,8 @@ const Contact = () => {
                                     </div>
                                     <div>
                                         <h3 className="font-bold text-slate-900 dark:text-white text-lg mb-1">Call Center</h3>
-                                        <p className="text-slate-500 dark:text-slate-400 font-medium text-sm">
-                                            +91 8104083002, +91 9783945080,<br/>
-                                            +91 8209635081<br/>
-                                            Mon-Sat, 10am to 5pm IST
+                                        <p className="text-slate-500 dark:text-slate-400 font-medium whitespace-pre-line text-sm">
+                                            {settings?.contact?.phoneNumbers || "+91 8104083002, +91 9783945080,\n+91 8209635081\nMon-Sat, 10am to 5pm IST"}
                                         </p>
                                     </div>
                                 </motion.div>
@@ -119,7 +123,7 @@ const Contact = () => {
                                     <div>
                                         <h3 className="font-bold text-slate-900 dark:text-white text-lg mb-1">Email Connect</h3>
                                         <p className="text-slate-500 dark:text-slate-400 font-medium text-sm">
-                                            r.c.sindiaconcept@gmail.com
+                                            {settings?.contact?.email || "r.c.sindiaconcept@gmail.com"}
                                         </p>
                                     </div>
                                 </motion.div>
@@ -132,8 +136,8 @@ const Contact = () => {
                             <p className="text-slate-400 font-medium text-sm leading-relaxed mb-6">
                                 Connect directly with our enterprise lead management team for bulk hiring.
                             </p>
-                            <a href="mailto:enterprise@rcsweb.com" className="text-blue-500 font-bold uppercase tracking-widest text-sm flex items-center gap-2 hover:text-white transition-colors">
-                                enterprise@rcsweb.com <span className="text-lg">→</span>
+                            <a href={`mailto:${settings?.contact?.enterpriseEmail || 'enterprise@rcsweb.com'}`} className="text-blue-500 font-bold uppercase tracking-widest text-sm flex items-center gap-2 hover:text-white transition-colors">
+                                {settings?.contact?.enterpriseEmail || 'enterprise@rcsweb.com'} <span className="text-lg">→</span>
                             </a>
                         </div>
                     </div>

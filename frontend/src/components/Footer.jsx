@@ -1,9 +1,17 @@
 import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-
+import { useSelector, useDispatch } from 'react-redux'
+import { useEffect } from 'react'
+import { fetchSettings } from '../store/slices/settingsSlice'
 
 const Footer = () => {
+    const dispatch = useDispatch()
+    const { settings } = useSelector((state) => state.settings)
+
+    useEffect(() => {
+        dispatch(fetchSettings())
+    }, [dispatch])
     const quickLinks = [
         { name: 'Home', href: '/' },
         { name: 'About Us', href: '/about' },
@@ -97,15 +105,15 @@ const Footer = () => {
                         <ul className="space-y-4">
                             <li className="flex items-start space-x-3 group">
                                 <MapPin className="h-5 w-5 text-[#2563eb] flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform" />
-                                <span className=" text-sm text-gray-400 font-medium">Building No. 645, Behind Allahabad Bank, In front of Gumanpura Thana, Aerodrome Circle, Kota-Rajasthan - 324001</span>
+                                <span className=" text-sm text-gray-400 font-medium">{settings?.contact?.address || "Building No. 645, Behind Allahabad Bank, In front of Gumanpura Thana, Aerodrome Circle, Kota-Rajasthan - 324001"}</span>
                             </li>
                             <li className="flex items-center space-x-3 group">
                                 <Phone className="h-5 w-5 text-[#2563eb] flex-shrink-0 group-hover:scale-110 transition-transform" />
-                                <span className=" text-sm text-gray-400 font-medium">+(91) 9667618794, +(91) 6378103533, +(91) 8104083002</span>
+                                <span className=" text-sm text-gray-400 font-medium whitespace-pre-line">{settings?.contact?.phoneNumbers || "+(91) 9667618794, +(91) 6378103533, +(91) 8104083002"}</span>
                             </li>
                             <li className="flex items-center space-x-3 group">
                                 <Mail className="h-5 w-5 text-[#2563eb] flex-shrink-0 group-hover:scale-110 transition-transform" />
-                                <span className=" text-sm text-gray-400 font-medium font-bold">r.c.sindiaconcept@gmail.com</span>
+                                <span className=" text-sm text-gray-400 font-medium font-bold">{settings?.contact?.email || "r.c.sindiaconcept@gmail.com"}</span>
                             </li>
                         </ul>
                     </motion.div>
